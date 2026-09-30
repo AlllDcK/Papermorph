@@ -61,6 +61,7 @@ AnimeBook/
 ├── content/ch01/
 │   ├── narration.en.json          # 第一章英文讲稿（语音源），[[mark]] 标记动画触发词
 │   └── narration.en.timings.json  # tts.py 的缓存，不部署
+├── .claude/skills/animebook-chapter/  # 做章节的流程、已定约定、踩过的坑、引擎速查（新章节先读）
 ├── tools/
 │   ├── tts.py          # Edge TTS 生成 MP3 与词级时间点
 │   └── e2e_ch01.py     # 浏览器端到端检查第一章全部流程（Playwright）
