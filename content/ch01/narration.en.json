@@ -1,0 +1,32 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Every number you meet in algebra belongs to a family. [[most]]Most numbers belong to several families at once. [[build]]Let's build those families one at a time, starting with the first numbers you ever learned.",
+    "natural": "When you count, you say [[c1]]one, [[c2]]two, [[c3]]three, [[more]]and you can keep going forever. [[def]]These are the natural numbers, also called the counting numbers. [[rule]]They start at one, and none of them has a fractional or decimal part.",
+    "whole": "Now picture an empty basket. [[z]]How many apples are in it? [[zero]]Zero. [[def]]Put zero together with the natural numbers, and you get the whole numbers.",
+    "integers": "Some quantities go [[below]]below zero, like a temperature of minus four degrees, or a debt of three dollars. [[flip]]So we mirror every natural number to the other side of zero. [[def]]The natural numbers, zero, and these negatives together make the integers.",
+    "gaps": "The integers are evenly spaced, [[gap]]but look at the space between zero and one. There are numbers in here too: [[half]]one half, [[q]]three quarters, [[neg]]and on the other side, negative one and a half.",
+    "rational": "A number is rational if you can write it as [[frac]]one integer divided by another. [[zero]]There is one rule: the bottom can never be zero, because dividing by zero has no meaning. [[dec]]A decimal like zero point seven five is rational, [[eq]]because it equals three quarters. [[int]]Even an integer like negative eight is rational: [[over]]it's negative eight over one.",
+    "task1": "Let's write a few numbers as fractions of integers: [[a]]five, [[b]]zero point six, [[c]]negative two point two five, [[d]]and zero.",
+    "check1": "[[a]]Five is five over one. [[b]]Zero point six is six tenths, which simplifies to three fifths. [[c]]Negative two point two five is negative two and one quarter, which is negative nine quarters. [[d]]And zero is zero over one. Zero on top is fine; only the bottom can't be zero. [[other]]Other fractions are correct too, like ten over two for five. [[place]]Each of these numbers has its own point on the number line.",
+    "sqrt2": "But not every point on the line is rational. [[sq]]Draw a square whose sides are one unit long. [[diag]]Its diagonal has a length of the square root of two. [[swing]]Swing that diagonal down onto the number line, and it lands right here. [[dec]]Its decimal goes on forever, and the digits never settle into a repeating pattern. [[def]]No fraction of integers is exactly equal to it. Numbers like this are called irrational numbers.",
+    "pi": "[[pi]]Pi is another irrational number. [[circ]]Take a circle whose diameter is one unit, [[roll]]and roll it along the line. [[land]]After exactly one full turn, it lands on pi, about three point one four one six.",
+    "real": "A number is either rational or irrational. [[nov]]It is never both. [[fill]]Together, these two families cover every point on the number line. [[def]]All of them together are called the real numbers.",
+    "map": "Let's put all six families on one map. [[n]]The natural numbers sit in the middle. [[w]]The whole numbers contain them, plus zero. [[i]]The integers contain the whole numbers, plus the negatives. [[q]]The rational numbers contain all the integers, plus fractions and decimals. [[irr]]The irrational numbers sit off to the side, with no overlap. [[r]]And the real numbers hold everything.",
+    "example": "Where does [[t]]negative two belong? [[notn]]It isn't a natural number or a whole number, because it's negative. [[in]]But it is an integer. [[up]]Every integer is rational, and every rational number is real, [[also]]so negative two is also rational, and real. [[rule]]A number belongs to its own ring, and to every ring around it.",
+    "more": "A few more. [[a]]Twenty-four sits in the center, so it's natural, whole, an integer, rational, and real. [[b]]Zero is whole, but not natural. [[c]]Two thirds is rational, but not an integer. [[d]]And pi is irrational, and real.",
+    "task2": "Now some numbers that need a closer look: [[a]]negative seven halves, [[b]]the square root of nine, [[c]]one point five, [[d]]and the square root of five. Where does each one belong?",
+    "check2": "[[a]]Negative seven halves is a fraction of integers, so it's rational and real. [[b]]The square root of nine looks unusual, but it equals three. That puts it right in the center: natural, whole, integer, rational, and real. [[c]]One point five equals three halves, so it's rational and real. [[d]]The square root of five is not a whole number, and its decimal never repeats, so it's irrational and real.",
+    "wrap": "So, to classify any number, [[s1]]first simplify it if you can. [[s2]]Then find the smallest ring it fits in. [[s3]]It belongs to that ring, and to every ring around it. [[end]]Now try the practice below.",
+    "q1": "Quick check. On the number line, tap the whole number that is not a natural number.",
+    "q2": "Quick check. Two short questions about integers.",
+    "q3": "Quick check. Two short questions about fractions.",
+    "q4": "Quick check. Is each of these numbers rational, or irrational?",
+    "q5": "Quick check. Drag each number into the smallest ring it belongs to.",
+    "final1": "Now let's practice the whole chapter. First, drag each number into the smallest ring it fits in. Simplify first when you can.",
+    "final2": "Next, choose every family that each number belongs to.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter one, types of numbers."
+  }
+}

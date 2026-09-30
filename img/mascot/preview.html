@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>角色素材预览</title><style>
+body{margin:24px;font:16px system-ui;background:#f4f3ee;color:#222}h1{font-size:24px}h2{font-size:17px;margin:12px 0 4px}p{margin:6px 0}
+nav{display:flex;gap:12px;margin:20px 0;flex-wrap:wrap}button{padding:8px 16px;cursor:pointer;border:1px solid #aaa;border-radius:8px}
+main{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}article{padding:14px;background:white;border-radius:12px}
+.art{height:280px;display:flex;align-items:center;justify-content:center;background-color:#fff;background-image:conic-gradient(#ddd 25%,transparent 0 50%,#ddd 0 75%,transparent 0);background-size:24px 24px;border-radius:6px}
+.art img{max-width:100%;max-height:100%;object-fit:contain}body[data-bg="dark"] .art{background:#263749}body[data-bg="paper"] .art{background:#fff4d8}body[data-bg="white"] .art{background:#fff}
+</style><body><h1>角色素材预览</h1><p>10 个表情 + 主形象。SVG 内嵌透明 PNG，保留原画风格，不是矢量路径。</p>
+<nav><button data-bg="check">透明棋盘</button><button data-bg="dark">深色背景</button><button data-bg="paper">纸色背景</button><button data-bg="white">白色背景</button></nav>
+<main><article><div class="art"><img src="svg/01_default.svg" alt="默认头像"></div>
+<h2>默认头像</h2><p>01_default</p><a href="png/01_default.png">PNG</a> · <a href="svg/01_default.svg">SVG</a></article>
+<article><div class="art"><img src="svg/02_explaining.svg" alt="开心讲题"></div>
+<h2>开心讲题</h2><p>02_explaining</p><a href="png/02_explaining.png">PNG</a> · <a href="svg/02_explaining.svg">SVG</a></article>
+<article><div class="art"><img src="svg/03_thinking.svg" alt="思考"></div>
+<h2>思考</h2><p>03_thinking</p><a href="png/03_thinking.png">PNG</a> · <a href="svg/03_thinking.svg">SVG</a></article>
+<article><div class="art"><img src="svg/04_confused.svg" alt="疑惑"></div>
+<h2>疑惑</h2><p>04_confused</p><a href="png/04_confused.png">PNG</a> · <a href="svg/04_confused.svg">SVG</a></article>
+<article><div class="art"><img src="svg/05_angry.svg" alt="生气"></div>
+<h2>生气</h2><p>05_angry</p><a href="png/05_angry.png">PNG</a> · <a href="svg/05_angry.svg">SVG</a></article>
+<article><div class="art"><img src="svg/06_anxious.svg" alt="害怕／紧张"></div>
+<h2>害怕／紧张</h2><p>06_anxious</p><a href="png/06_anxious.png">PNG</a> · <a href="svg/06_anxious.svg">SVG</a></article>
+<article><div class="art"><img src="svg/07_teasing.svg" alt="友好调侃"></div>
+<h2>友好调侃</h2><p>07_teasing</p><a href="png/07_teasing.png">PNG</a> · <a href="svg/07_teasing.svg">SVG</a></article>
+<article><div class="art"><img src="svg/08_speechless.svg" alt="无语"></div>
+<h2>无语</h2><p>08_speechless</p><a href="png/08_speechless.png">PNG</a> · <a href="svg/08_speechless.svg">SVG</a></article>
+<article><div class="art"><img src="svg/09_praising.svg" alt="自信／表扬"></div>
+<h2>自信／表扬</h2><p>09_praising</p><a href="png/09_praising.png">PNG</a> · <a href="svg/09_praising.svg">SVG</a></article>
+<article><div class="art"><img src="svg/10_inspired.svg" alt="灵机一动"></div>
+<h2>灵机一动</h2><p>10_inspired</p><a href="png/10_inspired.png">PNG</a> · <a href="svg/10_inspired.svg">SVG</a></article>
+<article><div class="art"><img src="svg/main.svg" alt="主形象"></div>
+<h2>主形象</h2><p>main</p><a href="png/main.png">PNG</a> · <a href="svg/main.svg">SVG</a></article></main><script>document.querySelectorAll('button').forEach(button=>button.onclick=()=>document.body.dataset.bg=button.dataset.bg);</script></body></html>
