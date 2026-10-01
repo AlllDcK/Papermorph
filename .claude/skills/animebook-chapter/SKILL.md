@@ -62,5 +62,7 @@ description: 为 AnimeBook 制作或修改一章数学动画课：读参考书�
 
 通用部分在 `site/lib/engine.js` 和 `site/lib/engine.css`：播放器、绘图、题型、角色、画面框架。每章一个 `site/chNN/index.html`，只写 `CHAPTER`、本章的绘图小函数、`BEATS` 和题目数据，最后调用 `boot()`。新章节从 `site/ch02/index.html` 开始改最方便，它展示了算式、面积模型、点阵、数轴跳步等常用写法。
 
+章节页 `<head>` 保留 `<link rel="expect" href="#bar" blocking="render">`：没有它，Chromium 常在播放器生成前就渲染首帧，目录卡片放大成画面的页面过渡会被取消。新章节做好后，在 `site/index.html` 的 `UNITS` 里加一行（标题、分钟数），章号按顺序自动编号；上一章的 `CHAPTER.next` 指向新章。
+
 - 改引擎后，必须重跑所有已完成章节的 `tools/e2e_chNN.py`。
 - 某个画法第二次用到时，再把它从章节文件挪进引擎，不要提前抽象。

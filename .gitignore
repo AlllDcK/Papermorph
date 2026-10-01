@@ -5,3 +5,4 @@ __pycache__/
 # Reference book: internal only, never published. book_pages/ is regenerated from the PDF by split_book.py.
 *.pdf
 book_pages/
+.wrangler/

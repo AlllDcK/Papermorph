@@ -49,10 +49,15 @@ document.body.insertAdjacentHTML('afterbegin', `<div id="frame">
   </div>
   <p class="sound-note" id="soundNote" hidden>Sound could not play. The lesson continues with the on-screen text.</p>
   <button class="cover" id="cover"><div>
-    <span><svg width="24" height="24" viewBox="0 0 18 18"><path d="M3 1.5v15l13-7.5z" fill="currentColor"/></svg>Start lesson</span>
+    <p class="cover-k" id="coverK"></p>
+    <h1 class="cover-t" id="coverT"></h1>
+    <span class="go"><svg width="24" height="24" viewBox="0 0 18 18"><path d="M3 1.5v15l13-7.5z" fill="currentColor"/></svg>Start lesson</span>
     <small><span id="coverMeta"></span> Press <kbd>Space</kbd> to start, <kbd>?</kbd> for shortcuts.</small>
   </div></button>
   <div id="bar">
+    <a class="icon" id="bHome" href="../" aria-label="All chapters" title="All chapters">
+      <svg viewBox="0 0 18 18"><path d="M2 2h6v6H2zM10 2h6v6h-6zM2 10h6v6H2zM10 10h6v6h-6z"/></svg>
+    </a>
     <button class="icon" id="bPlay" aria-label="Play or pause (space)">
       <svg class="i-play" viewBox="0 0 18 18"><path d="M4 2v14l12-7z"/></svg>
       <svg class="i-pause" viewBox="0 0 18 18"><path d="M3.5 2h4v14h-4zM10.5 2h4v14h-4z"/></svg>
@@ -724,6 +729,9 @@ function finishCard() {
   const c = card(SCREEN, 'fin');
   const sum = pre => Object.entries(SCORE).filter(([k]) => k.startsWith(pre)).reduce((a, [, v]) => [a[0] + v.right, a[1] + v.total], [0, 0]);
   const line = (name, [r, t]) => h('p', 'fb', t ? `${name}: ${r} of ${t} right on the first try.` : `${name}: not attempted.`);
+  progress(p => { p.done = [...new Set([...(p.done || []), CHAPTER.number])]; });
+  const home = h('a', 'btn quiet', 'All chapters');
+  home.href = $('bHome').href;
   const again = h('button', 'btn' + (CHAPTER.next ? ' quiet' : ' go'), ['Watch again', kbd(CHAPTER.next ? 'R' : 'Enter')]);
   again.onclick = restart;
   const next = CHAPTER.next && h('button', 'btn go', ['Next chapter', kbd('Enter')]);
@@ -732,7 +740,7 @@ function finishCard() {
     : (e.key === 'r' || e.key === 'R') ? (restart(), true) : false;
   const guide = mascotEl(240);
   c.append(h('div', 'finwrap', [guide, h('p', 'kicker', `Chapter ${CHAPTER.number} complete`), h('p', 'prompt', CHAPTER.title),
-    line('Quick checks', sum('c-')), line('Chapter practice', sum('p-')), h('div', 'acts', next ? [again, next] : [again])]));
+    line('Quick checks', sum('c-')), line('Chapter practice', sum('p-')), h('div', 'acts', next ? [home, again, next] : [home, again])]));
   setTimeout(() => mood(guide, 'happy'), 400);
 }
 
@@ -1377,7 +1385,15 @@ fit();
 
 // Start the lesson once the chapter page has defined CHAPTER and BEATS.
 // ?beat=N&t=S opens a paused frame, for reviewing a single moment.
+// Per-browser progress shared with the contents page: last chapter opened, chapters finished.
+function progress(f) {
+  try { const p = JSON.parse(localStorage.getItem('progress') || '{}'); f(p); localStorage.setItem('progress', JSON.stringify(p)); } catch {}
+}
 function boot() {
+  $('coverK').textContent = `Chapter ${CHAPTER.number}`;
+  $('coverT').textContent = CHAPTER.title;
+  $('bHome').href = `../#ch${String(CHAPTER.number).padStart(2, '0')}`;
+  progress(p => { p.last = CHAPTER.number; });
   document.getElementById('stage').setAttribute('aria-label', `Lesson animation: ${CHAPTER.title}`);
   $('coverMeta').textContent = `About ${CHAPTER.minutes} minutes, with sound and quick checks.`;
   buildSegs();

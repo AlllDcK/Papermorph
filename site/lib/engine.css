@@ -21,8 +21,16 @@ button[hidden] { display: none; }
 
 .cover { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; display: grid; place-items: center; background: rgba(15, 22, 19, .5); border: 0; }
 .cover[hidden] { display: none; }
-.cover span { display: inline-flex; align-items: center; gap: 16px; padding: 20px 40px; border-radius: 999px; background: var(--chalk); color: var(--board); font-weight: 600; font-size: 32px; }
-.cover small { display: block; margin-top: 16px; font-size: 22px; text-align: center; color: var(--chalk); }
+.cover > div { display: flex; flex-direction: column; align-items: center; }
+.cover-k { margin: 0 0 10px; text-align: center; font-size: 22px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--quiz); }
+.cover-t { margin: 0 0 44px; max-width: 1200px; text-align: center; font: 500 64px/1.15 "Iowan Old Style", Palatino, Georgia, serif; color: var(--chalk); text-wrap: balance; }
+.cover > div > * { animation: rise .7s cubic-bezier(.2, .8, .2, 1) backwards; }
+.cover-t { animation-delay: .08s; }
+.cover .go { animation-delay: .18s; }
+.cover small { animation-delay: .26s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+.cover .go { display: inline-flex; align-items: center; gap: 16px; padding: 20px 40px; border-radius: 999px; background: var(--chalk); color: var(--board); font-weight: 600; font-size: 32px; }
+.cover small { display: block; margin-top: 22px; font-size: 22px; text-align: center; color: var(--dim); }
 .paused-mark { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; display: none; place-items: center; pointer-events: none; }
 .paused .paused-mark { display: grid; }
 .paused-mark div { padding: 14px 30px; border-radius: 999px; background: rgba(15, 22, 19, .85); color: var(--dim); font-size: 22px; }
@@ -187,3 +195,16 @@ svg.m { display: inline-block; overflow: visible; }
 @keyframes hop { 40% { transform: translateY(-12px) rotate(4deg); } }
 @keyframes wobble { 25% { transform: rotate(-8deg); } 75% { transform: rotate(6deg); } }
 @media (prefers-reduced-motion: reduce) { .card, .fb, .opt, .grid .mark, .mascot * { animation: none !important; } }
+
+a.icon { text-decoration: none; }
+a.btn { text-decoration: none; display: inline-block; }
+/* Page-to-page motion: the contents card grows into this frame, and shrinks back on the way out. */
+@view-transition { navigation: auto; }
+#frame { view-transition-name: lesson; }
+::view-transition-group(lesson) { animation-duration: .5s; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+::view-transition-old(lesson), ::view-transition-new(lesson) { height: 100%; object-fit: cover; }
+::view-transition-old(lesson) { animation-duration: .18s; }
+@media (prefers-reduced-motion: reduce) { .cover > div > * { animation: none; } ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
+/* The finish screen speaks the same type as the chapter cover and the contents page. */
+.fin .kicker { font-size: 20px; letter-spacing: .14em; text-transform: uppercase; }
+.fin .prompt { margin: 6px 0 14px; font: 500 56px/1.15 "Iowan Old Style", Palatino, Georgia, serif; }
