@@ -397,6 +397,136 @@ function eqLine(p, L, R, y, t0, { xEq = 760, fill = COL.chalk, size = 50, note, 
   show(g, t0);
   return g;
 }
+/* ---------- data on a number line: dot plots (unit 7) ---------- */
+// Axis for data from lo to hi drawn between x0 and x1 at baseline y; every: label every n-th tick.
+// shape 'x' draws line-plot crosses instead of dots.
+// Returns D: D.V(value) -> x; D.dot(v, color, t0) stacks a dot above v; D.mark(v, color, t0, label) is a
+// balance triangle under the axis that can slide with D.slide(mark, v, t0).
+function dataLine(p, { lo, hi, x0 = 200, x1 = 1400, y = 600, step = 1, every = 1, t0 = .1, r = 13, size = 22, shape = 'dot' }) {
+  const V = v => x0 + (v - lo) / (hi - lo) * (x1 - x0), g = G(p, { o: 0 });
+  path(g, `M${x0 - 24} ${y}H${x1 + 24}`, { stroke: COL.dim, 'stroke-width': 3 });
+  for (let v = lo, i = 0; v <= hi + 1e-9; v += step, i++) {
+    path(g, `M${V(v)} ${y - 7}V${y + 7}`, { stroke: COL.dim, 'stroke-width': 2 });
+    if (i % every === 0) T(g, num(+v.toFixed(6)), { x: V(v), y: y + 26 + size, size, fill: COL.dim, font: MATH, anchor: 'middle' });
+  }
+  show(g, t0);
+  const D = {
+    g, V, y, r, count: {},
+    top: v => y - 6 - r - ((D.count[v] || 1) - 1) * (2 * r + 5),
+    dot(v, color, t0, { run = tw, into = p, from } = {}) {
+      D.count[v] = (D.count[v] || 0) + 1;
+      let d;
+      if (shape === 'x') { d = G(into); path(d, `M${-r * .75} ${-r * .75}L${r * .75} ${r * .75}M${r * .75} ${-r * .75}L${-r * .75} ${r * .75}`, { stroke: color, 'stroke-width': 5 }); }
+      else d = mk('circle', { r, fill: color, stroke: COL.board, 'stroke-width': 2 }, into);
+      put(d, { x: V(v), y: D.top(v), s: 0, o: 0 });
+      if (from !== undefined) { put(d, { y: from, s: 1 }); run(d, { o: 1 }, t0, .2); run(d, { y: D.top(v) }, t0, .7, back); }
+      else run(d, { s: 1, o: 1 }, t0, .45, back);
+      return d;
+    },
+    dots: (vals, color, t0, gap = .15, opts) => vals.map((v, i) => D.dot(v, color, t0 + i * gap, opts)),
+    mark(v, color, t0, label, { run = tw, into = p } = {}) {
+      const m = G(into, { x: V(v), y, o: 0 });
+      path(m, 'M0 4L-17 30H17Z', { fill: color, stroke: COL.board, 'stroke-width': 2 });
+      if (label) T(m, label, { y: 64 + size, size: 24, fill: color, weight: 600, anchor: 'middle' });
+      run(m, { o: 1 }, t0, .4);
+      return m;
+    },
+    slide: (m, v, t0, run = tw, dur = 1.2) => run(m, { x: V(v) }, t0, dur),
+    // Bracket above the data from a to b at height yb, with a label.
+    span(a, b, yb, label, color, t0, { run = tw, into = p } = {}) {
+      const g = G(into), l = path(g, `M${V(a)} ${yb + 12}V${yb}H${V(b)}V${yb + 12}`, { stroke: color, 'stroke-width': 3 }, { d: 0 });
+      run(l, { d: 1 }, t0, .6);
+      const t = M(g, [label], { x: (V(a) + V(b)) / 2, y: yb - 14, size: 28, fill: color, o: 0 });
+      run(t, { o: 1 }, t0 + .4, .4);
+      return g;
+    },
+  };
+  return D;
+}
+/* ---------- chance: number cubes, coins, spinners (unit 7) ---------- */
+// A number cube face showing n pips, centred on (x, y).
+const PIPS = { 1: [[0, 0]], 2: [[-1, -1], [1, 1]], 3: [[-1, -1], [0, 0], [1, 1]], 4: [[-1, -1], [1, -1], [-1, 1], [1, 1]],
+  5: [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]], 6: [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]] };
+function die(p, n, x, y, s = 96, o = 0) {
+  const g = G(p, { x, y, o, s: o ? 1 : .6 });
+  g._box = mk('rect', { x: -s / 2, y: -s / 2, width: s, height: s, rx: s * .18, fill: mix(COL.board, COL.chalk, .1), stroke: COL.chalk, 'stroke-width': 3 }, g);
+  PIPS[n].forEach(([a, b]) => mk('circle', { cx: a * s * .26, cy: b * s * .26, r: s * .085, fill: COL.chalk }, g));
+  return g;
+}
+// Spinner with equal sections; pointer starts straight up. land(k) is the rotation that points at section k.
+const SPIN = [COL.whole, COL.nat, COL.int, COL.whole, COL.irr, COL.nat, COL.whole, COL.int];
+function spinner(p, cx, cy, r, t0, cols = SPIN) {
+  const g = G(p, { x: cx, y: cy, o: 0 }), n = cols.length, secs = [];
+  cols.forEach((c, i) => {
+    const a1 = (-90 + i * 360 / n) * Math.PI / 180, a2 = (-90 + (i + 1) * 360 / n) * Math.PI / 180;
+    secs.push(path(g, `M0 0L${r * Math.cos(a1)} ${r * Math.sin(a1)}A${r} ${r} 0 0 1 ${r * Math.cos(a2)} ${r * Math.sin(a2)}Z`,
+      { fill: mix(COL.board, c, .7), stroke: COL.board, 'stroke-width': 3 }));
+  });
+  mk('circle', { r, fill: 'none', stroke: COL.chalk, 'stroke-width': 3 }, g);
+  const ptr = G(g);
+  path(ptr, `M0 ${r * .12}V${-r * .78}M-14 ${-r * .66}L0 ${-r * .8}L14 ${-r * .66}`, { stroke: COL.chalk, 'stroke-width': 7 });
+  mk('circle', { r: 12, fill: COL.chalk }, g);
+  show(g, t0);
+  return { g, secs, ptr, land: k => (k + .5) * 360 / n };
+}
+// Outline some spinner sections: a bright border that fades in.
+function outline(p, sp, ks, color, t0, run = tw) {
+  return ks.map(k => { const e = sp.secs[k].cloneNode(); e.setAttribute('fill', 'none'); e.setAttribute('stroke', color); e.setAttribute('stroke-width', 7); sp.g.insertBefore(e, sp.ptr); put(e, { o: 0 }); run(e, { o: 1 }, t0, .4); return e; });
+}
+// A coin face.
+function coin(p, side, x, y, t0, r = 34, run = tw) {
+  const g = G(p, { x, y, s: .5, o: 0 });
+  mk('circle', { r, fill: mix(COL.board, side === 'H' ? COL.int : COL.rat, .5), stroke: side === 'H' ? COL.int : COL.rat, 'stroke-width': 3 }, g);
+  T(g, side, { y: r * .36, size: r, fill: COL.chalk, weight: 700, anchor: 'middle' });
+  run(g, { s: 1, o: 1 }, t0, .45, back);
+  return g;
+}
+/* ---------- scaled axes for data and real-world graphs (ch41 onward) ---------- */
+// Axes with a scale on each; returns value -> pixel maps. ybreak draws a zigzag when y does not start at 0.
+function axes(p, { x0, y0, w, h, xs: [xlo, xhi, xst], ys: [ylo, yhi, yst], xl, yl, t0, ybreak }) {
+  const PX = v => x0 + (v - xlo) / (xhi - xlo) * w, PY = v => y0 - (v - ylo) / (yhi - ylo) * h, g = G(p, { o: 0 });
+  let d = '';
+  for (let v = xlo + xst; v <= xhi + 1e-9; v += xst) d += `M${PX(v)} ${y0}V${y0 - h}`;
+  for (let v = ylo + yst; v <= yhi + 1e-9; v += yst) d += `M${x0} ${PY(v)}H${x0 + w}`;
+  mk('path', { d, stroke: COL.chalk, 'stroke-opacity': .1, 'stroke-width': 1.5, fill: 'none' }, g);
+  path(g, `M${x0} ${y0 - h - 20}V${y0}H${x0 + w + 20}`, { stroke: COL.chalk, 'stroke-width': 3 });
+  if (ybreak) path(g, `M${x0 - 10} ${y0 - 22}L${x0 + 10} ${y0 - 30}M${x0 - 10} ${y0 - 34}L${x0 + 10} ${y0 - 42}`, { stroke: COL.chalk, 'stroke-width': 3 });
+  for (let v = xlo; v <= xhi + 1e-9; v += xst) T(g, String(v), { x: PX(v), y: y0 + 30, size: 20, fill: COL.dim, font: MATH, anchor: 'middle' });
+  for (let v = ylo; v <= yhi + 1e-9; v += yst) T(g, String(v), { x: x0 - 14, y: PY(v) + 7, size: 20, fill: COL.dim, font: MATH, anchor: 'end' });
+  T(g, xl, { x: x0 + w / 2, y: y0 + 66, size: 24, fill: COL.dim, anchor: 'middle' });
+  T(g, yl, { x: x0, y: y0 - h - 36, size: 24, fill: COL.dim, anchor: 'middle' });
+  show(g, t0);
+  return { PX, PY };
+}
+/* ---------- area grids for multiplying and factoring polynomials (ch51 onward) ---------- */
+// Area grid from (x0, y0): column widths ws, row heights hs, factor terms along the top and the left side.
+function areaGrid(p, x0, y0, ws, hs, colLab, rowLab, t0, { size = 40 } = {}) {
+  const xs = [x0], ys = [y0];
+  ws.forEach(w => xs.push(xs.at(-1) + w)); hs.forEach(h => ys.push(ys.at(-1) + h));
+  let d = '';
+  xs.forEach(x => { d += `M${x} ${y0}V${ys.at(-1)}`; }); ys.forEach(y => { d += `M${x0} ${y}H${xs.at(-1)}`; });
+  draw(path(p, d, { stroke: COL.chalk, 'stroke-width': 3 }, { d: 0 }), t0, .9);
+  colLab.forEach((l, j) => show(M(p, [].concat(l), { x: (xs[j] + xs[j + 1]) / 2, y: y0 - 22, size, fill: COL.whole, o: 0 }), t0 + .3 + j * .15));
+  rowLab.forEach((l, i) => show(M(p, [].concat(l), { x: x0 - 24, y: (ys[i] + ys[i + 1]) / 2 + size * .35, size, fill: COL.nat, anchor: 'end', o: 0 }), t0 + .3 + i * .15));
+  const box = (i, j, pad) => ({ x: xs[j] + pad, y: ys[i] + pad, width: xs[j + 1] - xs[j] - 2 * pad, height: ys[i + 1] - ys[i] - 2 * pad });
+  return {
+    xs, ys,
+    cell(i, j, parts, t0, { fill = COL.chalk, tint, run = tw, into = p } = {}) {
+      if (tint) { const r = put(mk('rect', { ...box(i, j, 3), fill: tint }, into), { o: 0 }); into.insertBefore(r, into.firstChild); run(r, { o: .3 }, t0, .4); }
+      const e = M(into, [].concat(parts), { x: (xs[j] + xs[j + 1]) / 2, y: (ys[i] + ys[i + 1]) / 2 + size * .35, size, fill, o: 0, s: .6 });
+      run(e, { o: 1, s: 1 }, t0, .4, back);
+      return e;
+    },
+    ring(i, j, color, t0, run = tw, into = p) { const r = put(mk('rect', { ...box(i, j, 8), rx: 12, fill: 'none', stroke: color, 'stroke-width': 4.5 }, into), { o: 0 }); run(r, { o: 1 }, t0, .3); return r; },
+  };
+}
+// A curved arrow from (x1, y1) to (x2, y2) bending up (h < 0) or down (h > 0).
+function arc(p, x1, y1, x2, y2, h, color, t0, run = tw) {
+  const mx = (x1 + x2) / 2, l = path(p, `M${x1} ${y1}Q${mx} ${y1 + h} ${x2} ${y2}`, { stroke: color, 'stroke-width': 3.5 }, { d: 0 });
+  run(l, { d: 1 }, t0, .5);
+  return l;
+}
+
 /* ---------- coordinate plane (unit 6 onward) ---------- */
 // Grid centred on the origin at (cx, cy); u pixels per unit; x from x0 to x1, y from y0 to y1.
 // Returns { g, PX, PY, u, ... } with helpers to plot points, walk to a point, and draw lines.
@@ -469,6 +599,17 @@ function plane(p, { cx = 800, cy = 450, u = 50, x0 = -6, x1 = 6, y0 = -6, y1 = 6
       return e;
     },
     half: (a, b, c, color, t0, opts) => P.region([[a, b, c]], color, t0, opts),
+    // Graph of y = f(x) for x from xa to xb, drawn on; the part outside the grid's y range is cut off.
+    fn(f, xa, xb, color, t0, { run = tw, w = 4, into = P.layer || p, n = 160, dur = 1.2 } = {}) {
+      let d = '', pen = false;
+      for (let i = 0; i <= n; i++) {
+        const x = xa + (xb - xa) * i / n, y = f(x), inside = y >= y0 - .5 && y <= y1 + .5;
+        if (inside) { d += `${pen ? 'L' : 'M'}${PX(x).toFixed(1)} ${PY(y).toFixed(1)}`; pen = true; } else pen = false;
+      }
+      const l = path(into, d, { stroke: color, 'stroke-width': w }, { d: 0 });
+      run(l, { d: 1 }, t0, dur);
+      return l;
+    },
     // Line through two points, extended to the edge of the grid.
     line(xa, ya, xb, yb, color, t0, { run = tw, w = 4, dash, into = P.layer || p } = {}) {
       const dx = xb - xa, dy = yb - ya, ts = [];
@@ -582,7 +723,7 @@ function brace(p, a, b, y, label, color, t0) {
 
 // Inline math for HTML text.
 function mathEl(parts, size = 22) {
-  const svg = mk('svg', { class: 'm' });
+  const svg = mk('svg', { class: 'm', 'font-weight': 400 });   // widths are measured at normal weight, so a bold prompt must not thicken the math
   const m = M(svg, parts, { size, anchor: 'start', fill: 'currentColor' });
   const top = size * 1.05, h = size * 1.5;
   svg.setAttribute('viewBox', `0 ${-top} ${m._w + 2} ${h}`);
@@ -644,10 +785,12 @@ function mix(a, b, q) {
   const A = h(a), B = h(b);
   return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * q).toString(16).padStart(2, '0')).join('');
 }
+// A colour or attribute tween with no starting value in the state starts from the element's attribute.
+const fromAttr = (e, k) => k.startsWith('c_') ? e.getAttribute(k.slice(2)) : k.startsWith('a_') ? parseFloat(e.getAttribute(k.slice(2))) : undefined;
 function evalTo(t, list = TW) {
   for (const w of list) {
     if (w.done || t < w.t0) continue;
-    if (!w.go) { w.go = 1; if (w.e) { const s = st(w.e); w.from = {}; for (const k in w.to) w.from[k] = s[k]; } }
+    if (!w.go) { w.go = 1; if (w.e) { const s = st(w.e); w.from = {}; for (const k in w.to) w.from[k] = s[k] ?? fromAttr(w.e, k); } }
     const p = w.dur ? Math.min(1, (t - w.t0) / w.dur) : 1, q = w.ease(p);
     if (w.e) {
       const s = st(w.e);
@@ -843,7 +986,7 @@ function quiz(pos, qs, done, label = 'Quick check') {
       return false;
     };
     const kick = label + (qs.length > 1 ? `   ${k + 1} of ${qs.length}` : '');
-    const head = h('div', 'head', [h('p', 'kicker', kick), h('p', 'prompt', [rich(q.prompt)])]);
+    const head = h('div', 'head', [h('p', 'kicker', kick), h('p', 'prompt', [rich(q.prompt, pos.cls.startsWith('screen') ? 38 : 28)])]);   // match the prompt's type size
     if (ctl.hint) head.append(h('p', 'keys', ['Keys: ', ...ctl.hint]));
     c.replaceChildren(...(guide ? [guide] : []), head, fb, body, acts);
   };
@@ -945,6 +1088,39 @@ const tapEls = (row, idx, right, yes, no, onRight) => (body, api) => {
     },
   };
 };
+// Click one of several stage objects (table cells, bars, small graphs). items: [{ el, box: [x, y, w, h], label }].
+const pickEls = (items, right, yes, no, onRight) => (body, api) => {
+  const L = qlayer();
+  let locked = false, cur = -1;
+  const hits = items.map((it, i) => {
+    const [x, y, w, hh] = it.box, g = G(L);
+    g.classList.add('hit');
+    g.setAttribute('tabindex', 0);
+    g.setAttribute('role', 'button');
+    g.setAttribute('aria-label', it.label);
+    mk('rect', { class: 'ring', x, y, width: w, height: hh, rx: 12 }, g);
+    const act = () => {
+      if (locked) return;
+      if (i === right) { g.classList.add('good'); onRight?.(); api.grade(true, yes); }
+      else { g.classList.add('bad'); shakeFx(it.el); api.grade(false, no(i)); }
+    };
+    g.addEventListener('click', act);
+    keyAct(g, act);
+    return g;
+  });
+  return {
+    reveal() { hits[right].classList.add('good'); onRight?.(); return yes; },
+    lock() { locked = true; },
+    hint: [kbd('←'), kbd('→'), ' move, ', kbd('Enter'), ' choose, or click'],
+    key(e) {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d || locked) return false;
+      cur = cur < 0 ? (d > 0 ? 0 : hits.length - 1) : (cur + d + hits.length) % hits.length;
+      hits[cur].focus();
+      return true;
+    },
+  };
+};
 // Rows of toggles. items: { parts, ans: [keys], why }. parts are math parts (strings, F, R) unless text: true,
 // where they are rich text (strings and $m(...)). cols: [[key, label, colour?, shortcut?]]. multi: several per row.
 const grid = (items, cols, { multi = true, text = false } = {}) => (body, api) => {
@@ -1027,6 +1203,7 @@ function rat(str) {
 const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
 const lowest = ([n, d]) => gcd(n, d) === 1;
 // Fill-in boxes inside math. rows: [{ parts: [math parts and { box: '21' }], why, hint?, fx? }].
+// test(values), when given, judges the whole row from the typed numbers (e.g. a factor pair in either order); the boxes' answers are still what Show answer fills in.
 // Answers are exact numbers: "−5", "-5", "0.5", "3/4" and "2 1/4" all work, and equal values match ("6/8" = "3/4")
 // unless the box has lowest: true. hint is shown after a wrong try, why after a right one.
 const blanks = rowsIn => (body, api) => {
@@ -1059,7 +1236,11 @@ const blanks = rowsIn => (body, api) => {
   const single = rows.length === 1;
   const judge = r => {
     let ok = true;
-    for (const b of r.boxes) {
+    if (r.it.test) {               // the row is judged as a whole, e.g. two factors in either order
+      const vals = r.boxes.map(b => rat(b.value));
+      ok = vals.every(Boolean) && !!r.it.test(vals.map(([n, d]) => n / d));
+      r.boxes.forEach(b => { b.classList.toggle('good', ok); b.classList.toggle('bad', !ok); });
+    } else for (const b of r.boxes) {
       const want = rat(b.dataset.ans), got = rat(b.value);
       const good = !!got && got[0] * want[1] === want[0] * got[1] && (!b.dataset.lowest || lowest(got));
       b.classList.toggle('good', good);

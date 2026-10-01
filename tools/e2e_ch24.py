@@ -60,7 +60,7 @@ async def main():
         await keys("Enter"); await pg.wait_for_timeout(200)
         await keys("1", "2", "3", "Enter"); assert await score("p-write") == 3   # practice 3
         await keys("Enter"); await pg.wait_for_timeout(200)
-        assert "Chapter 24 complete" in await pg.inner_text(".card")
+        assert "chapter 24 complete" in (await pg.inner_text(".card")).lower()
         await keys("r"); await pg.wait_for_timeout(200); assert await ev("P.i") == 0   # R restarts; Enter opens the next chapter
 
         for i in range(await ev("BEATS.length")):

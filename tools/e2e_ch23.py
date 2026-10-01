@@ -62,7 +62,7 @@ async def main():
         await typed("7", "8", "-2", "11", "5", "-7"); await keys("Enter")        # practice 3
         assert await score("p-dist") == 3, await ev("JSON.stringify(SCORE)")
         await keys("Enter"); await pg.wait_for_timeout(200)
-        assert "Chapter 23 complete" in await pg.inner_text(".card")
+        assert "chapter 23 complete" in (await pg.inner_text(".card")).lower()
         await keys("r"); await pg.wait_for_timeout(200); assert await ev("P.i") == 0   # R restarts; Enter opens the next chapter
 
         for i in range(await ev("BEATS.length")):

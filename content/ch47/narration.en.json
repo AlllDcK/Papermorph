@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter forty-seven. [[sub]]Not every function graphs as a straight line. Let's put functions to work.",
+    "kinds": "Compare two functions. [[lin]]y equals two x plus one. [[lsteps]]Each time x goes up by one, y goes up by the same amount, two. [[lline]]Equal steps make a straight line: this is a linear function. [[sq]]Now y equals x squared. [[qsteps]]Going up by one in x, y changes by negative three, then negative one, then one, then three. [[qcurve]]The steps change, so the graph bends: this is a nonlinear function. [[form]]A linear function can be written as y equals m x plus b. A nonlinear one can't.",
+    "table": "To graph a nonlinear function, make a table of values. [[rows]]Pick some inputs, and find each output: negative three squared is nine, negative two squared is four, and so on. [[pts]]Each row is a point. Plot them all. [[curve]]Then connect them with a smooth curve, not with straight segments. [[name]]The graph of y equals x squared is a U-shaped curve called a parabola. You'll study parabolas in unit thirteen.",
+    "q1": "Quick check. Plot a point from the table.",
+    "cubic": "Nonlinear functions come in many shapes. [[cube]]Here's y equals x cubed. [[vals]]Negative two cubed is negative eight, negative one cubed is negative one, zero, one, and eight. [[s]]The points make an S-shaped curve: [[neg]]negative inputs give negative outputs, [[steep]]and the curve grows steeper as x moves away from zero.",
+    "walk": "Graphs of functions also describe real situations. [[story]]Maya walks to a friend's house and back. The graph shows her distance from home over time. [[go]]For the first twenty minutes, the distance grows: she's walking away. [[stay]]From twenty to forty-five minutes the graph is flat. Her distance doesn't change, so she's at her friend's house. [[back]]Then the distance drops to zero in ten minutes: she heads home, faster than she came. [[read]]To read the graph, go up from a time to the line, then across to the distance. At ten minutes, she's one kilometer from home.",
+    "q2": "Quick check. Read the graph.",
+    "ball": "Here's a nonlinear situation. [[toss]]A ball is tossed straight up. Its height in meters after t seconds is twenty t minus five t squared. [[tab]]Make a table: [[curve]]the points rise, peak at twenty meters after two seconds, and fall back to the ground at four seconds. [[twice]]Notice the ball is fifteen meters high twice: once going up, at one second, and once coming down, at three seconds.",
+    "q3": "Quick check. When is the ball at its highest?",
+    "wrap": "To sum up. [[w1]]A linear function has equal steps and a straight-line graph. A nonlinear function doesn't. [[w2]]To graph any function, make a table, plot the points, and connect them smoothly. [[w3]]In a real situation, read a graph by going up from the input and across to the output. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Complete the table.",
+    "final2": "Next, linear or nonlinear?",
+    "final3": "Last one. Read the graph.",
+    "finish": "Great work. That's the end of chapter forty-seven, and of unit eight."
+  }
+}

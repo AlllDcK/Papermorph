@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter forty-four. [[sub]]How many ways can you arrange or choose things? It depends on whether order matters.",
+    "order": "Three friends: Ana, Ben, and Cal. [[perm]]If you pick a president and a vice president, Ana then Ben is different from Ben then Ana. Order matters, so each arrangement is a permutation. [[comb]]If you just pick two of them for a committee, Ana and Ben is the same committee as Ben and Ana. Order doesn't matter, so each group is a combination.",
+    "repeat": "Start with permutations that allow repetition. [[code]]A lock code has three digits, each from zero to nine, and digits can repeat. [[s1]]The first digit has ten choices. [[s2]]The second still has ten, [[s3]]and so does the third. [[mult]]By the counting principle, that's ten times ten times ten, or ten to the third power: one thousand codes. [[gen]]In general, choosing r times from n options with repetition gives n to the r.",
+    "norep": "Without repetition, the choices shrink. [[books]]Arrange four different books on a shelf. [[s1]]Any of the four can go first. [[s2]]Then three are left for the second spot, [[s3]]two for the third, [[s4]]and one for the last. [[mult]]Four times three times two times one is twenty-four. [[fact]]A product like this is called a factorial, written with an exclamation mark: four factorial. [[zero]]By definition, zero factorial is one.",
+    "q1": "Quick check. Count the arrangements.",
+    "npr": "Sometimes you arrange only some of the items. [[club]]A club has six members and needs a president, a vice president, and a secretary. [[s]]That's six choices, then five, then four: one hundred twenty. [[name]]This is called the number of permutations of six things taken three at a time. [[form]]As a formula, it's six factorial over three factorial. [[cancel]]The three times two times one cancels, [[left]]leaving six times five times four. [[gen]]In general, n factorial over the quantity n minus r, factorial.",
+    "qp": "Quick check. Arrange some of the items.",
+    "comb": "Now let order stop mattering. [[menu]]A dessert plate lets you pick two of four desserts. [[ordered]]Counting ordered picks gives four times three, twelve. [[pairs]]But apple then berry, and berry then apple, are the same plate. [[twice]]Every plate was counted twice. [[div]]So divide by two: six different plates.",
+    "groups": "Why divide by two? [[pick]]Two items can be ordered in two factorial ways. [[three]]A group of three can be ordered in three factorial, or six, ways. [[each]]Every group shows up that many times in the permutation count. [[rule]]So the number of combinations is the number of permutations divided by r factorial.",
+    "q2": "Quick check. Does order matter here?",
+    "wrap": "To sum up. [[w1]]Order matters: permutations. Order doesn't: combinations. [[w2]]With repetition, n choices r times gives n to the r. [[w3]]Without repetition, the permutations of n things taken r at a time are n factorial over n minus r factorial. [[w4]]Combinations are those permutations divided by r factorial. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Does order matter?",
+    "final2": "Next, count the permutations.",
+    "final3": "Last one. Count the combinations.",
+    "finish": "Excellent. That's the end of chapter forty-four, and of unit seven."
+  }
+}

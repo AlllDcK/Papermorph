@@ -5,7 +5,7 @@
 ## 舞台与状态
 
 - 舞台为 SVG，`viewBox 0 0 1600 900`，所有动画元素画在 `#scene` 中。HTML 卡片放在 `#ui`，坐标系与舞台相同。
-- 每个动画元素带一个状态对象，由 `render()` 写回 DOM：`x y`（平移）、`s`（缩放）、`r`（旋转，度）、`o`（不透明度）、`d`（描边绘制进度 0–1）、`a_<属性>`（数值属性，如 `'a_stroke-width'`）、`c_<属性>`（十六进制颜色）。补间用到的键要先在创建时赋初值。
+- 每个动画元素带一个状态对象，由 `render()` 写回 DOM：`x y`（平移）、`s`（缩放）、`r`（旋转，度）、`o`（不透明度）、`d`（描边绘制进度 0–1）、`a_<属性>`（数值属性，如 `'a_stroke-width'`）、`c_<属性>`（十六进制颜色）。补间用到的键要先在创建时赋初值；`a_`/`c_` 键若没有初值，补间开始时从元素的同名属性读取（属性须是数值或十六进制颜色）。
 - 缩放、旋转都绕元素自身原点。所以把内容画在 (0,0) 周围，再用 `x/y` 摆放位置。
 - `S` 保存本章跨步骤共用的对象（`S.line`、`S.dots`、`S.ring`、`S.panel`……）。`reset()` 会清空它，需要跨步使用的对象都要登记在 `S` 上。
 
@@ -43,9 +43,13 @@
 | `eqLine(p, L, R, y, t0, {xEq, sym, note})` | 等号（或不等号）对齐的一行推导，右侧可带注释 |
 | `ray(p, v, closed, dir, t0)`、`segment(p, a, b, ca, cb, t0)` | 数轴上的射线与线段解集（ch26、ch27） |
 | `E(exp)` | `M()` 中的上标指数 |
-| `plane(p, {cx, cy, u, x0, x1, y0, y1, t0})` | 坐标系（ch30 起）。返回 `P`：`PX/PY` 换算、`dot(x, y, color, t0, {label, dx, dy, anchor, into, run})`、`walk`（从原点沿 x 再沿 y 走到点）、`line(xa, ya, xb, yb, color, t0)`（延长到网格边）、`arrow(xa, ya, xb, yb, color, t0, {label})`、`stair(x, y, rise, run, t0, {labels})`（先竖后横的斜率台阶）、`half(a, b, c, color, t0)`（给 a·x + b·y ≥ c 的半平面着色，裁在网格内）；`line` 传 `dash` 时淡入而不是描出。每步设 `P.layer = panel(0)`，点和线画进本步面板，换步自动淡出；答题动画传 `{run: fx, into: 层}` |
+| `plane(p, {cx, cy, u, x0, x1, y0, y1, t0})` | 坐标系（ch30 起）。返回 `P`：`PX/PY` 换算、`dot(x, y, color, t0, {label, dx, dy, anchor, into, run})`、`walk`（从原点沿 x 再沿 y 走到点）、`line(xa, ya, xb, yb, color, t0)`（延长到网格边）、`arrow(xa, ya, xb, yb, color, t0, {label})`、`stair(x, y, rise, run, t0, {labels})`（先竖后横的斜率台阶）、`fn(f, xa, xb, color, t0, {w, dur})`（描出 y = f(x) 的曲线，超出网格的部分不画，ch47 起）、`half(a, b, c, color, t0)`（给 a·x + b·y ≥ c 的半平面着色，裁在网格内）；`line` 传 `dash` 时淡入而不是描出。每步设 `P.layer = panel(0)`，点和线画进本步面板，换步自动淡出；答题动画传 `{run: fx, into: 层}` |
+| `die(p, n, x, y, s, o)`、`coin(p, 'H'/'T', x, y, t0, r, run)`、`spinner(p, cx, cy, r, t0, colors)` + `.land(k)`、`outline(p, sp, ks, color, t0, run)` | 骰子点数面、硬币、等分转盘（指针转角 `land(k)` 指向第 k 格）及高亮格子（ch42 起） |
+| `axes(p, {x0, y0, w, h, xs: [lo, hi, step], ys: [lo, hi, step], xl, yl, t0, ybreak})` | 带刻度和轴名的第一象限坐标轴（散点图、实际情境图，ch41 起），返回 `{PX, PY}` |
+| `areaGrid(p, x0, y0, ws, hs, 列标签, 行标签, t0, {size})` + `.cell(i, j, parts, t0, {fill, tint, run, into})`、`.ring(i, j, color, t0)`；`arc(p, x1, y1, x2, y2, h, color, t0)` | 多项式乘法与因式分解的面积网格（列标签在上、行标签在左），弧形箭头（ch51 起） |
+| `dataLine(p, {lo, hi, x0, x1, y, step, every, r})` | 数据数轴（ch40 起）。返回 `D`：`V(v)` 换算横坐标，`dot(v, color, t0, {from})` 在 v 上方叠点（`from` 给出时从该高度落下），`dots(vals, …)`，`mark(v, color, t0, label)` 轴下的平衡三角（`slide(mark, v, t0)` 滑动），`span(a, b, y, label, color, t0)` 上方区间括号；答题动画传 `{run: fx, into}` |
 
-题型补充：`pickPoint(P, [x, y], 答对说明, (x, y) => 错因, 答对动画?, test?)`（`test(x, y)` 给出时接受任何满足的点，`[x, y]` 只用于 Show answer；答对说明也可以是 `(x, y) => 文本`） 在坐标系上选格点，方向键移动光标、Enter 选定或直接点击；同一 quiz 连续两题时，前一题的答对动画要画进本步面板（qlayer 会在下一题清空）。`tapEls(row, idx, right, yes, no, onRight)` 点选画面里算式的某个记号（如“先算哪一步”）；`blanks` 的格子接受分数与带分数，`{box: '3/4', lowest: true}` 要求最简形式。
+题型补充：`pickEls(items, right, 答对说明, i => 错因, 答对动画?)` 点选画面里任意对象（表格单元格、柱子、小图），`items` 为 `[{el, box: [x, y, w, h], label}]`，←/→ 切换、Enter 选定（ch41 起）；`pickPoint(P, [x, y], 答对说明, (x, y) => 错因, 答对动画?, test?)`（`test(x, y)` 给出时接受任何满足的点，`[x, y]` 只用于 Show answer；答对说明也可以是 `(x, y) => 文本`） 在坐标系上选格点，方向键移动光标、Enter 选定或直接点击；同一 quiz 连续两题时，前一题的答对动画要画进本步面板（qlayer 会在下一题清空）。`tapEls(row, idx, right, yes, no, onRight)` 点选画面里算式的某个记号（如“先算哪一步”）；`blanks` 的格子接受分数与带分数，`{box: '3/4', lowest: true}` 要求最简形式。行上给 `test(values)` 时整行一起判（如两个因式顺序任意，ch54 起），Show answer 仍填各格的 `box`。
 
 ## 步骤（BEATS）
 

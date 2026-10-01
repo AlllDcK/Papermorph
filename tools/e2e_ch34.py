@@ -66,7 +66,7 @@ async def main():
         await typed("3", "-3/5", "-3/2", "-3", "3/4", "-3", "4", "2"); await keys("Enter")   # practice 3
         assert await score("p-int") == 4
         await keys("Enter"); await pg.wait_for_timeout(200)
-        assert "Chapter 34 complete" in await pg.inner_text(".card")
+        assert "chapter 34 complete" in (await pg.inner_text(".card")).lower()
         await keys("r"); await pg.wait_for_timeout(200); assert await ev("P.i") == 0
 
         for i in range(await ev("BEATS.length")):

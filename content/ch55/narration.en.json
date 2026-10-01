@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter fifty-five. [[sub]]When the x squared term has a coefficient other than one, one extra step turns factoring back into a grouping problem.",
+    "form": "Trinomials like two x squared plus seven x plus five have a leading coefficient a that isn't one. [[goal]]We still want two binomials, now in the form d x plus e, times f x plus g. [[foil]]Multiplying them out: [[a]]d times f gives a, [[c]]e times g gives c, [[b]]and the outer and inner products add up to b. [[hard]]Four numbers at once is a lot to guess, so here's a method that finds them step by step.",
+    "ac": "It's called the a c method. [[mult]]First, multiply a by c: two times five is ten. [[pair]]Find two numbers that multiply to ten and add to b, seven. Two and five. [[split]]Split the middle term with them: seven x becomes two x plus five x. [[four]]Now there are four terms, [[group]]so factor by grouping: two x times x plus one, plus five times x plus one. [[ans]]The answer is x plus one, times two x plus five.",
+    "box": "A grid shows the same thing. [[cells]]Put two x squared and five in opposite corners, and the split terms, two x and five x, in the other two. [[rows]]Each row's common factor goes on the left: x for the top row, one for the bottom. [[cols]]Each column's common factor goes on top: two x, and five. [[ans]]The left side and the top are the two factors: x plus one, times two x plus five. [[chk]]Multiply back, and every cell checks out.",
+    "q1": "Quick check. Find the pair for the a c method.",
+    "neg": "Signs work as before. [[q]]Factor three x squared minus ten x plus eight. [[ac]]a times c is twenty-four, and b is negative ten. [[pair]]Both numbers are negative: negative four and negative six. [[split]]Split: three x squared minus four x minus six x plus eight. [[group]]Group: x times three x minus four, minus two times three x minus four. [[ans]]So it's three x minus four, times x minus two.",
+    "negc": "When c is negative, the two numbers have opposite signs. [[q]]Factor five x squared minus twenty-eight x minus twelve. [[ac]]a c is negative sixty, and b is negative twenty-eight. [[pair]]Two and negative thirty work: their product is negative sixty, and their sum is negative twenty-eight. [[split]]Split and group: x times five x plus two, minus six times five x plus two. [[ans]]The answer is five x plus two, times x minus six.",
+    "q2": "Quick check. Factor the trinomial.",
+    "none": "Some trinomials don't factor. [[q]]Try six x squared minus five x plus fourteen. [[ac]]a c is eighty-four, so we need two negative numbers that multiply to eighty-four and add to negative five. [[list]]Check every pair. Their sums run from negative eighty-five up to negative nineteen. [[nf]]None is negative five, so it can't be factored with integers.",
+    "wrap": "To sum up. [[w1]]Multiply a times c. [[w2]]Find two numbers that multiply to a c and add to b. [[w3]]Use them to split the middle term, then factor by grouping. [[w4]]If no pair works, the trinomial doesn't factor with integers. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Factor each trinomial.",
+    "final2": "Next, can it be factored?",
+    "final3": "Last one. Pick the factorization.",
+    "finish": "Well done. That's the end of chapter fifty-five, factoring trinomials when a isn't one."
+  }
+}

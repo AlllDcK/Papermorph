@@ -67,7 +67,7 @@ async def main():
         await keys("Enter"); await pg.wait_for_timeout(200)
         await keys("f", "f", "f", "t", "t", "f", "Enter"); assert await score("p-tf") == 6
         await keys("Enter"); await pg.wait_for_timeout(200)
-        assert "Chapter 2 complete" in await pg.inner_text(".card")
+        assert "chapter 2 complete" in (await pg.inner_text(".card")).lower()
         await keys("r"); await pg.wait_for_timeout(200); assert await ev("P.i") == 0   # R restarts; Enter would open the next chapter
 
         # every beat fast-forwards cleanly (replay from any step)

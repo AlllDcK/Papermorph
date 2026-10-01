@@ -1,0 +1,22 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Unit ten, chapter fifty-two. [[sub]]Factoring runs multiplication backward: you start with the product and find what was multiplied.",
+    "factors": "Factors are numbers you multiply to get a given number. [[dots]]Twelve dots can be arranged into rectangles. [[r1]]One row of twelve, [[r2]]two rows of six, [[r3]]or three rows of four. [[list]]The side lengths are the factors of twelve: one, two, three, four, six, and twelve. [[mono]]Monomials have factors too. Six x is two times three x, or three times two x, or six times x.",
+    "gcf": "The greatest common factor, or GCF, is the largest factor two numbers share. [[ex]]Take twelve and twenty. [[primes]]Break each into prime factors: twelve is two times two times three, and twenty is two times two times five. [[match]]Match the primes they share: a two, and another two. [[gcf]]Multiply the shared primes: the GCF is four.",
+    "mono": "The same idea finds the GCF of monomials. [[ex]]Take twelve x cubed y squared and eighteen x squared y to the fourth. [[expand]]Write out every factor. [[match]]Match what they share: [[nums]]a two and a three, [[xs]]two x's, [[ys]]and two y's. [[gcf]]So the GCF is six x squared y squared. [[rule]]In short: the GCF of the coefficients, times each shared variable to its smallest exponent.",
+    "q1": "Quick check. Find the GCF.",
+    "factor": "To factor a polynomial, pull its GCF out of every term. [[ex]]Factor six x squared plus nine x. [[area]]Think of it as the area of a rectangle made of two parts. [[gcf]]The GCF, three x, is the height they share. [[w1]]Six x squared divided by three x is two x, [[w2]]and nine x divided by three x is three. [[ans]]So six x squared plus nine x equals three x times the quantity two x plus three. [[chk]]Check by multiplying back: three x times two x is six x squared, and three x times three is nine x.",
+    "big": "The steps don't change for bigger exponents. [[ex]]Factor six x to the ninth y to the seventh minus ten x to the fourth y to the fifteenth. [[gcf]]The GCF is two, times x to the fourth, times y to the seventh. [[d1]]Divide the first term by the GCF: three x to the fifth. [[d2]]Divide the second: five y to the eighth. [[ans]]The factored form is two x to the fourth y to the seventh, times three x to the fifth minus five y to the eighth.",
+    "q2": "Quick check. Factor out the GCF.",
+    "one": "Watch out when the GCF is a whole term. [[ex]]Factor five a plus five. [[div]]Five a divided by five is a, and five divided by five is one. [[ans]]So the answer is five times a plus one. [[warn]]The one must stay. Without it, five times a is only five a, and the plus five is lost.",
+    "full": "Use the greatest common factor, not just any common factor. [[ex]]Someone factors twelve x to the seventh y to the ninth minus sixteen x to the tenth y to the fourth as two x to the seventh y squared, times six y to the seventh minus eight x cubed y squared. [[chk]]It multiplies back correctly, [[left]]but the terms inside still share a factor, two y squared. [[ans]]Factoring completely gives four x to the seventh y to the fourth, times three y to the fifth minus four x cubed. [[test]]A quick test: if the terms inside the parentheses still have a common factor, keep going.",
+    "q3": "Quick check. Is it fully factored?",
+    "wrap": "To sum up. [[w1]]The GCF is the product of the shared factors: the GCF of the coefficients, and each shared variable to its smallest exponent. [[w2]]To factor, divide every term by the GCF and write the GCF times what's left. [[w3]]Check by multiplying back, and make sure nothing common is left inside. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find each GCF.",
+    "final2": "Next, factor each polynomial.",
+    "final3": "Last one. Fully factored, or not yet?",
+    "finish": "Well done. That's the end of chapter fifty-two, factoring with the GCF."
+  }
+}

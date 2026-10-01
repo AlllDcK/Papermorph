@@ -146,7 +146,7 @@ async def keyboard_only():
         await keys("Enter"); await pg.wait_for_timeout(200)
         await keys("t", "f", "f", "t", "f", "Enter"); assert await ev("SCORE['p-tf'].right") == 5
         await keys("Enter"); await pg.wait_for_timeout(200)
-        assert "Chapter 1 complete" in await pg.inner_text(".card")
+        assert "chapter 1 complete" in (await pg.inner_text(".card")).lower()
         await keys("r"); await pg.wait_for_timeout(200); assert await ev("P.i") == 0   # R restarts; Enter would open the next chapter
         print("keyboard only: all questions answered, errors:", errs)
         assert not errs

@@ -1,0 +1,24 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter forty. [[sub]]When you have a whole set of data, it helps to describe it with just a few numbers: one for the middle, and one for the spread.",
+    "set": "A data set is the group of values you collected. [[c]]A measure of central tendency is a single number that summarizes the middle of the set. [[three]]The three most common are [[mean]]the mean, [[med]]the median, [[mode]]and the mode. [[var]]A measure of variation tells how spread out the values are. The main one is [[range]]the range.",
+    "mean": "Start with the mean, also called the average. [[data]]A player scored twelve, nineteen, twenty-three, and ten points in four games. [[add]]First, add all the values. The total is sixty-four. [[div]]Then divide by how many values there are. Four games, so sixty-four divided by four is sixteen. [[ans]]The mean is sixteen points per game.",
+    "level": "Why does that work? [[line]]Draw a line at sixteen. [[extra]]The tall bars have points above the line, [[short]]and the short bars have room below it. [[move]]Move the extra points into the gaps, [[even]]and every bar ends up at exactly sixteen. [[fair]]The mean is a fair share: what each game would score if the total were spread out evenly.",
+    "q1": "Quick check. Find the mean.",
+    "median": "The median is the middle value. [[jumps]]Five friends counted their jump rope jumps: one hundred thirty, eighty-five, one hundred fifty, two hundred ten, and one hundred. [[sort]]First, put the values in order from least to greatest. [[cross]]Then cross off one value from each end, again and again. [[mid]]The value left in the middle, one hundred thirty, is the median.",
+    "even": "With an even number of values, two values share the middle. [[set]]Take fourteen, twenty-six, forty, and fifty-three. [[pair]]Crossing off the ends leaves twenty-six and forty. [[avg]]The median is the mean of those two: add them to get sixty-six, then divide by two. [[ans]]The median is thirty-three, halfway between them, even though thirty-three isn't in the data.",
+    "q2": "Quick check. Click the median.",
+    "mode": "The mode is the value that occurs most often. [[plot]]Here are nine quiz scores on a dot plot. Each dot is one score, and repeated scores stack up. [[tall]]The tallest stack is at eight, so the mode is eight. [[two]]A set can have two modes, when two values tie for most often. [[none]]And if no value repeats, there is no mode.",
+    "range": "Now the spread. [[a]]Here are two groups of six scores. [[bal]]Both have a mean of eight: each dot plot balances at eight. [[diff]]But the second group is far more spread out. [[def]]The range measures that: the maximum minus the minimum. [[ra]]For the first group, ten minus six is four. [[rb]]For the second, fourteen minus two is twelve. [[big]]A bigger range means more variation.",
+    "q3": "Quick check. Find the mode and the range.",
+    "outlier": "An outlier is a value much greater or much less than the rest. [[four]]Four friends ate two, three, two, and four slices of pizza. [[mn]]Their mean is two point seven five, [[md]]and their median is two point five. [[out]]Now a fifth friend ate fourteen slices. [[pull]]The mean jumps to five, more than four of the five friends ate. [[stay]]The median only moves to three. [[skew]]An outlier can skew the mean, so when a set has one, the median usually describes a typical value better.",
+    "q4": "Quick check. Which number better describes a typical friend?",
+    "wrap": "To sum up. [[w1]]Mean: add the values, then divide by how many there are. [[w2]]Median: the middle value once they're in order, or the mean of the two middle values. [[w3]]Mode: the value that occurs most often. [[w4]]Range: the maximum minus the minimum. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find all four measures.",
+    "final2": "Next, how many modes does each set have?",
+    "final3": "Last one. This set has an even number of values.",
+    "finish": "Nicely done. That's the end of chapter forty, measures of central tendency and variation."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter fifty-six. [[sub]]A few patterns show up so often that it pays to recognize them on sight.",
+    "dos": "The first pattern is a difference of two squares: a squared minus b squared. [[sq]]Start with a big square, a by a. [[cut]]Cut a small b by b square out of its corner. The area left is a squared minus b squared. [[slice]]Slice the leftover shape into two rectangles, [[move]]and swing one of them around to the side. [[rect]]Now it's one rectangle: a plus b long, and a minus b wide. [[ans]]So a squared minus b squared equals a plus b, times a minus b.",
+    "dosex": "To use it, ask: is each term a perfect square? [[ex]]Take a squared minus eighty-one b squared. [[sq]]a squared is a, squared, and eighty-one b squared is nine b, squared. [[ans]]So it factors into a plus nine b, times a minus nine b. [[no]]There's no such pattern for a sum of two squares: a squared plus b squared doesn't factor with real numbers.",
+    "q1": "Quick check. Factor the difference of squares.",
+    "pst": "The second pattern is a perfect square trinomial. [[sq]]Picture a plus b, squared, as a square with side a plus b. [[parts]]It splits into an a squared square, a b squared square, and two a b rectangles. [[sum]]So a plus b, squared, equals a squared plus two a b plus b squared. [[minus]]And a minus b, squared, equals a squared minus two a b plus b squared. [[test]]To spot one, check three things: the first and last terms are perfect squares, and the middle term is twice the product of their square roots.",
+    "pstex": "Try four m squared minus twenty m n plus twenty-five n squared. [[ends]]The ends are two m, squared, and five n, squared. [[mid]]Twice two m times five n is twenty m n: that matches the middle term. [[sign]]The middle sign is minus, [[ans]]so it's two m minus five n, squared.",
+    "q2": "Quick check. Is it a perfect square?",
+    "cubes": "Two more patterns work with cubes. [[sum]]A sum of two cubes: a cubed plus b cubed equals a plus b, times a squared minus a b plus b squared. [[diff]]A difference of two cubes: a cubed minus b cubed equals a minus b, times a squared plus a b plus b squared. [[soap]]Notice the signs. The first sign matches the original, the middle sign is the opposite, and the last sign is always positive. [[ex]]For example, a cubed plus eight b cubed. [[cube]]Eight b cubed is two b, cubed. [[ans]]So it's a plus two b, times a squared minus two a b plus four b squared.",
+    "q3": "Quick check. Factor the sum of cubes.",
+    "combo": "Always look for a GCF first. [[ex]]Factor eighteen a x squared minus thirty-two a. [[gcf]]Both terms share two a. [[left]]What's left is nine x squared minus sixteen, [[dos]]a difference of squares: three x, squared, minus four, squared. [[ans]]So the answer is two a, times three x plus four, times three x minus four.",
+    "wrap": "To sum up. [[w1]]Difference of squares: a squared minus b squared is a plus b, times a minus b. [[w2]]Perfect square trinomial: a squared plus or minus two a b plus b squared is a plus or minus b, squared. [[w3]]Sum and difference of cubes follow their own patterns. [[w4]]Take out a GCF first, then look for a pattern. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Which pattern fits?",
+    "final2": "Next, factor using the patterns.",
+    "final3": "Last one. GCF first, then a pattern.",
+    "finish": "Great work. That's the end of chapter fifty-six, and of unit ten."
+  }
+}
