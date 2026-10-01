@@ -327,6 +327,52 @@
 - 26 步：19 段讲解、5 次小测、3 组全屏整章练习和结束页。`tools/e2e_ch01.py` 在浏览器里走一遍全部流程。
 - 原书错误已在改写中修正：natural numbers 并非 whole numbers；有限小数定义改为“会结束”；原练习第 3 题（无规律的有限位数加省略号）未采用。
 
+## 13.1 逐章进度
+
+| 章 | 内容 | 状态 | 原书问题（已在改写中处理） |
+| --- | --- | --- | --- |
+| 1 | Types of Numbers | 用户已认可 | natural 与 whole 混称；有限小数定义不严谨；练习 3 不可判定 |
+| 2 | Algebraic Properties | 首版完成，待用户审阅 | 练习 6 表述有误；“分配律不适用于除法”过宽，改为“除以一个和不能拆开” |
+| 3 | Order of Operations | 首版完成，待用户审阅 | 无明显错误；幂运算放到后面章节，本章只点到为止 |
+| 4 | Adding Positive and Negative Whole Numbers | 首版完成，待用户审阅 | 无明显错误；新增正负方块抵消的直观模型 |
+| 5 | Subtracting Positive and Negative Whole Numbers | 首版完成，待用户审阅 | 无明显错误；距离题换成原创情境 |
+| 6 | Multiplying and Dividing Positive and Negative Whole Numbers | 首版完成，待用户审阅 | “数负号”规则未提因数为 0 的情况，已补；练习 10 “自乘 327 次”次数有歧义，未采用 |
+| 7 | Multiplying and Dividing Positive and Negative Fractions | 首版完成，待用户审阅 | 无明显错误；补充了“−2½ 是 −(2 + ½)”的常见误区；填空题开始接受分数与带分数，可要求最简形式 |
+| 8 | Adding and Subtracting Positive and Negative Fractions | 首版完成，待用户审阅 | 无明显错误；用条形模型说明为何要通分 |
+| 9 | Adding and Subtracting Decimals | 首版完成，待用户审阅 | 小标题“Subtracting decimals with different signs”下的例题 8.01 − 5.4 符号相同，标题与例子不符；改写时按“同号/异号”重新组织 |
+| 10 | Multiplying and Dividing Decimals | 首版完成，待用户审阅 | 例题 −6.912 ÷ 0.03 中写“两数都乘 1000 变成 6912 和 30”，只需乘 100 使除数为整数，改写时采用后者 |
+| 11 | Ratio | 首版完成，待用户审阅 | 无明显错误；补充“两项同加一个数不能得到等比”的常见误区 |
+| 12 | Unit Rate | 首版完成，待用户审阅 | 无明显错误；用双数轴表示单位比率 |
+| 13 | Proportion | 首版完成，待用户审阅 | 原书称“构成比例的两个比叫 equivalent fractions”，应为 equivalent ratios；例题“18 minutes = 3x”单位混写，改写时不采用；补充了交叉相乘成立的理由 |
+| 14 | Percent | 首版完成，待用户审阅 | 原书写“多数百分数小于 1，如 25%；也可大于 1，如 125%”，应为小于/大于 100%；练习 1 答案 85/100 未化简（17/20） |
+| 15 | Percent Applications | 首版完成，待用户审阅 | 夹克例题 22/65 ≈ 0.338，原书写成 0.34 并得出“正好 66% 折扣”，属四舍五入未注明；改写时换成整数例子 |
+| 16 | Simple Interest | 首版完成，待用户审阅 | 小标题“Simple interest verses compound interest”拼写错误（versus）；柱状图中利息块按比例放大并在画面注明 |
+| 17 | Percent Rate of Change | 首版完成，待用户审阅 | 无明显错误；补充“除以原值”“先涨 50% 再跌 50% 回不到原价”两个常见误区 |
+| 18 | Tables and Ratios | 首版完成，待用户审阅 | 无明显错误；补充了非比例表（有起步价的出租车）作对照 |
+| 19 | Exponents | 首版完成，待用户审阅 | 答案页第 9 题 (2/5)⁻³ 应为 125/8（原书写 4/9），第 10 题 (4/3)⁻³ 应为 27/64（原书写 −64/27）；“任何底数的 0 次方为 1”需排除 0；引擎新增上标 E() |
+| 20 | Scientific Notation | 首版完成，待用户审阅 | “大于 1 的数指数为正”不严谨（1 到 10 之间指数为 0），改为“≥ 10 为正、小于 1 为负”；pointRow 移入引擎 |
+| 21 | Expressions | 首版完成，待用户审阅 | 答案页第 4 题变量应为 a、b（原书多写了 c），第 5 题系数应为 3、−0.7、−51（原书写 −0.7、51）；多变量按字母排序的“标准形式”超出初一范围，只讲单变量降幂 |
+| 22 | Evaluating Algebraic Expressions | 首版完成，待用户审阅 | 练习 9 “c 为猫粮磅数”却用 8c + 5d 求总磅数，量纲不通；改写为按袋计数（每袋 8 磅、5 磅） |
+| 23 | Combining Like Terms | 首版完成，待用户审阅 | 答案页第 6 题 4m + 3n² + 17/2 n 未按降幂排列（应为 3n² + 4m + 17/2 n）；用代数方块（algebra tiles）演示合并与抵消 |
+| 24 | Introduction to Equations | 首版完成，待用户审阅 | “自变量是你代入的变量、因变量是你求解的变量”表述含糊，改用输入/输出机器说明；用天平表示等式 |
+| 25 | Solving One-Variable Equations | 首版完成，待用户审阅 | 无明显错误；天平+代数方块演示“两边做同样的事”；天平与代数方块移入引擎 |
+| 26 | Solving One-Variable Inequalities | 首版完成，待用户审阅 | “加减负数不变号……因为负数改变了比较”一句自相矛盾，改为用数轴翻转说明为何乘除负数要变号；新增可用键盘画射线的作图题 |
+| 27 | Solving Compound Inequalities | 首版完成，待用户审阅 | “Union (or)”一节的例题写成 x < −2 and x ≤ −1，应为 or；ray/segment 移入引擎 |
+| 28 | Rewriting Formulas | 首版完成，待用户审阅 | x² − 9 = c² − 5 的例子只取正根（应为 ±），且写法 “√x² ± √(c²+4)” 不规范；开方求解超出本阶段，未采用；eqLine 移入引擎；引擎把单个大写字母及 PV、nRT 这类记号也排成斜体 |
+| 29 | Solving Systems by Substitution | 首版完成，待用户审阅 | “rewrite equation 2 in terms of x” 实际得到 x = 2 − 7y（是用 y 表示 x），术语前后不一致，改写时统一为“solve ① for y”；用枚举表先展示票价问题的唯一解，再用代入法求出 |
+| 30 | Solving Systems by Elimination | 首版完成，待用户审阅 | “x 系数的 LCM 是 6x”应为 6；用列对齐 + 划去相消列演示消元 |
+| 31 | Points and Lines | 首版完成，待用户审阅 | 章名为 Points and Lines，但本章只讲点、象限、定义域与值域；引擎新增坐标平面 plane 与点选题 pickPoint（方向键移动、Enter 选定，也可点击） |
+| 32 | Graphing a Line From a Table of Values | 首版完成，待用户审阅 | 无明显错误；补充“x 等步长时 y 也等步长才成直线”的判断依据；plane 的标记改为画在每步的面板里，换步自动清除 |
+| 33 | Slope | 首版完成，待用户审阅 | 无明显错误；书中 “(x₁, y₁) This is read …” 的读法说明被遮挡缺失，改写时不涉及；阶梯式 rise/run 箭头演示 |
+| 34 | Slope-Intercept Form | 首版完成，待用户审阅 | 原书第 6 题答案错：过 (3, 3)、(1, 10) 应为 y = −7/2 x + 27/2（书上 y = −4x + 14 不过这两点），练习已改正；阶梯箭头移入引擎 `P.arrow/P.stair`；小测在坐标系上先描截距再按斜率走一步 |
+| 35 | Point-Slope Form | 首版完成，待用户审阅 | 原书标准式例题步骤顺序混乱（y − 7 = x/3 + 4 出现在分配之前且重复），标注的 A 为 −1/3 与“A 为正”矛盾；本章按常见约定要求 A、B、C 为整数且 A 为正（例题答案 x − 3y = −33，第 9 题 12x − 2y = −11），与原书分数答案不同；补充了点斜式的推导 |
+| 36 | Solving Systems of Linear Equations by Graphing | 首版完成，待用户审阅 | 原书第 5 题答案错：5x − 3y = −14 与 3x + y = 0 的解是 (−1, 3)（书上写 (−5/7, 16/7)，但其图正确），练习已改正；三种情形（一解、无解、无穷多解）并排对比；小测在坐标系上点选交点 |
+| 37 | Graphing Linear Inequalities | 首版完成，待用户审阅 | 原书无明显错误；引擎新增 `P.half`（半平面着色）、`pickPoint` 可接受判定函数；修正虚线被描线动画覆盖成实线的引擎错误（影响 ch32、ch36，已回归） |
+| 38 | Solving Systems of Linear Inequalities by Graphing | 首版完成，待用户审阅 | 原书第二个例题题干写 x + y > −5、−x + y ≤ 1，解题过程却用 3x + y > −5、−x + y ≤ −1，本章按解题过程的版本讲；引擎新增 `P.region`（多个半平面的交集着色）与空心点 `open` |
+| 39 | Introduction to Statistics | 首版完成，待用户审阅 | 原书无明显错误（第 2 题“rounded up from 18.67”实为四舍五入）；第 3 题弹珠按高度比例估算与抽样无关，未采用；用点阵演示总体、随机样本与不具代表性的样本 |
+
+第二章起，引擎抽到 `site/lib/`，并新增填空题 `blanks`、可单独移动的算式记号 `tokens`、逐步化简动画 `collapse`、点选画面中运算符的 `tapEls`。
+
 ## 14. 首章验收标准
 
 - **数学正确**：定义、图形、例子、术语和判题规则一致，没有误导性演示。

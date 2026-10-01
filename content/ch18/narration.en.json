@@ -1,0 +1,18 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "A table is a tidy way to keep track of equivalent ratios. [[q]]Once you know one row, you can fill in the rest.",
+    "unitRow": "A runner's coach records her laps and minutes. [[r1]]Three laps take nine minutes. [[r2]]Six laps take eighteen minutes. [[q]]How long does one lap take? [[div]]Divide the minutes by the laps: nine divided by three is three. [[check]]And eighteen divided by six is also three. [[fill]]So one lap takes three minutes. That's the unit rate, and it goes in the first row. [[more]]With the unit rate, any row is easy: ten laps take ten times three, which is thirty minutes.",
+    "scale": "You can also move between rows without the unit rate. [[q]]Going from three laps to six laps doubles the laps, [[x2]]so the minutes double too: nine becomes eighteen. [[rule]]Whatever you multiply one column by, you multiply the other column by the same number. That's what makes a table proportional.",
+    "q1": "Quick check. Complete the table.",
+    "compare": "Tables make comparisons easy. [[q]]Two runners, Ann and Hiro, have their own tables. [[ann]]Ann runs three laps in twelve minutes: that's four minutes per lap. [[hiro]]Hiro runs two laps in ten minutes: that's five minutes per lap. [[who]]Ann needs less time for each lap, so Ann is faster. [[warn]]Be careful: fewer minutes per lap means faster, not slower.",
+    "notProp": "Not every table is proportional. [[q]]Here's a taxi fare: a three-dollar starting fee plus two dollars per kilometer. [[rows]]One kilometer costs five dollars. Two kilometers cost seven. Four kilometers cost eleven. [[test]]Divide each cost by the distance: five, three and a half, and two point seven five. [[no]]The ratios are not all the same, so this table is not proportional. [[why]]Doubling the distance does not double the cost, because of the starting fee. [[rule]]Only use unit rates and scaling when every row has the same ratio.",
+    "q2": "Quick check. Is it proportional?",
+    "wrap": "In a proportional table, [[w1]]every row has the same ratio: the unit rate. [[w2]]Find it by dividing, and write it in the one-unit row. [[w3]]Fill other rows by multiplying the unit rate, or by scaling both columns by the same number. [[w4]]If the ratios differ from row to row, the table isn't proportional. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Complete the tables.",
+    "final2": "Next, decide whether each table is proportional.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter eighteen, tables and ratios, and the end of unit three."
+  }
+}

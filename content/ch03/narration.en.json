@@ -1,0 +1,22 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Here's a quick question. [[q]]What is two plus three times four? [[a]]If you work from left to right, [[a1]]two plus three is five, [[a2]]and five times four is twenty. [[b]]If you multiply first, [[b1]]three times four is twelve, [[b2]]and two plus twelve is fourteen. [[agree]]Two different answers is a problem. So mathematicians agreed on one order for doing operations. [[right]]With that order, the answer is fourteen.",
+    "ladder": "The agreed order has four levels. [[l1]]First, anything inside parentheses or brackets. [[l2]]Second, powers, like three squared. You'll meet those in a later chapter. [[l3]]Third, multiplication and division. [[l3b]]These two share a level, so you do them from left to right, whichever comes first. [[l4]]Last, addition and subtraction. [[l4b]]They also share a level, and you work from left to right.",
+    "leftRight": "Let's try some. [[q]]Seven minus four plus one. [[lvl]]Subtraction and addition share a level, so go from left to right. [[s1]]Seven minus four is three. [[s2]]Three plus one is four. [[warn]]If you added first, you'd get seven minus five, which is two. That breaks the left to right rule.",
+    "mulFirst": "Next: [[q]]ten minus three times two. [[lvl]]Multiplication is on a higher level than subtraction, so it goes first. [[s1]]Three times two is six. [[s2]]Ten minus six is four.",
+    "q1": "Quick check. Tap the operation you should do first.",
+    "parens": "Now [[q]]nine plus three, in parentheses, divided by four. [[p]]Parentheses come first, even though division is on a higher level than addition. [[s1]]Nine plus three is twelve. [[s2]]Twelve divided by four is three.",
+    "chain": "Here's a longer one: [[q]]eighty-four minus seventy-two divided by six times two, plus one. [[md]]First, the multiplication and division level, from left to right. [[s1]]Division comes first here. Seventy-two divided by six is twelve. [[s2]]Then twelve times two is twenty-four. [[as]]Now the addition and subtraction level, from left to right. [[s3]]Eighty-four minus twenty-four is sixty. [[s4]]Sixty plus one is sixty-one.",
+    "pemdas": "You may have heard of PEMDAS. [[p]]Parentheses, [[e]]exponents, [[m]]multiplication, division, [[a]]addition, subtraction. [[trap]]It's a handy memory aid, but it can mislead you. [[md]]M comes before D in the word, but multiplication and division share a level. [[as]]The same goes for A and S. [[ex]]Take twelve divided by three times two. [[ex1]]Division comes first, so twelve divided by three is four, [[ex2]]and four times two is eight. [[wrong]]Multiplying first would give two, which is wrong.",
+    "q2": "Quick check. Two questions about the multiplication and division level.",
+    "brackets": "Parentheses can sit inside brackets. [[story]]Maya's team scores seven two-point baskets and three three-point baskets. [[story2]]Leo's team scores nine two-point baskets and one three-point basket. [[q]]How many more points did Maya's team score? [[expr]]Put each team's total in brackets, and subtract. [[s1]]Work from the inside out. Seven times two is fourteen, and three times three is nine. [[s2]]Fourteen plus nine is twenty-three. [[s3]]For Leo, nine times two is eighteen, one times three is three, and together they make twenty-one. [[s4]]Twenty-three minus twenty-one is two. Maya's team scored two more points.",
+    "q3": "Quick check. Work out the total cost.",
+    "wrap": "To simplify an expression, [[w1]]first work inside parentheses and brackets, from the inside out. [[w2]]Then multiply and divide, from left to right. [[w3]]Then add and subtract, from left to right. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Simplify each expression.",
+    "final2": "Next, choose the operation you should do first.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter three, order of operations."
+  }
+}

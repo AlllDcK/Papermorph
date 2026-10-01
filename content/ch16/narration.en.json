@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Money in a bank can grow on its own, and borrowed money costs extra to pay back. [[q]]That extra is called interest.",
+    "terms": "When you save, the bank pays you interest. When you borrow, you pay interest to the lender. [[p]]The principal is the amount you save or borrow. [[r]]The interest rate is the percent charged or paid each year. [[t]]And the time is how many years the money is saved or borrowed. [[f]]Simple interest multiplies all three: interest equals principal times rate times time. I equals P R T.",
+    "grow": "Let's watch it grow. [[q]]You deposit two hundred fifty dollars at three percent a year. [[y1]]After one year, you earn three percent of two fifty: seven dollars and fifty cents. [[y2]]In the second year, you earn another seven fifty, [[y3]]and in the third year, another seven fifty. [[same]]With simple interest, the interest is the same every year, because it's always three percent of the same principal. [[calc]]So after three years: two fifty times zero point zero three times three is twenty-two fifty. [[bal]]The balance, principal plus interest, is two hundred seventy-two dollars and fifty cents.",
+    "q1": "Quick check. Use the formula.",
+    "months": "The rate is per year, so the time must be in years too. [[m]]Eight months is eight twelfths of a year, which is two thirds. [[w]]Six weeks is six fifty-seconds of a year. [[ex]]For example, a loan of nine hundred dollars at six percent for eight months: [[calc]]nine hundred times zero point zero six times two thirds is thirty-six dollars of interest.",
+    "time": "The formula also works backward. [[q]]How long must four thousand dollars sit at four percent to earn six hundred dollars? [[sub]]Put in what you know: six hundred equals four thousand times zero point zero four times T. [[simp]]Four thousand times zero point zero four is one hundred sixty, so six hundred equals one sixty T. [[div]]Divide six hundred by one sixty: [[ans]]T is three point seven five years. That's three years and nine months. [[check]]Check: each year earns one hundred sixty dollars, and three and three quarter years of that is six hundred.",
+    "q2": "Quick check. Find the time.",
+    "compound": "Some accounts pay compound interest instead. [[q]]Put one thousand dollars in at two percent. [[y1]]After one year, both kinds of account earn twenty dollars. [[y2s]]In the second year, simple interest earns another twenty dollars. [[y2c]]But compound interest earns two percent of the new balance, one thousand twenty dollars, which is twenty dollars and forty cents. [[gap]]The gap is small at first, but it grows every year, because compound interest earns interest on interest.",
+    "q3": "Quick check. A loan.",
+    "wrap": "Simple interest is principal times rate times time. [[w1]]Write the rate as a decimal, and the time in years. [[w2]]The balance is the principal plus the interest. [[w3]]To find a missing value, put in what you know and divide. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Simple interest.",
+    "final2": "Next, work backward to find the missing value.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter sixteen, simple interest."
+  }
+}

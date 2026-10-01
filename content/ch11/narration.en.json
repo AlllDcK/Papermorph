@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Unit three is about comparing quantities. [[q]]The first tool is the ratio.",
+    "define": "Here's a bowl of beads: [[g]]five green [[r]]and four red. [[def]]A ratio compares two quantities. [[forms]]The ratio of green beads to red beads can be written three ways: five to four, five colon four, or as the fraction five fourths. [[order]]Order matters. Red to green is four to five, a different ratio.",
+    "partWhole": "A ratio can compare one part to another part, or a part to the whole. [[q]]In a club of thirteen students, [[d]]eight join drama [[c]]and five join chess. [[pp]]Drama to chess is eight to five: a part compared with a part. [[pw]]Chess to all students is five to thirteen: a part compared with the whole.",
+    "q1": "Quick check. Write the ratio.",
+    "simplify": "Ratios can be simplified, like fractions. [[q]]A key ring has three purple beads and six green beads. [[ratio]]Purple to green is three to six. [[group]]Arrange the beads in equal groups: [[each]]every group holds one purple and two green. [[three]]There are three such groups. [[simp]]So three to six simplifies to one to two: for every one purple bead there are two green beads. [[div]]That's dividing both numbers by three, their greatest common factor.",
+    "equiv": "Going the other way, you can multiply both numbers by the same amount. [[base]]Start with a recipe that uses three cups of flour for every two cups of milk. [[x2]]Double it: six to four. [[x3]]Triple it: nine to six. [[x4]]Four batches: twelve to eight. [[same]]All of these are equivalent ratios. The mixture tastes the same, because each batch keeps the same balance. [[rule]]Multiply or divide both numbers by the same nonzero number, and the ratio stays equivalent.",
+    "q2": "Quick check. Two questions about equivalent ratios.",
+    "check": "How can you tell whether two ratios are equivalent? [[q]]Is four to six equivalent to ten to fifteen? [[s1]]Simplify both. Four to six is two to three. [[s2]]Ten to fifteen is also two to three. [[yes]]They match, so the ratios are equivalent. [[q2]]What about three to four and four to five? [[no]]Both are already in simplest form, and they're different, so they are not equivalent. [[warn]]Adding the same number to both parts does not keep a ratio equivalent.",
+    "scale": "Maps use ratios too. [[map]]On this map, one centimeter stands for five kilometers. [[q]]Two towns are four centimeters apart on the map. How far apart are they really? [[calc]]Multiply both parts of one to five by four: four to twenty. [[ans]]The towns are twenty kilometers apart.",
+    "q3": "Quick check. Use the map scale.",
+    "wrap": "A ratio compares two quantities, [[w1]]written as a to b, a colon b, or a over b, in the order the question asks. [[w2]]It can compare part to part, or part to whole. [[w3]]Multiply or divide both numbers by the same nonzero number to get equivalent ratios, and divide by the greatest common factor to simplify. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Write each ratio in simplest form.",
+    "final2": "Next, decide whether each pair of ratios is equivalent.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter eleven, ratio."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Adding fractions takes one more idea than multiplying them. [[q]]The pieces have to be the same size before you can put them together.",
+    "like": "Three fifths plus four fifths. [[bar]]Here are bars cut into fifths. [[a]]Shade three fifths. [[b]]Now add four more fifths. [[spill]]The first bar fills up, and two fifths spill into the next one. [[count]]Count the pieces: seven fifths. [[rule]]When the bottoms match, add the tops and keep the bottom. [[mix]]Seven fifths is one and two fifths.",
+    "likeNeg": "Signs work just as they did with whole numbers. [[q]]Negative seven ninths plus two ninths. [[line]]Here's the number line from negative one to one, marked in ninths. [[m1]]Move seven ninths to the left, [[m2]]then two ninths to the right. [[land]]You stop at negative five ninths. [[rule]]Different signs: subtract the tops, seven minus two is five, and keep the sign of the number farther from zero.",
+    "likeSub": "To subtract, add the opposite, exactly as before. [[q]]Negative five sevenths minus negative one seventh. [[rw]]Change it to negative five sevenths plus one seventh. [[m1]]Move five sevenths left, [[m2]]then one seventh right. [[land]]The answer is negative four sevenths.",
+    "q1": "Quick check. Use the number line.",
+    "unlike": "Now one quarter plus one sixth. [[prob]]Quarters and sixths are different sizes, so you can't just count pieces. [[cut]]Cut both bars into twelfths instead. [[a]]One quarter becomes three twelfths. [[b]]One sixth becomes two twelfths. [[sum]]Now the pieces match: three twelfths plus two twelfths is five twelfths. [[why]]Twelve works because it's a multiple of both four and six.",
+    "lcm": "The smallest number that is a multiple of both denominators is called the least common multiple. [[q]]For two fifths plus one quarter, [[m5]]list the multiples of five, [[m4]]and the multiples of four. [[hit]]The first one they share is twenty. [[r1]]Rename two fifths: five times four is twenty, so multiply top and bottom by four to get eight twentieths. [[r2]]Rename one quarter: four times five is twenty, so it's five twentieths. [[add]]Eight twentieths plus five twentieths is thirteen twentieths.",
+    "unlikeSub": "Subtraction works the same way. [[q]]One quarter minus five sixths. [[lcm]]The least common multiple of four and six is twelve. [[ren]]So it's three twelfths minus ten twelfths. [[rw]]Add the opposite: three twelfths plus negative ten twelfths. [[ans]]Ten minus three is seven, and the negative number is farther from zero, so the answer is negative seven twelfths.",
+    "q2": "Quick check. Find a common denominator, then add.",
+    "mixed": "With mixed numbers, change them into fractions first. [[q]]Two and one quarter minus negative three and one sixth. [[rw]]Add the opposite: two and one quarter plus three and one sixth. [[imp]]As fractions, that's nine quarters plus nineteen sixths. [[ren]]The common denominator is twelve: twenty-seven twelfths plus thirty-eight twelfths. [[ans]]That's sixty-five twelfths, or five and five twelfths.",
+    "story": "A trail is five and a half kilometers long. [[walk]]A hiker has walked two and three quarters kilometers. [[q]]How far is left? [[expr]]Five and a half minus two and three quarters. [[ren]]In quarters: twenty-two quarters minus eleven quarters. [[ans]]That's eleven quarters, or two and three quarters kilometers. She's exactly halfway.",
+    "q3": "Quick check. Subtract.",
+    "wrap": "To add or subtract fractions: [[w1]]change mixed numbers into fractions. [[w2]]If the denominators are different, rename the fractions using the least common multiple. [[w3]]Add or subtract the numerators, using the sign rules you know, and keep the denominator. [[w4]]Then simplify. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Calculate, and give each answer in simplest form.",
+    "final2": "Next, find the least common multiple of each pair of numbers.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter eight, adding and subtracting fractions."
+  }
+}

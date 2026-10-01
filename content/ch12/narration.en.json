@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Which is faster, which is cheaper, which goes farther? [[q]]To compare fairly, you scale everything down to one unit.",
+    "rate": "When a ratio compares quantities with different units, it's called a rate. [[ex]]A car travels three hundred kilometers on twenty liters of fuel. [[units]]Kilometers and liters are different units. [[q]]How far does it go on one liter? [[bars]]Split the twenty liters into single liters, [[split]]and split the three hundred kilometers into twenty equal parts. [[one]]One liter matches fifteen kilometers. [[def]]Fifteen kilometers per liter is a unit rate: a rate for one unit of the second quantity. [[how]]To find it, divide the first quantity by the second.",
+    "q1": "Quick check. Find the unit rate.",
+    "fraction": "Unit rates work with fractions too. [[q]]A swimmer covers one half kilometer in one third of an hour. [[ask]]How far is that in one whole hour? [[bar]]Here's one hour, cut into thirds. [[fill]]Each third of an hour matches half a kilometer. [[three]]Three thirds make an hour, so that's three halves: one and a half kilometers. [[calc]]With division: one half divided by one third is one half times three, which is three halves. [[ans]]One and a half kilometers per hour.",
+    "price": "When the rate is a price, it's called a unit price. [[q]]Three bottles of juice cost two dollars and seventy cents. [[div]]Divide the price by the number of bottles. [[ans]]Each bottle costs ninety cents.",
+    "compare": "Unit prices let you compare deals. [[q]]A pack of eight notebooks costs forty dollars, [[q2]]and a pack of five costs thirty dollars. [[claim]]The smaller pack costs less, but is it the better deal? [[u1]]Forty divided by eight is five dollars per notebook. [[u2]]Thirty divided by five is six dollars per notebook. [[ans]]The pack of eight is the better deal: each notebook costs less.",
+    "q2": "Quick check. Two questions.",
+    "table": "A unit rate also lets you predict. [[q]]A printer prints eighteen pages in three minutes. [[unit]]That's six pages per minute. [[t]]So in five minutes it prints thirty pages, [[t2]]and in ten minutes, sixty. [[rule]]Multiply the unit rate by the number of units.",
+    "q3": "Quick check. Use the unit rate.",
+    "wrap": "A rate compares quantities with different units. [[w1]]A unit rate tells you how much for one unit: divide the first quantity by the second. [[w2]]A unit price is a unit rate for money. [[w3]]Compare unit prices to find the better deal, and multiply a unit rate to predict. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find each unit rate or unit price.",
+    "final2": "Next, choose the better deal.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter twelve, unit rate."
+  }
+}

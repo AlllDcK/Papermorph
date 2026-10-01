@@ -1,0 +1,17 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "One inequality shades half the plane. [[q]]Two inequalities together shade only where their regions overlap.",
+    "ex1": "Take the system x plus y is less than two, and two x minus y is greater than ten. [[r]]In slope intercept form: y is less than negative x plus two, [[r2]]and y is less than two x minus ten. [[dash]]Both signs are strict, so both boundaries are dashed. [[t1]]Test zero, zero in the first inequality: zero is less than two. True. [[s1]]Shade the side of the first line that contains the origin.",
+    "ex2": "Now the second inequality. [[t2]]Is zero greater than ten? No. [[s2]]So shade the side of the second line away from the origin. [[both]]A solution of the system must satisfy both inequalities, so the solution is the region shaded twice: where the colors overlap. [[corner]]The lines meet at four, negative two. Both lines are dashed, so this corner is not included. Mark it with an open circle.",
+    "q1": "Quick check. Pick a point that solves both inequalities.",
+    "mixed": "Here's a system with one of each kind of boundary: [[eqs]]three x plus y is greater than negative five, and negative x plus y is less than or equal to negative one. [[r]]That's y greater than negative three x minus five, a dashed line, [[r2]]and y less than or equal to x minus one, a solid line. [[t]]Test zero, zero: zero is greater than negative five, true, so shade the origin's side of the dashed line. [[t2]]Zero is not less than or equal to negative one, so shade the other side of the solid line. [[ov]]The overlap is the solution. [[edge]]Points on the solid edge are included. Points on the dashed edge are not. [[corner]]The corner, negative one, negative two, sits on the dashed line, so it is not included.",
+    "q2": "Quick check. Is this point a solution?",
+    "wrap": "To solve a system of linear inequalities, [[w1]]graph each inequality: its boundary, solid or dashed, and its shaded side. [[w2]]The solution is the region where the shadings overlap. [[w3]]A corner is included only if it lies on solid lines. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Is each point a solution of the system?",
+    "final2": "Next, find the corner where the two boundary lines meet.",
+    "final3": "Last one. Is the corner point part of the solution?",
+    "finish": "Well done. That's the end of chapter thirty-eight, and of unit six."
+  }
+}

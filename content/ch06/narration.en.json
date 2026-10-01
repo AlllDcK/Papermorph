@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "You can add and subtract positive and negative numbers. [[q]]Now, what happens when you multiply or divide them? [[teaser]]And why is a negative times a negative a positive?",
+    "posNeg": "Multiplication is repeated addition. [[ex]]Three times negative two means three groups of negative two. [[j1]]Negative two, [[j2]]negative two, [[j3]]and negative two. [[land]]You land on negative six. [[rule]]A positive times a negative is negative.",
+    "pattern": "Now watch a pattern. [[r1]]Three times negative two is negative six. [[r2]]Two times negative two is negative four. [[r3]]One times negative two is negative two. [[r4]]Zero times negative two is zero. [[step]]Each time the first number goes down by one, the answer goes up by two. [[r5]]So negative one times negative two must be two. [[r6]]And negative two times negative two is four. [[rule]]A negative times a negative is positive.",
+    "signRule": "Here's a way to picture it. [[flip]]Think of a negative sign as a flip: it turns an arrow around. [[one]]One flip, and the arrow points left: negative. [[two]]Two flips, and it points right again: positive. [[three]]Three flips, left again. [[rule]]So count the negative signs. [[odd]]An odd number of them makes the answer negative. [[even]]An even number makes it positive.",
+    "q1": "Quick check. Decide the sign of each product.",
+    "divide": "Division follows the same sign rule, because division undoes multiplication. [[q]]What is negative twelve divided by three? [[ask]]Ask: three times what equals negative twelve? [[ans]]Three times negative four is negative twelve, so the answer is negative four. [[q2]]And negative ninety-one divided by negative seven? [[count]]Two negative signs, so the answer is positive. [[ans2]]Ninety-one divided by seven is thirteen.",
+    "mixed": "When multiplication and division appear together, [[sign]]first count all the negative signs to decide the sign of the answer. [[ex]]Twenty divided by negative five, times negative two, has two negative signs, so the answer is positive. [[work]]Then work from left to right with the numbers: [[s1]]twenty divided by five is four, [[s2]]and four times two is eight.",
+    "zero": "One exception to the counting rule. [[ex]]If zero is one of the factors, the product is zero, no matter how many negative signs there are. [[why]]Zero is neither positive nor negative.",
+    "q2": "Quick check. Two questions.",
+    "story": "A submarine dives three meters every minute. [[q]]Where is it after six minutes, compared with where it started? [[expr]]Each minute is a change of negative three, so multiply: six times negative three. [[ans]]That's negative eighteen: eighteen meters lower than where it started.",
+    "wrap": "To multiply or divide positive and negative numbers, [[w1]]work out the size of the answer as usual. [[w2]]Then count the negative signs. An odd number means negative, and an even number means positive. [[w3]]And if zero is a factor, the product is zero. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Simplify each expression.",
+    "final2": "Next, decide whether each answer is positive, negative, or zero.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter six, multiplying and dividing positive and negative numbers."
+  }
+}

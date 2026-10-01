@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Unit five is about equations: math sentences that say two things are equal. [[q]]They're the tool for finding unknown numbers.",
+    "define": "An expression is a phrase, like x plus two. [[eq]]An equation joins two expressions with an equals sign: x plus two equals six. [[scale]]Picture a balance. [[left]]The left side holds x plus two, [[right]]the right side holds six, [[level]]and the equals sign says the scale is level. [[sol]]A value that keeps it level is called a solution. Here, x is four.",
+    "check": "To check whether a value is a solution, substitute it and compare both sides. [[q]]Is negative three a solution of four x equals negative twelve? [[sub]]Four times negative three is negative twelve. [[yes]]Both sides match, so yes, the scale stays level. [[q2]]Is x equals negative two and y equals five a solution of six y equals four x plus fifteen? [[sub2]]The left side is six times five, thirty. The right side is four times negative two plus fifteen, which is seven. [[no]]Thirty is not seven, so the scale tips: not a solution.",
+    "q1": "Quick check. Is it a solution?",
+    "machine": "Many equations work like a machine. [[q]]In y equals four x plus ten, [[in]]you choose x and feed it in. That's the input, also called the independent variable. [[out]]The machine multiplies by four and adds ten, and y comes out. That's the output, the dependent variable, because it depends on x. [[ex]]Feed in negative one: four times negative one plus ten is six. [[ex2]]Feed in two: out comes eighteen.",
+    "linear": "A linear equation is one where the variables have no exponent higher than one. [[yes]]Four a plus six equals nine a, and y equals three x plus seven, are linear. [[no]]Three m squared plus seven m minus six equals zero is not, because of the square. [[noeq]]And nine c plus seven d minus four isn't an equation at all: there's no equals sign. [[why]]They're called linear because, as you'll see later, their graphs are straight lines.",
+    "q2": "Quick check. Use the machine.",
+    "write": "You can turn a situation into an equation. [[q]]A bike shop charges a twenty-dollar fee, plus five dollars for each hour. [[vars]]Let x be the number of hours, and y the total cost. [[parts]]The hours cost five times x. Then add the fee. [[eq]]So y equals five x plus twenty. [[use]]For three hours, y is five times three plus twenty: thirty-five dollars.",
+    "q3": "Quick check. Write the equation.",
+    "wrap": "An equation says two expressions are equal, like a level balance. [[w1]]A solution makes both sides equal: substitute to check. [[w2]]The input is the independent variable, and the output depends on it. [[w3]]In a linear equation, no variable has an exponent above one. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find each output.",
+    "final2": "Next, decide whether each value is a solution.",
+    "final3": "Last one. Choose the equation for each situation.",
+    "finish": "Well done. That's the end of chapter twenty-four, introduction to equations."
+  }
+}

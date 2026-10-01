@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Every time you shop, eat out, or get paid, percents are working in the background. [[q]]This chapter puts them to work: tax, discounts, markups, tips, and commissions.",
+    "tax": "Sales tax is a percent of the price, added on top. [[q]]A hat costs forty dollars, and the sales tax is seven percent. [[bar]]Here's the price, one hundred percent. [[tax]]The tax adds seven percent more. [[calc]]Seven percent of forty is zero point zero seven times forty, which is two dollars and eighty cents. [[total]]So you pay forty plus two eighty: forty-two dollars and eighty cents. [[short]]A shortcut: the total is one hundred seven percent of the price, so multiply forty by one point zero seven.",
+    "taxBack": "Now work backward. [[q]]Earbuds cost fifty-four dollars including an eight percent tax. What was the price before tax? [[bar]]The total is one hundred eight percent of the price. [[eq]]So one point zero eight times the price is fifty-four. [[div]]Divide: fifty-four divided by one point zero eight is fifty. [[ans]]The price before tax was fifty dollars. [[warn]]Taking eight percent off fifty-four would be wrong: the tax was eight percent of the price, not of the total.",
+    "q1": "Quick check. Find the total.",
+    "discount": "A discount is a percent taken off the price. [[q]]A backpack costs sixty dollars, and everything is twenty-five percent off. [[bar]]Here's the full price. [[cut]]Cut off twenty-five percent. [[calc]]Twenty-five percent of sixty is fifteen dollars. [[sale]]So the sale price is sixty minus fifteen: forty-five dollars. [[short]]Or think of what you pay: one hundred minus twenty-five is seventy-five percent, and zero point seven five times sixty is forty-five.",
+    "discBack": "Two more questions you can ask about a sale. [[q]]A program is thirty-five percent off, and the sale price is fifty-two dollars. What was the original price? [[pay]]You pay sixty-five percent of the original. [[eq]]So zero point six five times the original is fifty-two. [[ans]]Fifty-two divided by zero point six five is eighty. The original price was eighty dollars. [[q2]]And if a forty-dollar shirt sells for thirty dollars, what's the percent discount? [[save]]You save ten dollars. [[pct]]Ten out of forty is one quarter, so the discount is twenty-five percent.",
+    "q2": "Quick check. Two questions about discounts.",
+    "markup": "Stores buy items and then raise the price to make a profit. That raise is a markup. [[q]]A game costs a store twenty dollars, and the store marks it up forty percent. [[bar]]Here's the cost. [[up]]Add forty percent: zero point four times twenty is eight dollars. [[sell]]So the selling price is twenty-eight dollars. [[back]]Working backward is like tax: a selling price of seventy dollars with a forty percent markup means one point four times the cost is seventy, so the cost was fifty dollars.",
+    "tip": "Tips and commissions are percents too. [[q]]A meal costs forty-five dollars, and you leave a twenty percent tip. [[ten]]Ten percent of forty-five is four fifty, [[twenty]]so twenty percent is nine dollars. [[total]]You pay fifty-four dollars in all. [[comm]]A commission is a percent of sales that a salesperson earns. With a fifteen percent commission on one thousand seven hundred dollars of sales, [[earn]]the salesperson earns zero point one five times seventeen hundred: two hundred fifty-five dollars.",
+    "q3": "Quick check. A markup.",
+    "wrap": "For every kind of percent problem, [[w1]]find the percent of the amount by multiplying. [[w2]]Tax, markups, and tips add to the price. Discounts subtract from it. [[w3]]To work backward from a final price, divide by the total percent as a decimal: one point zero eight for an eight percent tax, or zero point six five for thirty-five percent off. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Tax, discounts, and tips.",
+    "final2": "Next, work backward to find the original amount or the percent.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter fifteen, percent applications."
+  }
+}

@@ -58,17 +58,15 @@ AnimeBook/
 │       └── README.md     # 使用方式与重新生成说明
 ├── scripts/
 │   └── prepare_mascot.swift # 在 macOS 上生成透明 PNG 和 SVG 封装
-├── content/ch01/
-│   ├── narration.en.json          # 第一章英文讲稿（语音源），[[mark]] 标记动画触发词
-│   └── narration.en.timings.json  # tts.py 的缓存，不部署
+├── content/chNN/       # 每章英文讲稿 narration.en.json（[[mark]] 标记动画触发词）及 tts 缓存
 ├── .claude/skills/animebook-chapter/  # 做章节的流程、已定约定、踩过的坑、引擎速查（新章节先读）
 ├── tools/
-│   ├── tts.py          # Edge TTS 生成 MP3 与词级时间点
-│   └── e2e_ch01.py     # 浏览器端到端检查第一章全部流程（Playwright）
+│   ├── tts.py          # Edge TTS 生成 MP3、词级时间点与逐句字幕
+│   └── e2e_chNN.py     # 各章浏览器端到端检查（Playwright）；改引擎后全部重跑
 ├── site/               # 可部署的静态站点（只部署此目录）
-│   └── ch01/
-│       ├── index.html  # 第一章：单一画面内的动画、小测和整章练习，纯 JS + SVG，自包含
-│       └── audio/en/   # 每步一个 MP3，timings.js 记录时长和标记时间
+│   ├── index.html      # 课程目录
+│   ├── lib/            # 共用引擎：engine.js（播放器、绘图、题型、∞ 角色）、engine.css
+│   └── chNN/           # 每章一个目录：index.html（本章步骤与题目）、audio/en/（MP3 与 timings.js）
 ├── .venv/              # 现有 PDF 处理工具的 Python 虚拟环境
 ├── .git/               # 本地 Git 仓库，尚未配置远程
 └── .DS_Store           # macOS 自动生成的目录信息
@@ -125,15 +123,15 @@ SVG 将 PNG 以 data URL 嵌入，单个文件自包含；仍然是位图，放�
 本地预览（音频需要 HTTP，不能双击打开）：
 
 ```sh
-python3 -m http.server 8765 -d site   # 打开 http://localhost:8765/ch01/
+python3 -m http.server 8765 -d site   # 打开 http://localhost:8765/
 ```
 
-`?beat=N&t=秒` 直接停在某一步的某一时刻，便于截图审阅。改动播放或题目逻辑后运行 `uv run --with playwright tools/e2e_ch01.py`（需先启动上面的预览服务器）。
+`?beat=N&t=秒` 直接停在某一步的某一时刻，便于截图审阅。改动播放或题目逻辑后运行各章的 `uv run --with playwright tools/e2e_chNN.py`（需先启动上面的预览服务器）。
 
 修改讲稿后重新生成语音（只重做改动过的步骤，需联网）：
 
 ```sh
-uv run --with edge-tts tools/tts.py content/ch01/narration.en.json site/ch01/audio/en
+uv run --with edge-tts tools/tts.py content/chNN/narration.en.json site/chNN/audio/en
 ```
 
 讲稿中的 `[[mark]]` 名称必须与 `index.html` 中该步使用的 `m('mark')` 一致。

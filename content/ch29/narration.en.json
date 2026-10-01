@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "A family buys ten carnival tickets and pays fifty dollars. Adult tickets cost eight dollars, and child tickets cost three. [[q]]How many of each did they buy? Two unknowns need two equations, solved together.",
+    "system": "Two equations about the same unknowns form a system of equations. [[ex]]Here, x plus y equals five, and five x minus four y equals negative two. [[sol]]A solution must make both equations true at the same time. [[test]]Try x equals two and y equals three. [[e1]]Two plus three is five. The first equation works. [[e2]]Five times two, minus four times three, is ten minus twelve, which is negative two. The second works too. [[ans]]So the pair two, three is a solution of the system.",
+    "tickets": "Back to the tickets. [[vars]]Let a be the number of adults, and c the number of children. [[e1]]Ten tickets in all: a plus c equals ten. [[e2]]Fifty dollars in all: eight a plus three c equals fifty. [[guess]]You could test every way to split ten tickets. [[hit]]Four adults and six children is the only split that costs exactly fifty dollars. But guessing gets slow. Substitution finds it directly.",
+    "method": "The substitution method has four steps. [[s1]]First, solve one equation for one variable. [[s2]]Second, substitute that expression into the other equation. [[s3]]Third, solve the new equation, which now has only one variable. [[s4]]Fourth, substitute back to find the other variable.",
+    "ex1": "Let's try it. [[q]]Five x plus y equals eleven, and two x minus three y equals one. [[s1]]The first equation is easy to solve for y: y equals eleven minus five x. [[s2]]Now replace the y in the second equation with eleven minus five x. [[s3]]Distribute: two x minus thirty-three plus fifteen x equals one. So seventeen x equals thirty-four, and x equals two. [[s4]]Put x equals two back into y equals eleven minus five x: y equals one. [[ans]]The solution is two, one. [[check]]Check in the second equation: four minus three is one. It works.",
+    "q1": "Quick check. Finish the substitution.",
+    "back": "Now the tickets, with substitution. [[s1]]From a plus c equals ten, a equals ten minus c. [[s2]]Substitute into eight a plus three c equals fifty: eight times ten minus c, plus three c, equals fifty. [[s3]]Eighty minus eight c plus three c equals fifty, so negative five c equals negative thirty, and c equals six. [[s4]]Then a equals ten minus six, which is four. [[ans]]Four adults and six children, exactly as the table showed.",
+    "choose": "Which variable should you solve for first? [[tip]]Look for a variable with a coefficient of one or negative one. It can be isolated without fractions. [[ex]]In three x minus y equals negative four, the y has a coefficient of negative one. [[res]]So y equals three x plus four, with no fractions at all.",
+    "q2": "Quick check. A word problem.",
+    "wrap": "A system of equations has a solution that makes every equation true. [[w1]]To solve by substitution, solve one equation for one variable, [[w2]]substitute into the other equation, [[w3]]solve, then substitute back. [[w4]]Always check the pair in both equations. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Solve each system.",
+    "final2": "Next, decide whether each pair is a solution.",
+    "final3": "Last one. A word problem.",
+    "finish": "Well done. That's the end of chapter twenty-nine, solving systems by substitution."
+  }
+}

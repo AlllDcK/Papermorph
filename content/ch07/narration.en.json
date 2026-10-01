@@ -1,0 +1,23 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Fractions can be negative too. [[q]]In this chapter, you'll multiply and divide them, and the sign rule you already know still works.",
+    "steps": "Here's the plan for any product or quotient of fractions. [[s1]]First, count the negative signs to decide the sign of the answer. [[s2]]Second, change any mixed numbers into fractions. [[s3]]Then multiply or divide, and put the sign in front.",
+    "area": "What does two thirds times three quarters mean? It's two thirds of three quarters. [[whole]]Start with one whole square. [[cols]]Shade three quarters of it. [[rows]]Now take two thirds of that shaded part. [[overlap]]The part shaded twice is six of the twelve small pieces. [[rule]]That's why you multiply the tops, two times three is six, [[rule2]]and multiply the bottoms, three times four is twelve. [[simp]]Six twelfths simplifies to one half.",
+    "cancel": "You can save work by simplifying before you multiply. [[q]]Take eight fifteenths times five twelfths. [[c1]]Eight on top and twelve on the bottom share a factor of four. Divide both by four: two and three. [[c2]]Five on top and fifteen on the bottom share a factor of five: one and three. [[res]]Now multiply what's left. Two times one is two, and three times three is nine. The answer is two ninths. [[name]]Simplifying across like this is called cross-canceling.",
+    "q1": "Quick check. Multiply these fractions.",
+    "mixed": "Now a product with mixed numbers. [[q]]Negative two and a half times one and one fifth. [[sign]]There is one negative sign, so the answer is negative. [[m1]]Two and a half is five halves. Picture it: two wholes make four halves, plus one more half. [[m2]]One and one fifth is six fifths. [[warn]]The minus sign belongs to the whole mixed number, so negative two and a half is negative five halves. [[canc]]Cross-cancel: the fives cancel, and six and two share a factor of two. [[res]]Three over one is three, so the answer is negative three.",
+    "recip": "To divide fractions, you need one more idea: the reciprocal. [[def]]Two numbers are reciprocals if their product is one. [[ex1]]Eight times one eighth is one. [[flip]]To find the reciprocal of a fraction, flip it over. [[ex2]]The reciprocal of three fifths is five thirds. [[zero]]Zero has no reciprocal, because zero times anything is zero, never one.",
+    "divMeaning": "Why does flipping help with division? [[q]]Ask: how many three quarters fit into three? [[bars]]Here are three wholes. [[cut]]Cut each whole into quarters. [[group]]Now group the quarters in threes. [[count]]There are four groups. So three divided by three quarters is four. [[rule]]And three times four thirds is also four. [[sum]]Dividing by a fraction is the same as multiplying by its reciprocal.",
+    "divEx": "Let's divide negative six sevenths by eight elevenths. [[sign]]One negative sign: the answer is negative. [[kcf]]Keep the first fraction, change divide to multiply, and flip the second fraction. [[canc]]Six and eight share a factor of two: three and four. [[res]]Three times eleven is thirty-three, and seven times four is twenty-eight. [[mix]]Negative thirty-three twenty-eighths is negative one and five twenty-eighths.",
+    "q2": "Quick check. Two questions about dividing.",
+    "story": "A roll has seven and a half meters of ribbon. Each bow uses three quarters of a meter. [[q]]How many bows can you make? [[bar]]Here's the ribbon. [[cut]]Mark off pieces three quarters of a meter long. [[count]]Ten pieces fit exactly. [[calc]]In numbers: fifteen halves divided by three quarters is fifteen halves times four thirds, [[res]]which is sixty sixths, or ten. You can make ten bows.",
+    "q3": "Quick check. One more division.",
+    "wrap": "To multiply or divide fractions: [[w1]]count the negative signs to find the sign of the answer. [[w2]]Change mixed numbers into fractions. [[w3]]To divide, multiply by the reciprocal of the second number. [[w4]]Cross-cancel, then multiply tops and bottoms. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find each product or quotient. Give fractions in simplest form.",
+    "final2": "Next, write the reciprocal of each number.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter seven, multiplying and dividing fractions."
+  }
+}

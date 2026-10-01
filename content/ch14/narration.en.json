@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Sales, test scores, battery levels, and weather forecasts all use percents. [[q]]A percent is simply a ratio with one hundred as the whole.",
+    "define": "Percent means per hundred. [[grid]]Here's a square made of one hundred small squares. [[shade]]Shade twenty-five of them. [[pct]]That's twenty-five percent: twenty-five out of a hundred. [[forms]]It can also be written as the fraction twenty-five hundredths, or the decimal zero point two five. [[simp]]And twenty-five hundredths simplifies to one quarter: a quarter of the square is shaded. [[over]]Percents can also go past one hundred. One hundred twenty-five percent is one whole and twenty-five hundredths more.",
+    "convert": "Converting between forms is quick. [[p2f]]To write a percent as a fraction, put it over a hundred and simplify: seventy-five percent is seventy-five hundredths, which is three quarters. [[p2d]]To write a percent as a decimal, divide by a hundred: move the decimal point two places to the left. Forty-five percent is zero point four five. [[d2p]]To go from a decimal back to a percent, multiply by a hundred: move the point two places to the right. [[f2p]]And for a fraction, divide first. Three fifths is three divided by five, zero point six, which is sixty percent.",
+    "q1": "Quick check. Convert.",
+    "ofNumber": "What is fifteen percent of ninety-five? [[bar]]Think of ninety-five as a bar that stands for one hundred percent. [[ten]]Ten percent of it is nine point five. [[five]]Five percent is half of that: four point seven five. [[add]]Fifteen percent is ten percent plus five percent: fourteen point two five. [[calc]]Or multiply directly: zero point one five times ninety-five is fourteen point two five. [[rule]]To find a percent of a number, change the percent to a decimal or fraction, and multiply.",
+    "whatPercent": "Sometimes you know the part and the whole, and need the percent. [[q]]What percent of twenty is five? [[set]]Use a proportion: part over whole equals percent over one hundred. [[fill]]Five over twenty equals x over one hundred. [[solve]]Cross-multiply: twenty x equals five hundred, so x is twenty-five. [[ans]]Five is twenty-five percent of twenty. [[bar]]On the bar, twenty is one hundred percent, so five is one quarter of it: twenty-five percent.",
+    "q2": "Quick check. Find the percent.",
+    "whole": "And sometimes you know the part and the percent, but not the whole. [[q]]Twenty percent of what number is forty? [[bar]]If twenty percent is forty, [[ten]]then each twenty percent block is forty, [[five]]and five of those blocks make one hundred percent. [[ans]]Five times forty is two hundred. [[prop]]With a proportion: forty over x equals twenty over one hundred. Twenty x equals four thousand, so x is two hundred.",
+    "big": "A percent above one hundred means the part is bigger than the whole. [[q]]One hundred thirty percent of what number is one hundred forty-three? [[set]]One hundred forty-three over x equals one hundred thirty over one hundred. [[solve]]One hundred thirty x equals fourteen thousand three hundred, so x is one hundred ten. [[check]]The part, one forty-three, is bigger than the whole, one ten, just as expected.",
+    "q3": "Quick check. Find the whole.",
+    "wrap": "Percent means per hundred. [[w1]]To convert, divide or multiply by one hundred. [[w2]]To find a percent of a number, multiply. [[w3]]To find a missing percent or a missing whole, use part over whole equals percent over one hundred. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Convert each number.",
+    "final2": "Next, solve each percent problem.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter fourteen, percent."
+  }
+}

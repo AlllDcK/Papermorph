@@ -1,0 +1,19 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Some roads are gentle, and some are steep. [[q]]Slope is the number that measures how steep a line is.",
+    "define": "Pick two points on a line: A at negative three, one, and B at three, four. [[run]]Going from A to B, the line moves six units to the right. That's the run. [[rise]]It also goes up three units. That's the rise. [[ratio]]Slope is rise over run: three over six, [[simp]]which simplifies to one half. [[mean]]So every time the line runs two units to the right, it rises one.",
+    "stairs": "A slope of two thirds works like a staircase. [[start]]Start at negative five, negative five. [[s1]]Go up two, then right three. [[s2]]Up two, right three again. [[s3]]And again. [[line]]Every step lands on the same straight line. [[neg]]Going the other way works too: down two and left three is a rise of negative two over a run of negative three, which is still two thirds.",
+    "q1": "Quick check. Read the slope.",
+    "types": "Every line falls into one of four types. [[pos]]If it rises from left to right, the slope is positive. [[neg]]If it falls from left to right, the slope is negative. [[zero]]A horizontal line has a rise of zero, so its slope is zero. [[undef]]A vertical line has a run of zero. Dividing by zero has no meaning, so its slope is undefined.",
+    "q2": "Quick check. What type of slope?",
+    "formula": "When you know two points, you can compute the slope without a picture. [[sub]]Call them x one, y one, and x two, y two. [[f]]The slope, usually called m, is y two minus y one, over x two minus x one: the change in y over the change in x. [[ex]]For the points two, five and three, nine: [[calc]]nine minus five is four, and three minus two is one. The slope is four. [[ex2]]For negative five, three and four, negative two: [[calc2]]negative two minus three is negative five, and four minus negative five is nine. The slope is negative five ninths. [[check]]It's negative, and sure enough the line falls from left to right.",
+    "q3": "Quick check. Use the formula.",
+    "wrap": "Slope measures steepness: [[w1]]rise over run, or the change in y over the change in x. [[w2]]Positive slopes rise, negative slopes fall, horizontal lines have slope zero, and vertical lines have undefined slope. [[w3]]Subtract the coordinates in the same order on the top and the bottom. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find each slope.",
+    "final2": "Next, name the type of each slope.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter thirty-three, slope."
+  }
+}

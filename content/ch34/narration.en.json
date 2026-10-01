@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Two numbers are enough to pin down a straight line: [[q]]how steep it is, and where it crosses the y axis.",
+    "intercepts": "Here's a line. [[y]]It crosses the y axis at zero, negative three. That point is the y intercept. [[yx]]Every point on the y axis has an x value of zero. [[x]]The line crosses the x axis at six, zero. That's the x intercept. [[xy]]Every point on the x axis has a y value of zero.",
+    "form": "Now look at the slope. [[st]]From the y intercept, go up one and right two. [[m]]So the slope is one half. [[eq]]A line with slope m and y intercept b has the equation y equals m x plus b. [[mb]]m is the slope, and b is the y intercept. [[ex]]This line has slope one half and y intercept negative three, so its equation is y equals one half x minus three. [[chk]]Check a point: at x equals six, one half of six is three, and three minus three is zero. That's the x intercept.",
+    "q1": "Quick check. Read the slope and the y intercept.",
+    "graph": "To graph an equation in this form, read it first. [[read]]y equals three halves x minus one: the slope is three halves, and the y intercept is negative one. [[b]]Plot the y intercept, zero, negative one. [[s1]]Then use the slope: up three, right two. [[s2]]Up three, right two again. [[line]]Draw the line through the points. [[back]]You can also go the other way: down three, left two.",
+    "q2": "Quick check. Graph y equals three x minus four, one point at a time.",
+    "twoPts": "What if you only know two points? Say, three, two and negative five, six. [[m]]First find the slope: six minus two is four, and negative five minus three is negative eight. The slope is negative one half. [[sub]]Next, put one point into y equals m x plus b. Use three, two: two equals negative one half times three, plus b. [[b]]That's two equals negative three halves plus b, so b is seven halves. [[eq]]The equation is y equals negative one half x plus seven halves. [[chk]]The line crosses the y axis at three and a half, just as the equation says.",
+    "xint": "The equation also gives you the x intercept. [[eq]]Take y equals two thirds x minus eight thirds. [[yi]]The y intercept is b: zero, negative eight thirds. [[zero]]For the x intercept, set y to zero. [[s1]]Add eight thirds to both sides. [[s2]]Then multiply both sides by three halves: x equals four. [[pt]]So the x intercept is four, zero.",
+    "q3": "Quick check. Find the x intercept.",
+    "wrap": "In slope intercept form, y equals m x plus b, [[w1]]m is the slope and b is the y intercept. [[w2]]To graph it, plot zero, b, then step by the slope. [[w3]]From two points, find m first, then substitute a point to find b. [[w4]]For the x intercept, set y to zero and solve. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Read the slope and the y intercept.",
+    "final2": "Next, find each equation from two points.",
+    "final3": "Last one. Find both intercepts.",
+    "finish": "Well done. That's the end of chapter thirty-four, slope intercept form."
+  }
+}

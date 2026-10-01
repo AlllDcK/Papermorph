@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "An expression like three x plus five doesn't have a single value, until you know what x is. [[q]]Plugging in a value and working it out is called evaluating.",
+    "sub": "Evaluate three x plus five when x is four. [[in]]Replace x with four, and put the four in parentheses so the multiplication stays clear. [[mul]]Now use the order of operations. Three times four is twelve. [[add]]Twelve plus five is seventeen. [[ans]]So when x is four, three x plus five is seventeen. [[other]]Try another value: when x is ten, it's thirty-five. The expression changes value as x changes.",
+    "negative": "Parentheses matter most with negative numbers. [[q]]Evaluate five y squared plus seven y plus three when y is negative four. [[in]]Replace every y with negative four, in parentheses. [[pow]]Powers first: negative four squared is positive sixteen, because the parentheses make negative four the base. [[mul]]Then multiply: five times sixteen is eighty, and seven times negative four is negative twenty-eight. [[add]]Eighty minus twenty-eight is fifty-two, plus three is fifty-five.",
+    "q1": "Quick check. Evaluate.",
+    "two": "With two variables, substitute each one. [[q]]Evaluate negative six x plus seven y when x is three and y is negative five. [[in]]Three goes in for x, and negative five goes in for y. [[mul]]Negative six times three is negative eighteen. Seven times negative five is negative thirty-five. [[add]]Negative eighteen plus negative thirty-five is negative fifty-three.",
+    "fraction": "When there's a fraction bar, [[rule]]work out the top and the bottom separately, then divide. [[q]]Evaluate six f minus four g, over five f g squared, when f is eight and g is three. [[top]]Top: forty-eight minus twelve is thirty-six. [[bot]]Bottom: five times eight times nine is three hundred sixty. [[div]]Thirty-six over three hundred sixty is one tenth.",
+    "q2": "Quick check. Two variables.",
+    "story": "Expressions often describe real situations. [[q]]A theater sells adult tickets for twelve dollars and child tickets for seven. [[expr]]If a is the number of adult tickets and c is the number of child tickets, the total sales are twelve a plus seven c. [[in]]On Saturday they sell forty adult tickets and fifteen child tickets. [[calc]]Twelve times forty is four hundred eighty, and seven times fifteen is one hundred five. [[ans]]The total is five hundred eighty-five dollars.",
+    "q3": "Quick check. A word problem.",
+    "wrap": "To evaluate an expression, [[w1]]substitute each value for its variable, in parentheses. [[w2]]Then simplify with the order of operations: powers, then multiplication and division, then addition and subtraction. [[w3]]With a fraction bar, simplify the top and the bottom first, then divide. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Evaluate each expression.",
+    "final2": "Next, two variables and fractions.",
+    "final3": "Last one. Find the mistake in each case.",
+    "finish": "Well done. That's the end of chapter twenty-two, evaluating algebraic expressions."
+  }
+}

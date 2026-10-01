@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Prices, times in a race, and temperatures all use decimals. [[q]]Adding and subtracting them is just like whole numbers, as long as you line things up correctly.",
+    "align": "Let's add one point two and seventy-three point six five. [[wrong]]If you line up the last digits, you'd be adding two tenths to five hundredths. That doesn't work. [[place]]Each column has to hold one place value: tens, ones, tenths, hundredths. [[slide]]So line up the decimal points instead. [[pad]]You can write a zero after the two, because one point two and one point two zero are equal. [[add]]Now add each column, from right to left, [[c1]]zero plus five is five, [[c2]]two plus six is eight, [[c3]]one plus three is four, [[c4]]and seven comes down. [[dot]]The decimal point drops straight down. [[ans]]The sum is seventy-four point eight five.",
+    "carry": "Carrying works just as it does with whole numbers. [[q]]Fifty-six point zero nine plus seven point eight. [[pad]]Line up the points, and write seven point eight as seven point eight zero. [[c1]]Nine plus zero is nine. [[c2]]Zero plus eight is eight. [[c3]]Six plus seven is thirteen: write three and carry the one. [[c4]]Five plus the carried one is six. [[ans]]The sum is sixty-three point eight nine.",
+    "whole": "A whole number has a decimal point too; it's just not written. [[q]]For eight plus one point four five, [[pt]]write eight as eight point zero zero, [[ans]]and the sum is nine point four five.",
+    "q1": "Quick check. Line up the decimal points and add.",
+    "signs": "The sign rules are the same as for integers. [[q]]Negative nine point eight one plus three point two seven. [[diff]]The signs are different, so subtract the absolute values: nine point eight one minus three point two seven. [[b1]]One minus seven doesn't work, so borrow from the eight. Eleven minus seven is four. [[b2]]Seven minus two is five. [[b3]]Nine minus three is six. [[sign]]Negative nine point eight one is farther from zero, so the answer is negative six point five four.",
+    "subNeg": "To subtract, add the opposite. [[q]]Negative zero point three seven nine minus ten point five. [[rw]]That's negative zero point three seven nine plus negative ten point five. [[same]]Both are negative, so add the absolute values and keep the negative sign. [[col]]Line up the points and pad with zeros. [[ans]]The sum of the absolute values is ten point eight seven nine, so the answer is negative ten point eight seven nine.",
+    "q2": "Quick check. Two questions.",
+    "story": "A cup of soup is forty-two point six degrees Celsius. [[cool]]In the freezer, its temperature drops fifty-eight point two five degrees. [[q]]What temperature does it reach? [[expr]]A drop means subtraction: forty-two point six minus fifty-eight point two five. [[diff]]The signs are different once you add the opposite, so subtract: fifty-eight point two five minus forty-two point six zero is fifteen point six five. [[ans]]The larger number was negative, so the soup reaches negative fifteen point six five degrees.",
+    "q3": "Quick check. Find the mistake.",
+    "wrap": "To add or subtract decimals: [[w1]]line up the decimal points, and fill empty places with zeros. [[w2]]Add or subtract column by column, carrying or borrowing as usual. [[w3]]Bring the decimal point straight down. [[w4]]Use the same sign rules as for integers. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Simplify each expression.",
+    "final2": "Next, decide whether each answer is positive, negative, or zero.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter nine, adding and subtracting decimals."
+  }
+}

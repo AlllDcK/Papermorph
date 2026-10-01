@@ -1,0 +1,20 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "You must be at least twelve to ride. A bag can hold at most ten kilograms. [[q]]Statements like these aren't equations. They're inequalities, and they have many solutions, not just one.",
+    "symbols": "An inequality compares two expressions with one of four symbols. [[lt]]Less than, [[gt]]greater than, [[le]]less than or equal to, [[ge]]and greater than or equal to. [[words]]In words, at least means greater than or equal to, and at most means less than or equal to. [[tip]]The open side of the symbol always faces the larger amount.",
+    "graph": "Graph an inequality on a number line to see all its solutions. [[q]]For x greater than three, [[open]]put an open circle at three, because three itself is not greater than three. [[ray]]Then shade everything to the right. [[test]]Four works, and so does three point one. But three does not. [[q2]]For x less than or equal to negative two, [[closed]]use a closed circle, because negative two is included, [[ray2]]and shade to the left.",
+    "q1": "Quick check. Graph the inequality.",
+    "solve": "Solve an inequality just like an equation. [[q]]Two x minus one is less than or equal to nine. [[s1]]Add one to both sides: two x is less than or equal to ten. [[s2]]Divide both sides by two: x is less than or equal to five. [[graph]]Graph it with a closed circle at five, shading to the left.",
+    "flip": "There is one new rule. [[q]]Start with two is less than five: a true statement. [[mul]]Multiply both sides by negative one. [[line]]On the number line, two and five flip across zero, to negative two and negative five. [[now]]Now negative two is the larger one. [[rule]]So when you multiply or divide both sides by a negative number, you must reverse the inequality sign. [[ex]]For negative three x is less than or equal to twelve, [[div]]divide by negative three and flip the sign: x is greater than or equal to negative four. [[check]]Check with zero: negative three times zero is zero, and zero is at most twelve. It works.",
+    "q2": "Quick check. Watch the sign.",
+    "story": "A toy store has twenty-six dolls, and dolls arrive in crates of twelve. [[q]]How many crates must it order to have at least eighty-nine dolls? [[eq]]At least means greater than or equal to: twenty-six plus twelve c is at least eighty-nine. [[s1]]Twelve c is at least sixty-three, so c is at least five point two five. [[round]]But you can't order part of a crate. Five crates would not be enough, so the store needs at least six.",
+    "q3": "Quick check. A word problem.",
+    "wrap": "An inequality has many solutions. [[w1]]Graph it with an open circle for less than or greater than, and a closed circle when equal to is included. [[w2]]Solve it like an equation, [[w3]]but reverse the sign when you multiply or divide by a negative number. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Choose the correct sign for each answer.",
+    "final2": "Next, graph each inequality.",
+    "final3": "Last one. Decide whether each statement is true or false.",
+    "finish": "Well done. That's the end of chapter twenty-six, solving one-variable inequalities."
+  }
+}

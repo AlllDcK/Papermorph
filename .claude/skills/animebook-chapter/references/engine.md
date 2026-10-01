@@ -1,4 +1,4 @@
-# 课程引擎速查（以 site/ch01/index.html 为准）
+# 课程引擎速查（以 site/lib/engine.js 为准）
 
 写步骤代码或新题型前先读本文件。函数名如与代码不一致，以代码为准，并顺手更新本文件。
 
@@ -18,10 +18,34 @@
 | `T(parent, str, {x,y,size,fill,font,weight,anchor,o})` | 文字（默认 UI 字体） |
 | `M(parent, parts, {x,y,size,fill,anchor,o,s})` | 数学式，基线在 y；`parts` 由字符串、`F(n,d)` 分数、`R(x)` 根号组成；返回的元素带 `_w` 宽度 |
 | `chip(parent, parts, color, {x,y,size})` | 胶囊形数字卡片，中心在 (x,y) |
+| `tokens(parent, items, {x,y,size,anchor})` | 一行算式拆成可单独移动的记号；项可以是字符串、parts 数组或 `{t, fill}`；返回数组，带 `.w`、`.y`、`.size` |
 | `mathEl(parts, size)` | HTML 行内数学（小 SVG），基线与正文对齐 |
 | `rich([...])` | HTML 富文本：字符串、DOM 节点、`$m(...parts)` 行内数学 |
 
-第一章专用：数轴（`X(v)`、`Y0`、`tick`、`dot`）、家族列表 `row`、右侧面板 `panel/header`、集合图（`RINGS`、`CHAIN`、`buildVenn`、`regionAt`）。新章节需要的新场景（坐标系、方程两边等）按同样方式写一组小函数。
+数学字符串里 1–2 个字母的小写片段（a、x、ab）自动排成斜体变量；更长的单词保持正体。
+
+数轴：`X(v)`、`Y0`、`tick`、`dot`；章节可改 `AXIS.o`（0 的横坐标）和 `AXIS.u`（每单位像素）。`panel(t0)` 淡出上一个场景组并新建一个，`header()` 写小标题。第一章专用：家族列表 `row`（在 ch01 页面里）、集合图（`RINGS`、`CHAIN`、`buildVenn`、`regionAt`）。新章节需要的新场景（坐标系、方程两边等）按同样方式写一组小函数。
+
+## 按主题的现成画法（第 2–10 章加入引擎）
+
+| 函数 | 用途 |
+| --- | --- |
+| `collapse(row, i, j, parts, t0, {color, live})` | 框住 tokens 行里第 i..j 个记号，缩成一个结果并合拢空隙；返回新行。`live: true` 用于答题动画 |
+| `numberLine(t0, lo, hi)`、`move(p, a, b, y, t0)`、`landDot(p, v, t0, color)`、`brace(p, a, b, y, label, color, t0)` | 整数数轴、带箭头的移动、落点、区间括号；`POS`/`NEG` 为正负颜色 |
+| `tile / tiles / popAll / cancelPairs` | 正负方块与成对抵消 |
+| `vAxis(p, {x, Yf, lo, hi, step})`、`thermometer(p, {...}).set(v, t0, run)` | 竖直数轴、温度计 |
+| `fracRow(p, items, {x, y, size})`、`reduce(row, k, 'num'/'den', value, color, t0)` | 分数行，可逐个划掉分子分母写约分结果 |
+| `rect(p, x, y, w, h, fill, o, stroke)`、`bracketH(p, x1, x2, y, label, color, t0)` | 面积模型用的矩形和水平括号 |
+
+| `pointRow(p, digits, x, y, places)` + `.hop(from, to, t0)` | 小数点在数字间跳动（ch10、ch20） |
+| `balance(p, {x, y, L})` + `.load(side, parts, color, t0)`、`.tilt(deg, t0)` | 天平（ch24、ch25） |
+| `atile(p, kind, x, y, neg)`、`tileRow`、`cancel`、`popIn` | 代数方块 x²、x、y、1 及正负抵消（ch23、ch25） |
+| `eqLine(p, L, R, y, t0, {xEq, sym, note})` | 等号（或不等号）对齐的一行推导，右侧可带注释 |
+| `ray(p, v, closed, dir, t0)`、`segment(p, a, b, ca, cb, t0)` | 数轴上的射线与线段解集（ch26、ch27） |
+| `E(exp)` | `M()` 中的上标指数 |
+| `plane(p, {cx, cy, u, x0, x1, y0, y1, t0})` | 坐标系（ch30 起）。返回 `P`：`PX/PY` 换算、`dot(x, y, color, t0, {label, dx, dy, anchor, into, run})`、`walk`（从原点沿 x 再沿 y 走到点）、`line(xa, ya, xb, yb, color, t0)`（延长到网格边）、`arrow(xa, ya, xb, yb, color, t0, {label})`、`stair(x, y, rise, run, t0, {labels})`（先竖后横的斜率台阶）、`half(a, b, c, color, t0)`（给 a·x + b·y ≥ c 的半平面着色，裁在网格内）；`line` 传 `dash` 时淡入而不是描出。每步设 `P.layer = panel(0)`，点和线画进本步面板，换步自动淡出；答题动画传 `{run: fx, into: 层}` |
+
+题型补充：`pickPoint(P, [x, y], 答对说明, (x, y) => 错因, 答对动画?, test?)`（`test(x, y)` 给出时接受任何满足的点，`[x, y]` 只用于 Show answer；答对说明也可以是 `(x, y) => 文本`） 在坐标系上选格点，方向键移动光标、Enter 选定或直接点击；同一 quiz 连续两题时，前一题的答对动画要画进本步面板（qlayer 会在下一题清空）。`tapEls(row, idx, right, yes, no, onRight)` 点选画面里算式的某个记号（如“先算哪一步”）；`blanks` 的格子接受分数与带分数，`{box: '3/4', lowest: true}` 要求最简形式。
 
 ## 步骤（BEATS）
 
@@ -50,6 +74,7 @@ quiz(位置, [{ id: 'c-xxx', prompt: [...rich], build: 题型(...) }, …], done
   - `tap(数值[], 正确值, 答对说明, v => 错因, 答对动画?)`：点数轴上的点，←/→ 移动，Enter 选定。
   - `grid(行[{parts, ans:[键], why, fx?}], 列[[键, 名称, 颜色?, 快捷键?]], {multi, text})`：表格勾选，↑/↓ 换行，数字键或字母键选择。
   - `sorter(卡片[[parts, 最小圈, 错因]], i => [x, y])`：拖进集合图，←/→ 挑卡片，1–6 放入圈。
+  - `blanks(行[{parts: [..., {box: '21'}, ...], why, hint?, fx?}])`：在算式里填数字，Tab 切换格子，Enter 检查；接受 “−5”“-5”；答错显示 hint，答对显示 why。
 - 新题型的 `build(body, api)` 需返回 `{ reveal, check?, lock?, key?(e), hint? }`，判完调用 `api.grade(是否正确, 说明, {right, total})`。`key` 处理本题快捷键，返回 true 表示已处理；`hint` 显示在题干下方。
 - 答题动画使用独立时钟，函数有 `fx`、`fxp`、`pulseFx`、`shakeFx`、`glowFx`、`popDotFx`、`floatText`、`hopsFx`。离开本步时会自动收尾，不必自己清理。
 

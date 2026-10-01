@@ -1,0 +1,19 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Two equations, two lines. [[q]]Where they cross is the one point that works for both.",
+    "system": "Two equations considered together are called a system of equations. [[eqs]]Here's one: x plus y equals five, and two x minus y equals four. [[sol]]A solution of the system is an ordered pair that makes both equations true. [[t1]]Try three, two. Three plus two is five. True. [[t2]]Six minus two is four. Also true. So three, two is a solution. [[t3]]What about one, four? One plus four is five, [[t4]]but two minus four is negative two, not four. It fails the second equation, so it's not a solution.",
+    "graph": "To find the solution by graphing, first write each equation in slope intercept form. [[r1]]x plus y equals five becomes y equals negative x plus five. [[r2]]Two x minus y equals four becomes y equals two x minus four. [[l1]]Graph the first line: start at five on the y axis, then go down one and right one. [[l2]]Graph the second: start at negative four, then go up two and right one. [[x]]The lines cross at three, two. That point is on both lines, so it satisfies both equations. It's the solution.",
+    "q1": "Quick check. Find where the lines cross.",
+    "parallel": "Do two lines always cross? [[eqs]]Try two x plus y equals negative two, and four x plus two y equals six. [[r]]In slope intercept form: y equals negative two x minus two, and y equals negative two x plus three. [[lines]]Same slope, different y intercepts. [[par]]The lines are parallel. They never meet, [[none]]so the system has no solution.",
+    "same": "Now try four x minus two y equals six, and two x minus y equals three. [[r]]Rewrite both, and you get the same equation: y equals two x minus three. [[line]]The two graphs are the same line. [[inf]]Every point on the line is a solution, so the system has infinitely many solutions.",
+    "count": "So a system of two linear equations has one of three outcomes. [[one]]Different slopes: the lines cross once, and there is exactly one solution. [[none]]Same slope with different y intercepts: parallel lines, and no solution. [[inf]]Same slope and same y intercept: the same line, and infinitely many solutions.",
+    "q2": "Quick check. How many solutions?",
+    "wrap": "To solve a system by graphing, [[w1]]write each equation in slope intercept form and graph both lines. [[w2]]The point where they cross is the solution. Check it in both equations. [[w3]]Parallel lines mean no solution, and the same line means infinitely many. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find the solution of each system.",
+    "final2": "Next, how many solutions does each system have?",
+    "final3": "Last one. Is the point a solution of the system?",
+    "finish": "Well done. That's the end of chapter thirty-six, solving systems of linear equations by graphing."
+  }
+}
