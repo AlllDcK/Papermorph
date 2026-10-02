@@ -15,7 +15,7 @@ cp SKILL/assets/templates/narration.en.json content/ch01/
 cp SKILL/assets/templates/e2e.py tools/e2e_ch01.py
 ```
 
-Each book keeps its own engine copy, so improving one book never breaks another. A chapter links back to `../` (the book's index) and the index links back to `../` (the bookshelf).
+Each book keeps its own engine copy, so improving one book never breaks another. A chapter links back to `../` (the book's index) and the index links back to `../` (the bookshelf). With no bookshelf yet, either add `site/index.html` that simply redirects to the book (`<meta http-equiv="refresh" content="0; url=<book-slug>/">`) or delete the two `back-shelf` links from the book's index.
 
 ## Cover and contents (`index.html`)
 
