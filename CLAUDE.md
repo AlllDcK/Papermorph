@@ -66,7 +66,7 @@ AnimeBook/
 │   └── check_blank.py  # 检测开场留白：旁白已开始、画面仍为空的步骤
 ├── site/               # 可部署的静态站点（只部署此目录）
 │   ├── index.html      # 书架、书封与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
-│   ├── lib/            # 共用引擎 engine.js / engine.css；书架数据与样式 bookshelf.js / bookshelf.css
+│   ├── lib/            # 共用引擎 engine.js / engine.css；书架数据与样式 bookshelf.js / bookshelf.css；目录页单元小图 unit-art.js
 │   └── chNN/           # ch01–ch68 每章一个目录：index.html（本章步骤与题目）、audio/en/（MP3 与 timings.js）
 ├── .venv/              # 现有 PDF 处理工具的 Python 虚拟环境
 ├── .git/               # 本地 Git 仓库，尚未配置远程
