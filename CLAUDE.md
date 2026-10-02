@@ -62,7 +62,8 @@ AnimeBook/
 ├── .claude/skills/animebook-chapter/  # 做章节的流程、已定约定、踩过的坑、引擎速查（新章节先读）
 ├── tools/
 │   ├── tts.py          # Edge TTS 生成 MP3、词级时间点与逐句字幕
-│   └── e2e_chNN.py     # 各章浏览器端到端检查（Playwright）；改引擎后全部重跑
+│   ├── e2e_chNN.py     # 各章浏览器端到端检查（Playwright）；改引擎后全部重跑
+│   └── check_blank.py  # 检测开场留白：旁白已开始、画面仍为空的步骤
 ├── site/               # 可部署的静态站点（只部署此目录）
 │   ├── index.html      # 书架、书封与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
 │   ├── lib/            # 共用引擎 engine.js / engine.css；书架数据与样式 bookshelf.js / bookshelf.css

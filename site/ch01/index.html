@@ -231,7 +231,7 @@ const BEATS = [
     ], [['rat', 'Rational', COL.rat], ['irr', 'Irrational', COL.irr]], { multi: false }),
   }], done) }],
   ['map', 'The number map', (m) => {
-    hide(S.list, 0, .7); hide(S.line, 0, .7); hide(S.panel, 0, .7);
+    hide(S.list, 0, .7); hide(S.line, 0, .7); panel(0);
     S.ring = buildVenn(S.venn, true);
     const samples = { nat: [[['1  2  3'], 500, 548]], whole: [[['0'], 332, 578]], int: [[['−5'], 248, 560], [['−1'], 752, 560]],
       rat: [[[F(3, 4)], 150, 512], [['0.6'], 850, 512]], irr: [[[R(2)], 1060, 462]] };

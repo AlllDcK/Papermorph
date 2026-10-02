@@ -849,6 +849,7 @@ function dot(key, v, r = 9, name = v) {
 }
 const arrow = (x, dir) => `M${x - 15 * dir} ${Y0 - 10}L${x} ${Y0}L${x - 15 * dir} ${Y0 + 10}`;
 function panel(t0) {
+  if (t0 < .5) S.cleared = true;   // the old panel fades, or this is the first panel after the title
   if (S.panel) hide(S.panel, t0, .4);
   return (S.panel = G(scene));
 }
@@ -1427,9 +1428,26 @@ function runBeat(i) {
     if (!(k in tm.marks)) throw new Error(`${b.id}: missing mark ${k}`);
     return tm.marks[k] + off;
   };
+  S.cleared = false;
   b.run(m, tm.dur);
+  if (S.cleared && b.lead !== false) leadIn();
   TW.sort((a, c) => a.t0 - c.t0);
   return Math.max(tm.dur, ...TW.map(w => w.t0 + w.dur)) + .6;
+}
+// A beat that clears the picture must not leave it empty while the narration has started.
+// If nothing appears before LEAD_MAX, the opening group (every tween that starts within LEAD_GROUP s of the
+// first reveal) moves earlier so it begins at LEAD_AT, just after the old panel has faded. Later steps keep their word timing.
+const LEAD_AT = .4, LEAD_MAX = .8, LEAD_GROUP = 1.2;
+function leadIn() {
+  const reveals = TW.filter(w => {
+    if (!w.e) return false;
+    const s = st(w.e), to = w.to;
+    return (to.o > 0 && s.o === 0) || (to.s > 0 && s.s === 0) || (to.d > 0 && (s.d ?? 1) === 0);
+  });
+  if (!reveals.length) return;
+  const first = Math.min(...reveals.map(w => w.t0));
+  if (first <= LEAD_MAX) return;
+  for (const w of TW) if (w.t0 >= first && w.t0 < first + LEAD_GROUP) w.t0 -= first - LEAD_AT;
 }
 function stopAudio() {
   const a = P.audio;
