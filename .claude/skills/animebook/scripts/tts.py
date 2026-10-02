@@ -1,7 +1,9 @@
 """Generate narration audio and word-mark timings with Edge TTS.
 
-Usage (from project root):
-    uv run --with edge-tts tools/tts.py content/ch01/narration.en.json site/ch01/audio/en
+Usage (from the project root; SKILL is this skill's folder):
+    uv run --with edge-tts $SKILL/scripts/tts.py content/ch01/narration.en.json site/ch01/audio/en
+
+Needs network access and ffprobe (from ffmpeg) for clip durations.
 
 Narration text may contain [[mark]] tags placed before a word. The output
 timings.js records each clip's duration and the time (seconds) at which the

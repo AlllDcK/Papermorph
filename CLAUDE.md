@@ -20,9 +20,7 @@ AnimeBook/
 ├── CLAUDE.md           # Agent 工作指南与目录地图
 ├── plan.md             # 详细项目计划
 ├── README.md           # PDF 按章节导出图片的使用说明
-├── split_book.py       # PDF 每页导出为 PNG 的脚本
 ├── sections.json       # 分组名称、章节与单元信息、PDF 页码范围
-├── requirements.txt    # PDF 导出脚本的 Python 依赖
 ├── Everything You Need to Ace Pre-Algebra and Algebra I in One Big Fat Notebook (Jason Wang) (z-library.sk, 1lib.sk, z-lib.sk).pdf
 │                      # 原始参考书，641 页
 ├── book_pages/         # 原书书页图片；内部制作参考
@@ -59,16 +57,15 @@ AnimeBook/
 ├── scripts/
 │   └── prepare_mascot.swift # 在 macOS 上生成透明 PNG 和 SVG 封装
 ├── content/chNN/       # 每章英文讲稿 narration.en.json（[[mark]] 标记动画触发词）及 tts 缓存
-├── .claude/skills/animebook-chapter/  # 做章节的流程、已定约定、踩过的坑、引擎速查（新章节先读）
+├── .claude/skills/animebook/  # 从一本 PDF 到互动动画书的完整流程（英文）：拆书、规划、试点章、逐章制作、审阅测试、目录与发布；
+│                      # scripts/（outline、split_pages、tts、shot、check_blank）、assets/（引擎与模板）、references/
 ├── tools/
 │   ├── tts.py          # Edge TTS 生成 MP3、词级时间点与逐句字幕
-│   ├── e2e_chNN.py     # 各章浏览器端到端检查（Playwright）；改引擎后全部重跑
-│   └── check_blank.py  # 检测开场留白：旁白已开始、画面仍为空的步骤
+│   └── e2e_chNN.py     # 各章浏览器端到端检查（Playwright）；改引擎后全部重跑
 ├── site/               # 可部署的静态站点（只部署此目录）
 │   ├── index.html      # 书架、书封与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
 │   ├── lib/            # 共用引擎 engine.js / engine.css；书架数据与样式 bookshelf.js / bookshelf.css；目录页单元小图 unit-art.js
 │   └── chNN/           # ch01–ch68 每章一个目录：index.html（本章步骤与题目）、audio/en/（MP3 与 timings.js）
-├── .venv/              # 现有 PDF 处理工具的 Python 虚拟环境
 ├── .git/               # 本地 Git 仓库，尚未配置远程
 └── .DS_Store           # macOS 自动生成的目录信息
 ```
@@ -107,19 +104,14 @@ SVG 将 PNG 以 data URL 嵌入，单个文件自包含；仍然是位图，放�
 
 ## 现有工具
 
-查看章节分组：
+制作工具都在技能 `.claude/skills/animebook/scripts/` 里（下面用 `$SKILL` 指这个目录）。查看章节分组、按章导出书页与文字层：
 
 ```sh
-.venv/bin/python split_book.py --list
+uv run --with pymupdf $SKILL/scripts/split_pages.py *.pdf --list
+uv run --with pymupdf $SKILL/scripts/split_pages.py *.pdf --text-only   # 只导出每章 text.md（读书页先读它，省 token）
 ```
 
-重新导出书页到新的目录：
-
-```sh
-.venv/bin/python split_book.py --dpi 200 --output book_pages_200dpi
-```
-
-安装和其他导出参数见 `README.md`。已有图片通常可以直接使用，不必重复导出。`.venv/` 服务于现有 PDF 工具，不是已确定的网站开发环境。
+已有图片通常可以直接使用，不必重复导出。本书的网站在 `site/` 根目录（书架也在这里）；以后的新书放在 `site/<书名>/`，见技能的 `references/site.md`。改动 `site/lib/engine.*` 中通用的部分时，同步更新技能的 `assets/engine/`。
 
 本地预览（音频需要 HTTP，不能双击打开）：
 
@@ -132,7 +124,7 @@ python3 -m http.server 8765 -d site   # 打开 http://localhost:8765/
 修改讲稿后重新生成语音（只重做改动过的步骤，需联网）：
 
 ```sh
-uv run --with edge-tts tools/tts.py content/chNN/narration.en.json site/chNN/audio/en
+uv run --with edge-tts $SKILL/scripts/tts.py content/chNN/narration.en.json site/chNN/audio/en
 ```
 
 讲稿中的 `[[mark]]` 名称必须与 `index.html` 中该步使用的 `m('mark')` 一致。

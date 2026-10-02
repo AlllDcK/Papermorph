@@ -1,6 +1,8 @@
 /* The public bookshelf. Add real, published books here; no build step required.
  * This first book shares index.html with its contents, so its counts and saved
  * place come from the rendered chapter cards, never a second chapter list.
+ * A book in its own folder (site/<slug>/) gives href '<slug>/' and its counts
+ * (chapters, units) instead of contents.
  */
 'use strict';
 (() => {
@@ -35,11 +37,11 @@
   </svg>`;
   const container = document.getElementById('shelf-books');
   for (const [index, book] of books.entries()) {
-    const contents = document.querySelector(book.contents);
-    const chapters = contents.querySelectorAll('.ch');
-    const units = contents.querySelectorAll('.unit').length;
-    const last = contents.querySelector('.ch.last');
-    const finished = contents.querySelectorAll('.ch.done').length;
+    const contents = book.contents && document.querySelector(book.contents);
+    const chapters = contents ? contents.querySelectorAll('.ch') : { length: book.chapters };
+    const units = contents ? contents.querySelectorAll('.unit').length : book.units;
+    const last = contents?.querySelector('.ch.last');
+    const finished = contents ? contents.querySelectorAll('.ch.done').length : 0;
     const row = el('article', 'shelf-book');
     row.style.setProperty('--book-index', index);
     const display = el('div', 'book-display');
@@ -54,7 +56,7 @@
     title.append(el('span', '', book.coverTitle[0]), el('i', '', book.coverTitle[1]));
     front.append(title);
     const picture = el('span', 'book-picture');
-    picture.innerHTML = artwork;
+    picture.innerHTML = book.artwork || artwork;   // each book may bring its own small SVG cover picture
     front.append(picture, el('span', 'book-cover-bottom', 'Watch · Explore · Try'));
     cover.append(front);
     display.append(cover, el('span', 'shelf-plank'));
@@ -67,7 +69,7 @@
     const facts = el('p', 'book-facts', `${chapters.length} chapters · ${units} units · Narrated lessons`);
     info.append(facts);
     const features = el('ul', 'book-features');
-    for (const text of ['Ideas drawn step by step', 'Quick checks inside the animation', 'Practice you can play with']) {
+    for (const text of book.features || ['Ideas drawn step by step', 'Quick checks inside the animation', 'Practice you can play with']) {
       const li = el('li', '', text);
       li.prepend(el('span', 'feature-tick', '↗'));
       features.append(li);
