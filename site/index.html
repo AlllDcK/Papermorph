@@ -262,8 +262,12 @@ function show(animate) {
       heading?.focus({ preventScroll: true });
     }
   };
-  if (animate && document.startViewTransition && !reduced) document.startViewTransition(apply).ready.catch(() => {});   // an interrupted transition just ends
-  else apply();
+  if (animate && document.startViewTransition && !reduced) {
+    const transition = document.startViewTransition(apply);
+    // Navigation can interrupt either promise; the new view is already applied.
+    transition.ready.catch(() => {});
+    transition.finished.catch(() => {});
+  } else apply();
 }
 addEventListener('hashchange', () => show(true));
 show(false);
