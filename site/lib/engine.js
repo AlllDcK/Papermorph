@@ -133,7 +133,7 @@ const ctx2d = document.createElement('canvas').getContext('2d');
 function textW(str, size, italic = false) { ctx2d.font = `${italic ? 'italic ' : ''}${size}px ${MATH}`; return ctx2d.measureText(str).width; }
 const VAR = /(?<![A-Za-z°])(?:(?!(?:of|in|is|to|or|at|on|by|as|an|if|it|be|no|so|up|we|my)(?![A-Za-z]))[a-z]{1,2}|(?!(?:If|In|It|Is|On|At|No|So|Or|An|As|To|By|Up)(?![A-Za-z]))[a-z]?[A-Z]{1,3}[a-z]?)(?![A-Za-z])/g;   // capitals: A, PV, nRT   // short lowercase runs are variables (a, x, ab), except short English words
 const F = (n, d) => ({ f: [String(n), String(d)] });   // fraction
-const R = x => ({ r: String(x) });                      // square root
+const R = (x, i) => ({ r: x && x.f ? x : String(x), i: i && String(i) });   // root of a number or of F(n, d); i = index, e.g. 3 for a cube root
 const E = x => ({ sup: String(x) });                    // exponent, raised after the part before it
 // Math expression from parts: 'text' | F(n,d) | R(x) | E(exp). Baseline at y; anchor start/middle/end.
 function M(parent, parts, { x = 0, y = 0, size = 36, fill = COL.chalk, anchor = 'middle', o = 1, s = 1 } = {}) {
@@ -165,10 +165,19 @@ function M(parent, parts, { x = 0, y = 0, size = 36, fill = COL.chalk, anchor = 
       rule(cx + size * .04, cx + w - size * .04, bar);
       cx += w + size * .04;
     } else if (p.r) {
-      const w = textW(p.r, size), x0 = cx + size * .04, top = -size * .82;
-      mk('path', { d: `M${x0} ${-size * .3}L${x0 + size * .1} ${-size * .36}L${x0 + size * .27} ${size * .06}L${x0 + size * .45} ${top}H${x0 + size * .56 + w + size * .06}`,
+      const fr = typeof p.r === 'object', mid = fr ? -size * .12 : -size * .3, bot = fr ? size * .45 : size * .06, top = fr ? -size * 1.12 : -size * .82;
+      let x0 = cx + size * .04;
+      if (p.i) { const iw = textW(p.i, size * .42); text(p.i, x0, mid - size * .14, size * .42); x0 += Math.max(0, iw - size * .12); }   // index in the radical's crook
+      let w;
+      if (fr) {   // a fraction under the radical, laid out like F()
+        const fs = size * .72, [n, d] = p.r.f, wn = textW(n, fs), wd = textW(d, fs), bx = x0 + size * .56, bar = -size * .3;
+        w = Math.max(wn, wd) + size * .2;
+        text(n, bx + (w - wn) / 2, bar - size * .12, fs);
+        text(d, bx + (w - wd) / 2, bar + size * .62, fs);
+        mk('path', { d: `M${bx + size * .04} ${bar}H${bx + w - size * .04}`, stroke: fill, 'stroke-width': lw, 'stroke-linecap': 'round' }, inner);
+      } else { w = textW(p.r, size); text(p.r, x0 + size * .56, 0, size); }
+      mk('path', { d: `M${x0} ${mid}L${x0 + size * .1} ${mid - size * .06}L${x0 + size * .27} ${bot}L${x0 + size * .45} ${top}H${x0 + size * .56 + w + size * .06}`,
         fill: 'none', stroke: fill, 'stroke-width': lw, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, inner);
-      text(p.r, x0 + size * .56, 0, size);
       cx = x0 + size * .56 + w + size * .1;
     } else if (p.sup !== undefined) {
       cx += text(p.sup, cx + size * .03, -size * .45, size * .62) + size * .06;
@@ -1279,7 +1288,7 @@ const slot = (k, n) => {
   const r = RINGS[k];
   return [r.lx + [-72, 72, 0][n % 3], r.ly + 50 + 56 * Math.floor(n / 2)];
 };
-const plain = parts => parts.map(p => typeof p === 'string' ? p : p.f ? p.f.join('/') : p.sup !== undefined ? '^' + p.sup : '√' + p.r).join('');
+const plain = parts => parts.map(p => typeof p === 'string' ? p : p.f ? p.f.join('/') : p.sup !== undefined ? '^' + p.sup : (p.i ? p.i : '') + '√' + (p.r.f ? p.r.f.join('/') : p.r)).join('');
 const sorter = (items, trayXY) => (body, api) => {
   const L = qlayer();
   const bg = mk('rect', { width: 1600, height: 900, fill: 'transparent' }, L);

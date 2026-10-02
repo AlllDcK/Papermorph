@@ -43,6 +43,7 @@
 | `eqLine(p, L, R, y, t0, {xEq, sym, note})` | 等号（或不等号）对齐的一行推导，右侧可带注释 |
 | `ray(p, v, closed, dir, t0)`、`segment(p, a, b, ca, cb, t0)` | 数轴上的射线与线段解集（ch26、ch27） |
 | `E(exp)` | `M()` 中的上标指数 |
+| `R(x, i)` | 根号：`x` 可以是数字串或 `F(n, d)`（分数在根号下），`i` 为根指数，如 `R(125, 3)` 是立方根（ch57 起） |
 | `plane(p, {cx, cy, u, x0, x1, y0, y1, t0})` | 坐标系（ch30 起）。返回 `P`：`PX/PY` 换算、`dot(x, y, color, t0, {label, dx, dy, anchor, into, run})`、`walk`（从原点沿 x 再沿 y 走到点）、`line(xa, ya, xb, yb, color, t0)`（延长到网格边）、`arrow(xa, ya, xb, yb, color, t0, {label})`、`stair(x, y, rise, run, t0, {labels})`（先竖后横的斜率台阶）、`fn(f, xa, xb, color, t0, {w, dur})`（描出 y = f(x) 的曲线，超出网格的部分不画，ch47 起）、`half(a, b, c, color, t0)`（给 a·x + b·y ≥ c 的半平面着色，裁在网格内）；`line` 传 `dash` 时淡入而不是描出。每步设 `P.layer = panel(0)`，点和线画进本步面板，换步自动淡出；答题动画传 `{run: fx, into: 层}` |
 | `die(p, n, x, y, s, o)`、`coin(p, 'H'/'T', x, y, t0, r, run)`、`spinner(p, cx, cy, r, t0, colors)` + `.land(k)`、`outline(p, sp, ks, color, t0, run)` | 骰子点数面、硬币、等分转盘（指针转角 `land(k)` 指向第 k 格）及高亮格子（ch42 起） |
 | `axes(p, {x0, y0, w, h, xs: [lo, hi, step], ys: [lo, hi, step], xl, yl, t0, ybreak})` | 带刻度和轴名的第一象限坐标轴（散点图、实际情境图，ch41 起），返回 `{PX, PY}` |
