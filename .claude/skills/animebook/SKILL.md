@@ -36,7 +36,7 @@ Gates marked **(user)** need the user's go-ahead; everything else you just do.
 2. **Split.** `SKILL/scripts/outline.py book.pdf` prints the bookmark tree; rerun with `--level N -o sections.json` at the chapter depth (no bookmarks: write sections.json by hand from the contents pages). Check it against the book's contents, then `SKILL/scripts/split_pages.py book.pdf` (needs `--with pymupdf`) for page images and each chapter's `text.md`.
 3. **Book map (user).** Skim every chapter's `text.md` (text only). Write in BOOK.md: units and chapters with minute estimates, a colour per unit, and the recurring visual models across the book (number line, timeline, map, graph, …) — these become engine helpers. Show the user the chapter list and the visual approach.
 4. **Pilot chapter (user).** Make chapter 1 completely (chapter loop below). This is where look, pacing, voice and question style get approved; expect several rounds. Record every decision in BOOK.md under *Conventions*; later chapters follow them. Build helpers for the recurring models now, not halfway through the book.
-5. **Chapter loop.** One chapter at a time, each in a fresh context (see *Budget*). Commit per unit if the user agrees.
+5. **Chapter loop.** One chapter at a time, each in its own subagent (see *Budget*); the main conversation stays the coordinator. Commit per unit if the user agrees.
 6. **Finish the book.** Contents page with a sketch per unit, cover text, bookshelf entry, whole-book `check_blank.py` and all tests. Deploy only when asked. See `references/site.md`.
 
 ## Chapter loop
@@ -69,7 +69,8 @@ The process is fixed; the design is yours. For each idea pick the visual argumen
 
 A book is long; spend tokens on design, not on re-reading.
 
-- **Fresh context per chapter** (a new session, or a subagent briefed with the chapter number, BOOK.md and the files to touch). Anything later chapters need lives in files — BOOK.md, `references/` — not in conversation memory.
+- **One subagent per chapter.** After the pilot, the main conversation only coordinates: it starts one subagent (Agent tool) per chapter, sequentially, with a short brief — chapter number, book folder, "follow SKILL.md and BOOK.md Conventions", anything the user asked for. The subagent runs the chapter loop through step 6 and replies in a few lines: files changed, tests and blank check passed or not, book errors found, new helpers or conventions. The main conversation then registers the chapter (step 7), updates BOOK.md, runs the regression if the engine changed, and asks the user only when something needs a decision. Don't run chapters in parallel: they share the engine, the contents page and the screenshot browser. The pilot stays in the main conversation, where the user can steer.
+- **State lives in files.** Anything a later chapter needs goes into BOOK.md or `references/`, never only into conversation memory.
 - **Text before images**: read `text.md`; open a page image only for a diagram.
 - **Don't read engine.js**; use `references/engine.md` and grep for one function when needed.
 - **Screenshots as sheets**: read the 4-up contact sheets from `shot.py` (open and end frames first), single shots only where a sheet shows a problem. Don't re-screenshot what a test already proves.
