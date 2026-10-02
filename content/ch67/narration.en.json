@@ -1,0 +1,22 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Unit thirteen, chapter sixty-seven. [[sub]]The graph of every quadratic function is a parabola. Its equation tells you where to draw it.",
+    "dir": "Start with the sign of a. [[up]]When a is positive, the parabola opens upward. [[shrink]]Watch a get smaller. The parabola widens, [[flip]]and once a turns negative, it flips and opens downward. [[big]]The bigger the size of a, the narrower the parabola. [[rule]]The sign of a sets the direction; its size sets the width.",
+    "vertex": "The vertex is the turning point at the tip. [[x]]Its x-coordinate is negative b over two a. [[ex]]For y equals x squared plus six x minus seven, [[calc]]that's negative six over two, negative three. [[y]]Substitute back for y: nine minus eighteen minus seven, negative sixteen. [[pt]]The vertex is negative three, negative sixteen. [[min]]This parabola opens upward, so the vertex is its lowest point: the minimum value of the function is negative sixteen.",
+    "q1": "Quick check. Click the vertex.",
+    "vform": "Vertex form shows the vertex directly: y equals a times x minus h, squared, plus k. [[hk]]The vertex is h, k. [[slide]]Start with y equals x squared, and slide it. [[h]]Replacing x with x minus three moves the graph three to the right. [[k]]Adding eight moves it eight up. [[ans]]So y equals x minus three, squared, plus eight, has its vertex at three, eight. [[sign]]Watch the sign: x plus seven is x minus negative seven, so h is negative seven.",
+    "convert": "To get vertex form from standard form, complete the square. [[ex]]Take y equals x squared plus ten x minus seven. [[half]]Half of ten is five, and five squared is twenty-five. [[add]]Add and subtract twenty-five on the right, so nothing changes. [[group]]The first three terms make x plus five, squared, [[ans]]and the leftover numbers make negative thirty-two. [[v]]The vertex is negative five, negative thirty-two.",
+    "q2": "Quick check. Write it in vertex form.",
+    "axis": "Every parabola is symmetric. [[line]]The vertical line through the vertex is the axis of symmetry: x equals negative b over two a. [[mirror]]Points at the same height sit the same distance from it, on opposite sides. [[use]]So once you plot a point on one side, you get its mirror image for free.",
+    "intercepts": "The intercepts are where the parabola crosses the axes. [[yint]]For the y-intercept, set x equal to zero: you get c. [[xint]]For the x-intercepts, set y equal to zero and solve the quadratic equation. [[count]]The discriminant says how many x-intercepts to expect: two, one, or none.",
+    "graph": "Put it all together to graph y equals x squared minus four x minus five. [[dir]]a is one, so it opens upward. [[v]]The vertex is at x equals two; y is four minus eight minus five, negative nine. [[ax]]The axis of symmetry is x equals two. [[yi]]The y-intercept is negative five, [[m]]and its mirror point is four, negative five. [[xi]]The discriminant is thirty-six, so there are two x-intercepts. Factoring gives x minus five times x plus one: negative one and five. [[draw]]Connect the points with a smooth curve.",
+    "q3": "Quick check. Click the vertex.",
+    "wrap": "To sum up. [[w1]]The sign of a gives the direction: up for a minimum, down for a maximum. [[w2]]The vertex is at x equals negative b over two a; in vertex form it's h, k. [[w3]]The axis of symmetry passes through the vertex. [[w4]]The y-intercept is c; the x-intercepts are the solutions of the equation. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Describe the parabola.",
+    "final2": "Next, find each vertex.",
+    "final3": "Last one. Mark the key points on the graph.",
+    "finish": "Great work. That's the end of chapter sixty-seven, graphing quadratic functions."
+  }
+}

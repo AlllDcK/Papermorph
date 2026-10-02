@@ -1,0 +1,19 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter sixty-four. [[sub]]Completing the square turns any quadratic into something squared equals a number, which you already know how to solve.",
+    "tiles": "Start with x squared plus six x. [[sq]]Here's the x squared tile, [[strips]]and six x strips. [[split]]Split the strips in half: three go along the right side, [[split2]]and three go along the bottom. [[gap]]The shape is almost a square, but a corner is missing. [[size]]The corner is three by three. [[fill]]Fill it with nine unit squares, [[done]]and now it's a complete square, x plus three on each side. [[ans]]So x squared plus six x plus nine equals x plus three, squared.",
+    "rule": "That's the pattern. [[half]]Take half of b: half of six is three. [[sq]]Square it: three squared is nine. [[add]]Add that to x squared plus b x, and you get a perfect square: x plus half of b, all squared. [[ex]]For x squared plus eight x, half of eight is four, and four squared is sixteen: x squared plus eight x plus sixteen is x plus four, squared. [[neg]]The sign of b carries into the binomial: x squared minus ten x plus twenty-five is x minus five, squared.",
+    "q1": "Quick check. What completes the square?",
+    "solve": "Now solve an equation with it. [[ex]]x squared minus fourteen x equals negative eleven. [[half]]Half of negative fourteen is negative seven, and negative seven squared is forty-nine. [[both]]Add forty-nine to both sides, to keep the equation balanced. [[fac]]The left side becomes x minus seven, squared, and the right side is thirty-eight. [[root]]Take square roots: x minus seven is plus or minus root thirty-eight. [[ans]]So x is seven plus or minus root thirty-eight.",
+    "q2": "Quick check. Complete the square and solve.",
+    "lead": "Completing the square needs the x squared term to have a coefficient of one. [[ex]]For two x squared plus twelve x equals ten, [[div]]divide every term by two first: x squared plus six x equals five. [[add]]Half of six is three; add nine to both sides: x plus three, squared, equals fourteen. [[ans]]So x equals negative three plus or minus root fourteen.",
+    "frac": "The numbers don't have to be whole. [[ex]]Negative three x squared minus x plus ten equals zero. [[div]]Move the ten, then divide by negative three: x squared plus one third x equals ten thirds. [[half]]Half of one third is one sixth, and its square is one thirty-sixth. [[add]]Adding it to both sides gives x plus one sixth, squared, equals one hundred twenty-one thirty-sixths. [[root]]Square roots: x plus one sixth is plus or minus eleven sixths. [[ans]]So x is five thirds or negative two.",
+    "wrap": "To sum up. [[w1]]Get the equation into the form x squared plus b x equals c, with a coefficient of one on x squared. [[w2]]Take half of b, square it, and add it to both sides. [[w3]]Factor the left side as x plus half of b, squared. [[w4]]Then take square roots and solve. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. What completes the square?",
+    "final2": "Next, solve by completing the square.",
+    "final3": "Last one. Divide first.",
+    "finish": "Great work. That's the end of chapter sixty-four, completing the square."
+  }
+}

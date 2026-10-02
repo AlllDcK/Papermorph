@@ -1,0 +1,21 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter sixty-two. [[sub]]Factoring turns a quadratic equation into two simple linear equations.",
+    "zp": "Here's the key idea. [[rule]]If a product of two numbers is zero, then at least one of the numbers must be zero. This is the zero-product principle. [[why]]Any two nonzero numbers multiply to something nonzero, [[zero]]so a zero product needs a zero factor. [[ex]]So if x minus two, times y minus five, equals zero, [[split]]then x minus two is zero, or y minus five is zero: [[ans]]x is two, or y is five.",
+    "watch": "Watch it happen. [[f]]Here are two factors, x plus five and x minus two, and their product. [[slide]]Slide x along the number line. [[a]]At x equals negative five, the first factor is zero, so the product is zero. [[b]]At x equals two, the second factor is zero, and again the product is zero. [[else]]Anywhere else, both factors are nonzero, and so is the product. [[graph]]On the graph of the product, those two values are exactly where the parabola crosses the x-axis.",
+    "steps": "So to solve a quadratic equation by factoring: [[s1]]first, move everything to one side, so the other side is zero. [[s2]]Second, factor. [[s3]]Third, set each factor equal to zero and solve. [[ex]]For x squared plus three x minus ten equals zero, [[fac]]factor into x plus five, times x minus two. [[sol]]Then x plus five is zero or x minus two is zero: [[ans]]x is negative five or x is two.",
+    "q1": "Quick check. Solve by factoring.",
+    "rhs": "Step one matters. [[ex]]Take two x squared minus eleven x equals negative twelve. [[move]]Add twelve to both sides first: two x squared minus eleven x plus twelve equals zero. [[fac]]Factor: two x minus three, times x minus four. [[ans]]So x is three halves or four. [[warn]]Never apply the principle when the other side isn't zero. If x minus four, times x plus three, equals two, the factors could be one and two, or many other pairs. Nothing forces either one to be two.",
+    "q2": "Quick check. Find the first mistake.",
+    "gcf": "Factor out a GCF first when there is one. [[ex]]Six x squared minus four x minus ten equals zero. [[g]]Every term has a factor of two: two, times three x squared minus two x minus five. [[f]]Factor the trinomial: two, times three x minus five, times x plus one. [[two]]The factor two can never be zero, so it gives no solution. [[ans]]The solutions are five thirds and negative one.",
+    "double": "Sometimes both factors are the same. [[ex]]x squared minus sixteen x plus sixty-four equals zero [[f]]factors into x minus eight, squared. [[one]]Both factors give the same value, so there's just one solution: x equals eight. [[graph]]The parabola touches the x-axis at one point instead of crossing it.",
+    "q3": "Quick check. Solve the equation.",
+    "wrap": "To sum up. [[w1]]If a product is zero, one of the factors is zero. [[w2]]Get zero on one side, then factor. [[w3]]Set each factor equal to zero, and solve. [[w4]]The solutions are where the parabola meets the x-axis. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Solve by factoring.",
+    "final2": "Next, move everything to one side first.",
+    "final3": "Last one. A few harder ones.",
+    "finish": "Nice work. That's the end of chapter sixty-two, solving quadratic equations by factoring."
+  }
+}

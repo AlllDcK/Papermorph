@@ -48,6 +48,7 @@
 | `die(p, n, x, y, s, o)`、`coin(p, 'H'/'T', x, y, t0, r, run)`、`spinner(p, cx, cy, r, t0, colors)` + `.land(k)`、`outline(p, sp, ks, color, t0, run)` | 骰子点数面、硬币、等分转盘（指针转角 `land(k)` 指向第 k 格）及高亮格子（ch42 起） |
 | `axes(p, {x0, y0, w, h, xs: [lo, hi, step], ys: [lo, hi, step], xl, yl, t0, ybreak})` | 带刻度和轴名的第一象限坐标轴（散点图、实际情境图，ch41 起），返回 `{PX, PY}` |
 | `areaGrid(p, x0, y0, ws, hs, 列标签, 行标签, t0, {size})` + `.cell(i, j, parts, t0, {fill, tint, run, into})`、`.ring(i, j, color, t0)`；`arc(p, x1, y1, x2, y2, h, color, t0)` | 多项式乘法与因式分解的面积网格（列标签在上、行标签在左），弧形箭头（ch51 起） |
+| `frac(p, top, bot, x, y, t0, {size, fill, anchor, topFill, botFill})` | 分子分母都是 parts 的大分数（可含根号，如求根公式），横线在 y；返回 `{g, w, t, b, x0}`（ch60 起） |
 | `dataLine(p, {lo, hi, x0, x1, y, step, every, r})` | 数据数轴（ch40 起）。返回 `D`：`V(v)` 换算横坐标，`dot(v, color, t0, {from})` 在 v 上方叠点（`from` 给出时从该高度落下），`dots(vals, …)`，`mark(v, color, t0, label)` 轴下的平衡三角（`slide(mark, v, t0)` 滑动），`span(a, b, y, label, color, t0)` 上方区间括号；答题动画传 `{run: fx, into}` |
 
 题型补充：`pickEls(items, right, 答对说明, i => 错因, 答对动画?)` 点选画面里任意对象（表格单元格、柱子、小图），`items` 为 `[{el, box: [x, y, w, h], label}]`，←/→ 切换、Enter 选定（ch41 起）；`pickPoint(P, [x, y], 答对说明, (x, y) => 错因, 答对动画?, test?)`（`test(x, y)` 给出时接受任何满足的点，`[x, y]` 只用于 Show answer；答对说明也可以是 `(x, y) => 文本`） 在坐标系上选格点，方向键移动光标、Enter 选定或直接点击；同一 quiz 连续两题时，前一题的答对动画要画进本步面板（qlayer 会在下一题清空）。`tapEls(row, idx, right, yes, no, onRight)` 点选画面里算式的某个记号（如“先算哪一步”）；`blanks` 的格子接受分数与带分数，`{box: '3/4', lowest: true}` 要求最简形式。行上给 `test(values)` 时整行一起判（如两个因式顺序任意，ch54 起），Show answer 仍填各格的 `box`。

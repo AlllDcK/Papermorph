@@ -1,0 +1,18 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter sixty-six. [[sub]]Before solving a quadratic equation, you can tell how many real solutions it has.",
+    "disc": "Look again at the quadratic formula. [[part]]The part under the radical, b squared minus four a c, is called the discriminant. [[pm]]The plus or minus adds and subtracts its square root. [[pos]]If the discriminant is positive, its square root is a positive number, and the plus and minus give two different solutions. [[zero]]If it's zero, plus zero and minus zero are the same, so there's one solution. [[neg]]If it's negative, its square root isn't a real number: no real solutions.",
+    "slide": "Watch it on a graph. [[fam]]Here's y equals x squared plus six x plus c. [[c3]]With c equal to three, the discriminant is thirty-six minus twelve, twenty-four: positive. The parabola crosses the x-axis twice. [[up]]Now raise c. The parabola rises, and the discriminant shrinks. [[c9]]At c equals nine, the discriminant is zero, and the parabola just touches the axis: one solution. [[c11]]At c equals eleven, it's negative eight, and the parabola floats above the axis: no real solutions.",
+    "q1": "Quick check. Find the discriminant.",
+    "ex": "Try one with a fraction. [[q]]One half x squared minus eight x plus thirty-two equals zero. [[abc]]a is one half, b is negative eight, c is thirty-two. [[d]]Negative eight squared is sixty-four, and four times one half times thirty-two is also sixty-four. [[zero]]The discriminant is zero, so there's exactly one solution. [[chk]]The formula confirms it: x equals eight over one, or eight.",
+    "form": "Make sure the equation is in standard form first. [[q]]Negative two x squared plus seven x equals eight. [[move]]Subtract eight: negative two x squared plus seven x minus eight equals zero. [[d]]Now a is negative two, b is seven, c is negative eight. Forty-nine minus sixty-four is negative fifteen. [[none]]Negative, so there are no real solutions.",
+    "q2": "Quick check. How many real solutions?",
+    "wrap": "To sum up. [[w1]]The discriminant is b squared minus four a c. [[w2]]Positive: two real solutions. Zero: one. Negative: none. [[w3]]On the graph, that's whether the parabola crosses the x-axis twice, touches it once, or misses it. [[w4]]Write the equation in standard form before reading off a, b, and c. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find each discriminant.",
+    "final2": "Next, how many real solutions?",
+    "final3": "Last one. Find the discriminant, then solve.",
+    "finish": "Well done. That's the end of chapter sixty-six, and of unit twelve."
+  }
+}

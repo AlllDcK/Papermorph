@@ -536,6 +536,21 @@ function arc(p, x1, y1, x2, y2, h, color, t0, run = tw) {
   return l;
 }
 
+/* ---------- built-up fractions with math above and below the bar (ch60 onward) ---------- */
+// Width of math parts at a size, without leaving anything on the stage.
+function mathW(parts, size) { const e = M(scene, [].concat(parts), { size, o: 0 }), w = e._w; e.remove(); return w; }
+// A built-up fraction whose top and bottom are math parts (they may hold radicals); bar on y. Returns { g, w, t, b, x0 }.
+function frac(p, top, bot, x, y, t0, { size = 56, fill = COL.chalk, anchor = 'start', topFill, botFill } = {}) {
+  const g = G(p, { o: 0 });
+  const w = Math.max(mathW(top, size), mathW(bot, size)) + size * .3;
+  const x0 = anchor === 'middle' ? x - w / 2 : x;
+  const t = M(g, [].concat(top), { x: x0 + w / 2, y: y - size * .25, size, fill: topFill || fill });
+  const b = M(g, [].concat(bot), { x: x0 + w / 2, y: y + size * 1.05, size, fill: botFill || fill });
+  path(g, `M${x0} ${y}H${x0 + w}`, { stroke: fill, 'stroke-width': size * .05 });
+  if (t0 !== undefined) show(g, t0);
+  return { g, w, t, b, x0 };
+}
+
 /* ---------- coordinate plane (unit 6 onward) ---------- */
 // Grid centred on the origin at (cx, cy); u pixels per unit; x from x0 to x1, y from y0 to y1.
 // Returns { g, PX, PY, u, ... } with helpers to plot points, walk to a point, and draw lines.

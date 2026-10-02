@@ -1,0 +1,18 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Unit twelve, chapter sixty-one. [[sub]]A quadratic has a squared variable, and its graph is a curve called a parabola.",
+    "form": "A quadratic has a variable to the second power, and no higher power. [[std]]Its standard form is a x squared plus b x plus c, where a is not zero. [[eq]]Set equal to zero, it's a quadratic equation. [[fn]]Set equal to y, it's a quadratic function, and you can graph it. [[ex]]For y equals three x squared minus five x plus seven, [[abc]]a is three, b is negative five, and c is seven. [[sign]]The sign belongs to the number: minus five x means b is negative five.",
+    "which": "How do you tell whether an equation is quadratic? Look at the highest power. [[q1]]Four x squared minus x plus one third: the highest power is two, so it's quadratic. [[q2]]Twelve x plus five: the highest power is one, so a is zero and it's linear. [[q3]]Nine x cubed plus x squared: the highest power is three, so it's cubic, not quadratic. [[q4]]Negative four thirds x squared: b and c are both zero, and that's allowed. It's still quadratic.",
+    "q1": "Quick check. Find a, b, and c.",
+    "sol": "A solution of a quadratic equation is a value of x that makes it true. [[ex]]Is x equals two a solution of x squared minus five x plus six equals zero? [[sub]]Substitute two for every x: four minus ten plus six. [[ans]]That's zero, so both sides match. Yes, two is a solution. [[ex2]]Is negative three a solution of negative two x squared equals seven x plus ten? [[l]]The left side is negative two times nine, negative eighteen. [[r]]The right side is negative twenty-one plus ten, negative eleven. [[no]]They don't match, so negative three is not a solution.",
+    "graph": "Every quadratic function graphs as a parabola. [[up]]When a is positive, the parabola opens upward, like a cup. [[down]]When a is negative, it opens downward. [[vertex]]The turning point is called the vertex. [[roots]]The solutions of a x squared plus b x plus c equals zero are where the parabola crosses the x-axis. [[none]]Some parabolas never cross it. Then the equation has no real solution. So not every quadratic equation has a solution.",
+    "q2": "Quick check. Which graph is a parabola?",
+    "wrap": "To sum up. [[w1]]A quadratic is a x squared plus b x plus c, with a not zero and no higher power. [[w2]]A solution makes the equation true: substitute and check. [[w3]]The graph is a parabola: it opens up when a is positive and down when a is negative. [[w4]]Its x-intercepts are the solutions, and there may be none. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Is it quadratic?",
+    "final2": "Next, find a, b, and c.",
+    "final3": "Last one. Is it a solution?",
+    "finish": "Nice work. That's the end of chapter sixty-one, introduction to quadratic equations."
+  }
+}
