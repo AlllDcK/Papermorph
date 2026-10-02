@@ -1,10 +1,11 @@
 # <Book title> — book plan
 
-The working memory of this book. Every session starts by reading it; update it whenever something is decided.
+Read this compact current state for chapter work. The chapter map/status lives in `chapters.md`; storyboards, errata and feedback live in `chapters/chNN.md`.
 
 ## Intake
 - Readers: … · Tone: … · Narration language: … · Guide character: … · Publish to: …
-- Source: `book.pdf`, N pages, N chapters in N units (`sections.json`).
+- Slug: … · Primary language code: … · Asset approach: code/SVG by default, or agreed assets.
+- Source: `book.pdf` · Page map: `sections.json` · N pages, N chapters in N units.
 
 ## Conventions (approved in the pilot; later chapters follow them)
 - Look: palette, fonts, how a new idea enters, how steps are laid out …
@@ -12,16 +13,8 @@ The working memory of this book. Every session starts by reading it; update it w
 - Questions: placement, typical types, feedback style …
 - Subject conventions (definitions, notation, rounding) …
 
-## Recurring visual models → engine helpers
-- … (which chapters use it, helper name once built)
+## Visual models / available helpers
+- … (candidate model, chapters using it, helper name and file once implemented)
 
-## Chapters
-| # | Title | Unit | Status | Book errors fixed |
-| --- | --- | --- | --- | --- |
-| 1 | … | 1 | planned / draft / reviewed / approved | … |
-
-## User feedback and decisions (dated)
-- YYYY-MM-DD: …
-
-## Releases
-- YYYY-MM-DD commit … deployment …
+## Current decisions
+- … (fold approved changes into conventions above; chapter feedback stays with its chapter)

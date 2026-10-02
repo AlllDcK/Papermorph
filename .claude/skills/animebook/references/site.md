@@ -4,18 +4,25 @@ The site is static: HTML, JS, CSS, MP3. No build step, backend, database or acco
 
 ## Start a book folder
 
+Set `SKILL` to the installed skill folder. Run once for a new slug; use an existing book's actual files when resuming:
+
 ```sh
-B=site/<book-slug>
-mkdir -p $B/lib $B/ch01 content/ch01 tools
-cp SKILL/assets/engine/engine.js SKILL/assets/engine/engine.css $B/lib/
-cp SKILL/assets/templates/book.html $B/index.html
-cp SKILL/assets/templates/unit-art.js $B/unit-art.js
-cp SKILL/assets/templates/chapter.html $B/ch01/index.html
-cp SKILL/assets/templates/narration.en.json content/ch01/
-cp SKILL/assets/templates/e2e.py tools/e2e_ch01.py
+BOOK_ID=history
+BOOK_SITE="site/$BOOK_ID"
+BOOK_WORK="books/$BOOK_ID"
+mkdir -p "$BOOK_SITE/lib" "$BOOK_SITE/ch01" "$BOOK_WORK/chapters" "content/$BOOK_ID/ch01" "tools/$BOOK_ID"
+cp "$SKILL/assets/engine/engine.js" "$SKILL/assets/engine/engine.css" "$BOOK_SITE/lib/"
+cp "$SKILL/assets/templates/book.html" "$BOOK_SITE/index.html"
+cp "$SKILL/assets/templates/unit-art.js" "$BOOK_SITE/unit-art.js"
+cp "$SKILL/assets/templates/chapter.html" "$BOOK_SITE/ch01/index.html"
+cp "$SKILL/assets/templates/narration.en.json" "content/$BOOK_ID/ch01/narration.en.json"
 ```
 
-Each book keeps its own engine copy, so improving one book never breaks another. A chapter links back to `../` (the book's index) and the index links back to `../` (the bookshelf). With no bookshelf yet, either add `site/index.html` that simply redirects to the book (`<meta http-equiv="refresh" content="0; url=<book-slug>/">`) or delete the two `back-shelf` links from the book's index.
+Use the agreed primary language: rename the narration source, load `audio/<lang>/timings.js`, and set `CHAPTER.language` to match (default `en`). Choose the voice and translate the template's visible UI text as needed before the pilot.
+
+Each book has its own engine, source materials, narration and optional tests. The engine and cover derive the same progress key from the book's URL folder. Keep existing books on their current paths; their legacy progress remains intact.
+
+A chapter returns to its book's index; the cover/contents returns to the bookshelf. With no bookshelf yet, create a minimal `site/index.html` linking to the book's cover. When adding a bookshelf, use underlined text and a small arrow for the entry; preserve cover → contents → chapter navigation.
 
 ## Cover and contents (`index.html`)
 
@@ -27,11 +34,11 @@ One page: no hash or `#book` shows the cover, `#contents` or `#chNN` the content
 
 ## Unit sketches (`unit-art.js`)
 
-Each unit header is a strip of chalkboard with a small drawing of that unit's ideas in the unit colour. It draws itself the first time the unit scrolls into view, then keeps one gentle loop that fits the topic (two terms swapping places, a dot hopping along a line, a balance tilting, a spinner turning). Draw from the book's own content — a timeline for a history unit, a map, a family tree, a key quotation — with paths and text only. Keep the left third light (the title sits there on phones); test at 1440 px and 390 px wide; motion stops under `prefers-reduced-motion`. The classes and loop examples are documented at the top of `unit-art.js` and in the `.unit-art` CSS of `index.html`.
+Give each unit a small sketch of its own ideas, drawn in the unit colour, with one gentle topic-related loop. Use the agreed asset approach. Keep the left third light for the title on phones; check the finished contents at 1440 px and 390 px once. The template handles reduced motion; classes and loop examples are in `unit-art.js` and the `.unit-art` CSS.
 
 ## Guide character
 
-The engine's `mascotEl` draws the guide shown on question cards and the score card (and the cover uses the same drawing). The first book used an infinity sign whose loops are eyes. For a new book, draw a simple SVG character that suits it, in `mascotEl` and in the cover script, with the same moods (blink, hop when right, tilt when wrong). Never use a famous or branded character.
+Keep the existing infinity guide by default. For an agreed custom guide, adapt `mascotEl` and the cover drawing together, retaining blink, happy hop and wrong-answer tilt states.
 
 ## Bookshelf
 
@@ -43,17 +50,17 @@ The engine's `mascotEl` draws the guide shown on question cards and the score ca
   artwork: '<svg viewBox="0 0 260 175" class="book-art">…</svg>', features: ['…', '…', '…'] }
 ```
 
-Only list books that are published; never placeholders.
+List ready books. Folder-based entries use their own counts and artwork; their saved place is available on the book cover.
 
 ## Publishing
 
-Only when the user asks. Any static host works; for Cloudflare Pages:
+Use the user's publishing authorization. Any static host works; for Cloudflare Pages:
 
 ```sh
 npx wrangler pages deploy site --project-name <project> --branch main --commit-hash $(git rev-parse --short HEAD)
 ```
 
-Commit first, deploy the committed state, then confirm the live URL serves the new files (`curl` a changed file with a cache-busting query) and record the deployment id in BOOK.md. Never publish the PDF, `book_pages/` or tools; they live outside `site/`.
+Commit first, deploy the committed state, then confirm the live URL serves a changed file with a cache-busting query. Record commit, URL and deployment id in `books/<book>/releases.md`. Publish only `site/`.
 
 ## Languages
 

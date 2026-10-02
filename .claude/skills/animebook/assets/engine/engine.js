@@ -1475,7 +1475,7 @@ function start(i, play) {
   Object.assign(P, { i, t: 0, waiting: false, done: false, afail: false, stall: 0 });
   P.end = runBeat(i);
   evalTo(0);
-  const a = P.audio = new Audio(`audio/en/${BEATS[i].id}.mp3`);
+  const a = P.audio = new Audio(`audio/${CHAPTER.language || 'en'}/${BEATS[i].id}.mp3`);
   a.preload = 'auto';
   a.onerror = () => { if (P.audio === a) soundFailed(); };
   const b = BEATS[i];
@@ -1608,9 +1608,10 @@ fit();
 
 // Start the lesson once the chapter page has defined CHAPTER and BEATS.
 // ?beat=N&t=S opens a paused frame, for reviewing a single moment.
-// Per-browser progress shared with the contents page: last chapter opened, chapters finished.
+// Per-book progress shared with the cover/contents at the parent URL folder.
+const BOOK_PROGRESS_KEY = 'animebook:progress:' + new URL('../', location.href).pathname;
 function progress(f) {
-  try { const p = JSON.parse(localStorage.getItem('progress') || '{}'); f(p); localStorage.setItem('progress', JSON.stringify(p)); } catch {}
+  try { const p = JSON.parse(localStorage.getItem(BOOK_PROGRESS_KEY) || '{}'); f(p); localStorage.setItem(BOOK_PROGRESS_KEY, JSON.stringify(p)); } catch {}
 }
 function boot() {
   $('coverK').textContent = `Chapter ${CHAPTER.number}`;

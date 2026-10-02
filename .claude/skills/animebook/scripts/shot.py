@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Screenshot beats of a chapter for review, plus contact sheets of four shots each.
 
-    uv run --with playwright --with pillow shot.py ch07                    # every beat at 1.2 s, middle and end
+    uv run --with playwright --with pillow shot.py ch07                    # every beat at 1.2 s (open) and its end
+    uv run --with playwright --with pillow shot.py ch07 --moments mid      # add the middle of every beat
     uv run --with playwright --with pillow shot.py ch07 3:end 5:4.5 6:mid  # chosen moments (seconds, mid, end)
     ... --url http://localhost:8765/history/ --out /tmp/shots
 
@@ -10,6 +11,7 @@ Uses ?beat=N&t=S, which seeks to the beat and freezes at that time. Run one brow
 time: parallel runs slow page loads and catch pictures half faded in.
 """
 import argparse, asyncio
+import sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 from PIL import Image
@@ -26,10 +28,10 @@ async def main(a):
         base = f"{a.url}{a.chapter}/index.html"
         await pg.goto(base + "?beat=0&t=0"); await pg.wait_for_timeout(500)
         if errs:
-            print("page errors:", errs); return
+            print("page errors:", errs); await b.close(); return 1
         n = await pg.evaluate("BEATS.length")
         durs = await pg.evaluate("BEATS.map(b => TIMINGS[b.id].dur)")
-        specs = a.specs or [f"{i}:{t}" for t in ("open", "mid", "end") for i in range(n)]
+        specs = a.specs or [f"{i}:{t}" for t in ("open", "end", *a.moments) for i in range(n)]
         groups = {}
         for s in specs:
             i, t = s.split(":"); i = int(i)
@@ -47,14 +49,16 @@ async def main(a):
                 sheet.paste(Image.open(f).resize((800, 480)), ((j % 2) * 800, (j // 2) * 480))
             sheet.save(a.out / f"{a.chapter}_sheet_{t}_{k // 4}.png")
     print("errors:", sorted(set(errs))[:8] or "none", "| shots in", a.out)
+    return 1 if errs else 0
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("chapter")
     ap.add_argument("specs", nargs="*")
+    ap.add_argument("--moments", nargs="*", default=[], choices=["mid"], help="extra moments for every beat")
     ap.add_argument("--url", default="http://localhost:8765/")
     ap.add_argument("--out", type=Path, default=Path("/tmp/animebook-shots"))
     a = ap.parse_args()
     a.url = a.url if a.url.endswith("/") else a.url + "/"
-    asyncio.run(main(a))
+    sys.exit(asyncio.run(main(a)))

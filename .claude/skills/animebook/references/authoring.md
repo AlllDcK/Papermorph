@@ -2,15 +2,15 @@
 
 ## Shape
 
-A chapter runs about 5–11 minutes: 10–20 beats, each 5–40 seconds of narration.
+The algebra book used roughly 5–11 minute chapters and 5–40 second beats. Let the content determine length and the number of checks/practice sets.
 
 | Beat | Purpose |
 | --- | --- |
 | `intro` | Title card (unit and chapter number, title, one line of purpose). |
 | lesson beats | One idea each, built up in the picture while the narration explains it. |
-| `q1`, `q2`, … | A quick check after every one to three lesson beats, inside the picture. |
+| `q1`, `q2`, … | A check of already taught content, separated from the next check by a lesson beat. |
 | `wrap` | Three or four numbered takeaways. |
-| `final1` … | Two to four full-screen practice sets labelled "Chapter practice N of M", covering the whole chapter. |
+| `final1` … | Consecutive full-screen practice sets labelled "Chapter practice N of M", covering the whole chapter. |
 | `finish` | Score card (`finishCard`): first-try results for quick checks and practice. |
 
 Beat ids are shared by the page (`BEATS`) and the narration file; a beat with `ask` waits for the answers before moving on.
@@ -36,7 +36,7 @@ Principles that held up over a whole book:
 
 ## Narration
 
-`content/chNN/narration.en.json`:
+`content/<book>/chNN/narration.<lang>.json` (English example):
 
 ```json
 { "voice": "en-US-AndrewMultilingualNeural", "rate": "-4%",
@@ -47,7 +47,7 @@ Principles that held up over a whole book:
 - Write for the ear: short sentences, one idea each. Say math in words ("negative seven halves", "x squared"); the picture shows the symbols.
 - Match the audience: plain, warm, never childish. Explain why, not only how.
 - Question beats get one short line ("Quick check. Find the mean."); the card holds the question.
-- `tts.py` caches word timings and only re-synthesizes beats whose text or voice changed. It writes `audio/en/<beat>.mp3` and `timings.js` (duration, mark times, one caption cue per sentence). Edge TTS needs network access.
+- `tts.py` caches word timings beside the script; the output folder receives `<beat>.mp3` and `timings.js` (duration, marks, sentence captions).
 
 ## Questions
 
@@ -72,6 +72,5 @@ New types are welcome when the content calls for one; each needs keyboard play (
 
 ## Content rules
 
-- Rewrite everything in your own words with your own examples and numbers; keep the book's topics and order unless the user decides otherwise.
-- Recompute every worked example and every answer key entry. Wrong statements, wrong answers and ambiguous exercises are common; fix or drop them, and log each in BOOK.md (chapter, what was wrong, what you did).
-- Keep one consistent set of conventions (definitions, notation, rounding) for the whole book and record them in BOOK.md.
+- Follow the agreed chapter scope and order. Verify facts, calculations and answers actually used in the finished lesson; correct or replace source errors and note them in `books/<book>/chapters/chNN.md` for the user.
+- Use BOOK.md's definitions, notation and rounding conventions. Record new shared decisions there.

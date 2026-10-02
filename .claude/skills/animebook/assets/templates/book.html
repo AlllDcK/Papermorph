@@ -226,7 +226,8 @@ const UNITS = [   // [unit title, [[chapter title, minutes], ...]]; chapters are
 const HUES = ['#f4a48c', '#86c9e8', '#f3c95c', '#e8a0c8', '#8fd6b0', '#bba8ee', '#f0b45a'];
 const id = n => 'ch' + String(n).padStart(2, '0');
 let P = {};
-try { P = JSON.parse(localStorage.getItem('progress') || '{}'); } catch {}
+const BOOK_PROGRESS_KEY = 'animebook:progress:' + new URL('.', location.href).pathname;
+try { P = JSON.parse(localStorage.getItem(BOOK_PROGRESS_KEY) || '{}'); } catch {}
 const done = new Set(P.done || []);
 
 // Contents.

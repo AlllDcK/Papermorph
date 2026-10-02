@@ -1,9 +1,9 @@
-"""Keyboard-only walk through chapter NN: each question answered wrong, right, and once via Show answer.
+"""Optional interaction-test example; adapt the cases to the behavior being changed.
 
     python3 -m http.server 8765 -d site &
-    uv run --with playwright tools/e2e_chNN.py
+    URL=http://localhost:8765/BOOK/chNN/ uv run --with playwright tools/BOOK/e2e_chNN.py
 
-Beat numbers follow BEATS in the chapter page. Rerun every chapter's test after an engine change.
+Beat numbers follow BEATS in the chapter page. Run relevant existing cases after engine changes.
 """
 import asyncio, os
 from playwright.async_api import async_playwright

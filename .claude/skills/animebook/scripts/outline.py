@@ -12,9 +12,11 @@ page where the chapter itself begins. Pages before the first chapter become
 Every PDF page lands in exactly one section, numbered by PDF page order (from 1),
 not by printed page numbers.
 
-Without bookmarks, nothing is guessed: read the contents pages (render them with
-split_pages.py --only 00_front) and write sections.json by hand in the same format.
-Always check the result against the book before rendering pages.
+Without bookmarks, render the contents using split_pages.py book.pdf --pages 1-12,
+then write sections.json from those pages. Its JSON array covers every PDF page once:
+[{"folder":"00_front","title":"Front matter","start":1,"end":12},
+ {"folder":"ch01","title":"Chapter title","start":13,"end":40,"unit":"Part one"}, ...]
+Adjust boundaries to the actual PDF; start/end are inclusive PDF page numbers.
 """
 import argparse
 import json
@@ -34,7 +36,7 @@ def main():
     toc = doc.get_toc()                     # [level, title, page]
     n = len(doc)
     if not toc:
-        sys.exit("No bookmarks in this PDF. Write sections.json by hand from the contents pages.")
+        sys.exit("No bookmarks. Render contents with split_pages.py book.pdf --pages 1-12, then write sections.json from them.")
     if a.level is None:
         for lv, title, page in toc:
             print(f"{'  ' * (lv - 1)}[{lv}] p{page}  {title}")

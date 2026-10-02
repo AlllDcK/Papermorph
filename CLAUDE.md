@@ -57,11 +57,10 @@ AnimeBook/
 ├── scripts/
 │   └── prepare_mascot.swift # 在 macOS 上生成透明 PNG 和 SVG 封装
 ├── content/chNN/       # 每章英文讲稿 narration.en.json（[[mark]] 标记动画触发词）及 tts 缓存
-├── .claude/skills/animebook/  # 从一本 PDF 到互动动画书的完整流程（英文）：拆书、规划、试点章、逐章制作、审阅测试、目录与发布；
+├── .claude/skills/animebook/  # 从 PDF 到互动动画书的流程（英文）：拆书、规划、初始化、试点、逐章制作、轻量交付检查、目录与发布；
 │                      # scripts/（outline、split_pages、tts、shot、check_blank）、assets/（引擎与模板）、references/
 ├── tools/
-│   ├── tts.py          # Edge TTS 生成 MP3、词级时间点与逐句字幕
-│   └── e2e_chNN.py     # 各章浏览器端到端检查（Playwright）；改引擎后全部重跑
+│   └── e2e_chNN.py     # 当前数学书的浏览器端到端检查；播放器或判题变化时运行相关检查
 ├── site/               # 可部署的静态站点（只部署此目录）
 │   ├── index.html      # 书架、书封与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
 │   ├── lib/            # 共用引擎 engine.js / engine.css；书架数据与样式 bookshelf.js / bookshelf.css；目录页单元小图 unit-art.js
@@ -104,14 +103,14 @@ SVG 将 PNG 以 data URL 嵌入，单个文件自包含；仍然是位图，放�
 
 ## 现有工具
 
-制作工具都在技能 `.claude/skills/animebook/scripts/` 里（下面用 `$SKILL` 指这个目录）。查看章节分组、按章导出书页与文字层：
+制作工具在技能 `.claude/skills/animebook/scripts/` 里（下面用 `$SKILL` 指技能根目录）。查看章节分组、按章导出书页与文字层：
 
 ```sh
 uv run --with pymupdf $SKILL/scripts/split_pages.py *.pdf --list
 uv run --with pymupdf $SKILL/scripts/split_pages.py *.pdf --text-only   # 只导出每章 text.md（读书页先读它，省 token）
 ```
 
-已有图片通常可以直接使用，不必重复导出。本书的网站在 `site/` 根目录（书架也在这里）；以后的新书放在 `site/<书名>/`，见技能的 `references/site.md`。改动 `site/lib/engine.*` 中通用的部分时，同步更新技能的 `assets/engine/`。
+已有图片通常可以直接使用，不必重复导出。本书保持原路径；新书页面在 `site/<书名>/`，参考资料与当前约定在 `books/<书名>/`，讲稿和可选测试在 `content/<书名>/`、`tools/<书名>/`。初始化与进度隔离见技能 `references/site.md`。改动 `site/lib/engine.*` 中通用的部分时，同步更新技能的 `assets/engine/`。
 
 本地预览（音频需要 HTTP，不能双击打开）：
 

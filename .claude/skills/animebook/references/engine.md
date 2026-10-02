@@ -1,8 +1,8 @@
 # The engine (lib/engine.js, lib/engine.css)
 
-A chapter page loads the engine and its `audio/en/timings.js`, defines `CHAPTER`, its own small drawing helpers, `BEATS` and question data, then calls `boot()`. The engine provides the stage, drawing, a timeline, question types, the guide character and the player. If a name below disagrees with the code, the code wins; fix this file.
+A chapter page loads the engine and its `audio/<lang>/timings.js`, defines `CHAPTER` (including `language` when different from `en`), drawing helpers, `BEATS` and questions, then calls `boot()`. The engine provides the stage, drawing, timeline, question types, guide and player. Use the code's signatures if they differ from this reference.
 
-Many helpers are mathematical (number lines, planes, tiles) because the first book was algebra. Use what fits; for other subjects write new helpers in the chapter page, and move one into the engine the second time it is needed — not earlier.
+Many helpers are mathematical because the first book was algebra. Use those that fit, implement new ones in the chapter as needed, and share them in the book's engine when another chapter uses them.
 
 ## Stage and state
 
@@ -41,11 +41,11 @@ Topic helpers already in the engine: number lines (`numberLine`, `X(v)`, `Y0`, `
 }, { ask: done => quiz(BAND, [/* questions */], done) }],           // optional: a question beat
 ```
 
-- `m('name', offset)` is the start time of the word after `[[name]]`; `D` is the clip's length. Never hard-code seconds that should follow the voice.
+- `m('name', offset)` is the start time of the word after `[[name]]`; `D` is the clip's length. Use marks for actions tied to speech; scene entrances and transitions can use fixed offsets.
 - Tweens: `tw(e, to, t0, dur, ease)`, `prog(q => …, t0, dur, ease)` for custom motion (arcs, counters, live redraws), `show`, `hide`, `draw`, `pop`, `pulse`, `stream`. Eases: `io`, `out`, `back`, `lin`.
 - A lesson beat ends after its narration and its last tween, then the next starts; an `ask` beat waits for `done()`.
 - **Opening lead-in**: if a beat calls `panel()` (before 0.5 s) and nothing appears within 0.8 s, `runBeat` moves the opening group (every tween starting within 1.2 s of the first reveal) to start at 0.4 s. Opt out with `{ lead: false }` in the beat's fourth slot.
-- **Seeking replays**: jumping to beat N rebuilds the scene and runs every earlier beat's `run` instantly. So `run` may only schedule tweens — no `setTimeout`, `Math.random`, `Date`, or reading the current state to decide what to draw. Interactive elements are created only inside `ask`.
+- **Seeking replays**: jumping to beat N rebuilds the scene and runs earlier beats instantly. Make `run` deterministic: create objects and schedule tweens through the timeline, with inputs from chapter data and replayed `S` state. Create interactions inside `ask`; use `fx`/`fxp` for answer effects.
 - Constants used in a `BEATS` literal are evaluated when it is defined, so define them above `BEATS`. Data used only inside an `ask` closure may sit below.
 
 ## Questions
@@ -67,13 +67,15 @@ quiz(position, [{ id: 'c-mean', prompt: ['Find the mean of ', $m('7, 3, 9'), '.'
 
 Space play/pause, ←/→ previous/next beat (Shift+←/→ during a question), Home restart, C captions, F full screen, ? help. `seek(i, play)` rebuilds and jumps; `start(i, play)` begins a beat from the current picture. While audio plays, the beat clock follows `audio.currentTime`. `?beat=N&t=S` in the URL opens a frozen frame for review. The finish card's Enter opens `CHAPTER.next`, R replays.
 
+Progress uses `animebook:progress:<book-path>`; the cover template reads the same key. Books served in different folders have separate saved places and completion lists.
+
 Keep `<link rel="expect" href="#bar" blocking="render">` in every chapter's head; without it Chromium may paint before the player exists and cancel the page transition from the contents page.
 
 ## Traps
 
 - `M()` italicises 1–2 letter lowercase runs (variables) and runs of capitals, but keeps common short English words upright (by, my, an, if, in, is, of, or, …; capitalised: By, If, In, …). In maths write `b​y`, `m​y`, `a​n`, `B​y` to keep them italic. Units inside `M()` turn italic too: write them as words in `T()` text ("meters"). Never put an English sentence in `M()`.
 - Prompts, `grid` text rows and `choice` options are HTML: plain strings render as text, so wrap math in `$m(...)`.
-- Don't redeclare an engine name with `const` in a chapter (`rect`, `popIn`, `eqLine`, `fit`, `slot`, `Y0`, …): the page script dies and the stage stays empty. After writing a page, load `?beat=0` and check the console first.
+- Prefix chapter-specific helpers when their names might collide with engine globals (`rect`, `popIn`, `eqLine`, `fit`, `slot`, `Y0`, …); a redeclaration stops the page script.
 - Drag handling: re-parent (append) the element before `setPointerCapture`; moving a node drops its capture.
 - A card whose content is too long for `BAND` should become several `blanks` rows in a wider side card.
 - When a question beat is continued early, the engine finishes the beat's pending tweens first; don't rely on half-finished fades.

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Render every PDF page to PNG, one folder per section of sections.json.
+"""Extract a book by its page map, or preview a page range before a map exists.
 
     uv run --with pymupdf split_pages.py book.pdf --sections sections.json --out book_pages
     uv run --with pymupdf split_pages.py book.pdf --list            # check the map only
     uv run --with pymupdf split_pages.py book.pdf --only ch05       # one section
     uv run --with pymupdf split_pages.py book.pdf --text-only        # text layer only, no images
+    uv run --with pymupdf split_pages.py book.pdf --pages 1-12       # preview/, no sections.json needed
 
 Each section folder also gets text.md: the PDF's own text layer, page by page. Read that
 first; open a page image only for diagrams, layout or text the layer gets wrong (it is far
@@ -17,6 +18,7 @@ never published with the site.
 """
 import argparse
 import json
+import re
 from pathlib import Path
 
 import pymupdf
@@ -32,20 +34,32 @@ def main():
     ap.add_argument("--only", nargs="*", help="render only these section folders")
     ap.add_argument("--overwrite", action="store_true")
     ap.add_argument("--text-only", action="store_true", help="write text.md files, skip the images")
+    ap.add_argument("--pages", help="preview a page or inclusive range (e.g. 3 or 1-12), independently of the map")
     a = ap.parse_args()
-    sections = json.loads(a.sections.read_text(encoding="utf-8"))
     with pymupdf.open(a.pdf) as doc:
-        nxt, seen = 1, set()
-        for s in sections:
-            f, st, en = s["folder"], s["start"], s["end"]
-            if not f or "/" in f or "\\" in f or f in (".", "..") or f in seen:
-                ap.error(f"bad or repeated folder name: {f!r}")
-            if st != nxt or en < st or en > len(doc):
-                ap.error(f"pages must run on without gaps or overlaps: {f} ({st}-{en}), expected start {nxt}")
-            seen.add(f)
-            nxt = en + 1
-        if nxt != len(doc) + 1:
-            ap.error(f"the map ends at page {nxt - 1}; the PDF has {len(doc)} pages")
+        if a.pages:
+            match = re.fullmatch(r"(\d+)(?:-(\d+))?", a.pages)
+            if not match:
+                ap.error("--pages expects a page or range, e.g. 3 or 1-12")
+            start, end = int(match[1]), int(match[2] or match[1])
+            if not 1 <= start <= end <= len(doc):
+                ap.error(f"--pages must be within 1-{len(doc)} in ascending order")
+            if a.only:
+                ap.error("use --pages for a preview or --only for mapped sections")
+            sections = [{"folder": "preview", "title": f"Pages {start}-{end}", "start": start, "end": end}]
+        else:
+            sections = json.loads(a.sections.read_text(encoding="utf-8"))
+            nxt, seen = 1, set()
+            for s in sections:
+                f, st, en = s["folder"], s["start"], s["end"]
+                if not f or "/" in f or "\\" in f or f in (".", "..") or f in seen:
+                    ap.error(f"bad or repeated folder name: {f!r}")
+                if st != nxt or en < st or en > len(doc):
+                    ap.error(f"pages must run on without gaps or overlaps: {f} ({st}-{en}), expected start {nxt}")
+                seen.add(f)
+                nxt = en + 1
+            if nxt != len(doc) + 1:
+                ap.error(f"the map ends at page {nxt - 1}; the PDF has {len(doc)} pages")
         print(f"{len(doc)} pages, {len(sections)} sections, {a.dpi} dpi")
         if a.list:
             for s in sections:
@@ -70,7 +84,8 @@ def main():
         manifest = {"source": a.pdf.name, "page_count": len(doc), "dpi": a.dpi,
                     "page_numbering": "PDF page order from 1, not printed page numbers",
                     "filename_pattern": "page_{pdf_page:04d}.png", "sections": sections}
-        (a.out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        manifest_dir = a.out / "preview" if a.pages else a.out
+        (manifest_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
