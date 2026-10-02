@@ -64,8 +64,8 @@ AnimeBook/
 │   ├── tts.py          # Edge TTS 生成 MP3、词级时间点与逐句字幕
 │   └── e2e_chNN.py     # 各章浏览器端到端检查（Playwright）；改引擎后全部重跑
 ├── site/               # 可部署的静态站点（只部署此目录）
-│   ├── index.html      # 书的封面与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
-│   ├── lib/            # 共用引擎：engine.js（播放器、绘图、题型、∞ 角色）、engine.css
+│   ├── index.html      # 书架、书封与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
+│   ├── lib/            # 共用引擎 engine.js / engine.css；书架数据与样式 bookshelf.js / bookshelf.css
 │   └── chNN/           # ch01–ch68 每章一个目录：index.html（本章步骤与题目）、audio/en/（MP3 与 timings.js）
 ├── .venv/              # 现有 PDF 处理工具的 Python 虚拟环境
 ├── .git/               # 本地 Git 仓库，尚未配置远程
