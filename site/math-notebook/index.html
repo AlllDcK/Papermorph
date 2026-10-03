@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+// Observe aborted incoming transitions before the first rendering opportunity.
+addEventListener('pagereveal', e => e.viewTransition?.ready.catch(() => {}));
+</script>
 <title>Elementary Mathematics — Papermorph</title>
 <meta name="description" content="Animated middle-school mathematics, with narrated lessons, interactive quick checks, and chapter practice.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d2b27'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-size='48' fill='%23f0b45a'%3E∞%3C/text%3E%3C/svg%3E">
@@ -318,8 +322,6 @@ const name = el => {
 };
 document.addEventListener('click', e => { const a = e.target.closest('a[href^="ch"]'); if (a) name(a); });
 addEventListener('pagereveal', e => {
-  // A new navigation can interrupt the incoming page transition.
-  e.viewTransition?.ready.catch(() => {});
   const target = (location.hash.length > 1 && document.getElementById(location.hash.slice(1))?.closest('.ch')) || (named?.offsetParent && named);
   name(e.viewTransition && target ? target : null);
   e.viewTransition?.finished.then(() => name(null), () => name(null));

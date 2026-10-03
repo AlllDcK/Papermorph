@@ -1,6 +1,8 @@
 // Papermorph lesson engine: stage, drawing, timeline, questions, player.
 // A chapter page loads this file, defines CHAPTER and BEATS, then calls boot().
 'use strict';
+// A fast follow-up navigation can abort the incoming page transition.
+addEventListener('pagereveal', e => e.viewTransition?.ready.catch(() => {}));
 document.body.insertAdjacentHTML('afterbegin', `<div id="frame">
   <svg id="stage" viewBox="0 0 1600 900" role="img" aria-label="Lesson animation">
     <defs>
