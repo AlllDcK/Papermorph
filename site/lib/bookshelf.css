@@ -1,7 +1,14 @@
+:root {
+  --ui: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --book: "Iowan Old Style", Palatino, Georgia, serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100svh; background: #c4a47e; font: 18px/1.5 var(--ui); }
+a { color: inherit; }
+@view-transition { navigation: auto; }
+::view-transition-group(*) { animation-duration: .5s; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
 /* The photographed bookshelf belongs to this website, not the book-making Skill. */
-body.shelved #cover, body:not(.shelved) #shelf { display: none; }
-body.shelved { background: #c4a47e; }
-body.shelved::before { display: none; }
 #shelf { position: relative; width: 100%; min-height: 100dvh; margin: 0; color: #443526; }
 .shelf-top { position: absolute; z-index: 2; inset: 0 0 auto; display: flex; justify-content: space-between; align-items: center; height: 3%; padding: 0 2.6%; }
 #shelf-title { margin: 0; font: 600 clamp(14px, 1.35vw, 25px)/1 var(--ui); letter-spacing: -.4px; view-transition-name: none; }
@@ -37,9 +44,7 @@ body.shelved::before { display: none; }
 .shelf-about p { font: 15px/1.7 var(--ui); }
 .shelf-about .about-kicker { margin: 0; color: #826545; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
 .about-close { position: absolute; right: 16px; top: 12px; padding: 0 7px; background: transparent; border: 0; color: #675542; font: 26px var(--ui); cursor: pointer; }
-/* These controls belong to the existing book cover and contents. */
-.back-shelf { color: var(--dim); font: 13px var(--ui); text-decoration: none; white-space: nowrap; }
-.back-shelf:hover { color: var(--chalk); }
-.cover-back { position: absolute; top: 24px; left: 24px; }
-.contents-back { margin-left: 16px; }
-@media (prefers-reduced-motion: reduce) { .book-caption { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .book-caption { transition: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}

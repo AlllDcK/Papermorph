@@ -1,10 +1,21 @@
 /* Website-only book navigation. The picture, links and hotspot positions live in index.html/bookshelf.css. */
 'use strict';
 (() => {
+  // Old root hashes referred to the first book before each book had its own folder.
+  const legacyBook = () => {
+    if (/^#(?:book|contents|ch\d{2})$/.test(location.hash)) {
+      const target = new URL('elementary-algebra/', location.href);
+      target.search = location.search;
+      target.hash = location.hash;
+      location.replace(target.href);
+    }
+  };
+  legacyBook();
+  addEventListener('hashchange', legacyBook);
   const about = document.getElementById('shelf-about');
   document.getElementById('shelf-about-button').addEventListener('click', () => about.showModal());
   const books = [
-    { id: 'pre-algebra', key: 'progress', chapterBase: '', chapters: 68 },
+    { id: 'elementary-algebra', key: 'progress', chapterBase: 'elementary-algebra/', chapters: 68 },
     { id: 'math-notebook', key: 'animebook:progress:' + new URL('math-notebook/', location.href).pathname,
       chapterBase: 'math-notebook/', chapters: 3 },
   ];

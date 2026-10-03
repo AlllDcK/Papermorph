@@ -318,6 +318,8 @@ const name = el => {
 };
 document.addEventListener('click', e => { const a = e.target.closest('a[href^="ch"]'); if (a) name(a); });
 addEventListener('pagereveal', e => {
+  // A new navigation can interrupt the incoming page transition.
+  e.viewTransition?.ready.catch(() => {});
   const target = (location.hash.length > 1 && document.getElementById(location.hash.slice(1))?.closest('.ch')) || (named?.offsetParent && named);
   name(e.viewTransition && target ? target : null);
   e.viewTransition?.finished.then(() => name(null), () => name(null));
