@@ -2,29 +2,43 @@
 
 An AI skill that turns books into animated, narrated, interactive web experiences.
 
-Source & Skill: [DozenTwelve/Papermorph](https://github.com/DozenTwelve/Papermorph) · [MIT License](LICENSE).
+[Live bookshelf](https://math.diamonddoge.org/) · [MIT License](LICENSE)
 
-把一本书（PDF）做成带动画、语音和互动练习的网页书。网站在 `site/`，首页书架目前收录：
+## The Skill
 
-- *Elementary Algebra*：68 章，保留原有 `site/chNN/` 路径。
-- *Elementary Mathematics*：已完成前三章，入口在 `site/math-notebook/`；全书规划为 63 章，后续制作因 API 成本暂停。
+The core of Papermorph is a reusable book-making Skill: [.claude/skills/papermorph/SKILL.md](.claude/skills/papermorph/SKILL.md).
 
-在线书架：[math.diamonddoge.org](https://math.diamonddoge.org/)。Cloudflare Pages 项目仍为 `animebook`，生产分支为 `main`；直接发布静态文件，无构建步骤：
+It guides an AI agent through reference preparation, book planning, storyboards, narration, animated chapters, and interactive exercises. It includes production scripts, lesson engines, and templates. Start with `SKILL.md`, then read the references needed for the current stage.
+
+Production tools use `uv`, PDF extraction, Edge TTS, and Playwright as described in the Skill. Generated books run as static websites without a backend or live AI calls.
+
+## Example books
+
+The website in `site/` showcases:
+
+- **Elementary Algebra**: 68 animated, narrated chapters.
+- **Elementary Mathematics**: three available chapters, with further production currently paused.
+
+The bookshelf is the project's showcase. Its appearance will continue to evolve as more books are added.
+
+The book cover pages credit their reference textbooks and link to the publishers. Reference PDFs, extracted source pages, private production notes, narration drafts, and unused artwork remain local and are not tracked in this repository. The bookshelf image used by the live website is included.
+
+## Preview
+
+There is no build step. Serve the website over HTTP for audio playback:
+
+```sh
+python3 -m http.server 8765 -d site
+```
+
+Open `http://localhost:8765/`.
+
+## Deploy
+
+The current website uses Cloudflare Pages project `animebook`, production branch `main`, and domain `math.diamonddoge.org`. Deploy only `site/`:
 
 ```sh
 npx wrangler pages deploy site --project-name animebook --branch main
 ```
 
-完整制作流程、脚本、引擎与模板都在技能 `.claude/skills/papermorph/`（英文，从 `SKILL.md` 读起）。本书的计划与进度见 `plan.md`，目录地图与约定见 `CLAUDE.md`。
-
-第二本书从 Book2 合并，使用独立引擎和学习进度；约定与进度见 `books/math-notebook/BOOK.md` 和 `chapters.md`，讲稿在 `content/math-notebook/`，检查脚本在 `tools/math-notebook/`。原始 PDF 和提取书页仅供本地制作，不进入 Git 或部署目录。
-
-常用命令（`SKILL=.claude/skills/papermorph`）：
-
-```sh
-uv run --with pymupdf $SKILL/scripts/outline.py book.pdf                 # 看 PDF 书签，生成 sections.json
-uv run --with pymupdf $SKILL/scripts/split_pages.py book.pdf             # 按章导出书页图片和 text.md
-python3 -m http.server 8765 -d site                                       # 本地预览
-uv run --with playwright tools/e2e_ch01.py                                # 某章端到端测试
-uv run --with playwright tools/math-notebook/smoke_ch01.py                # 第二本书；另有 ch02、ch03
-```
+Maintain public repository documentation in English.

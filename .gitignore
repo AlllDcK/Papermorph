@@ -9,3 +9,14 @@ book_pages/
 
 # Extracted references for books in their own folders.
 books/*/pages/
+
+# Local production state and unused artwork; publish the Skill and finished site.
+/CLAUDE.md
+/plan.md
+/sections.json
+/3.png
+/img/
+/scripts/
+/books/
+/content/
+/tools/
