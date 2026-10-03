@@ -1,9 +1,9 @@
 ---
-name: animebook
+name: papermorph
 description: Make or edit animated, narrated, interactive web books from reference PDFs. Use for book planning, chapter animation and exercises, narration, cover and contents pages, and requested publishing, including "make the next chapter" or "fix this animation".
 ---
 
-# AnimeBook
+# Papermorph
 
 Make the picture explain the idea through change: rearrange, split, balance, count, compare. Each chapter is one 1600×900 SVG stage plus controls; **beats** pair narration clips with timed actions. Quick checks and final practice happen inside the picture. Templates supply mechanics; choose the visual argument for the content.
 

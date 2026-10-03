@@ -31,6 +31,6 @@ Read this compact current state for chapter work. The chapter map/status lives i
 ## Current decisions
 - Pilot chapter 1 approved by the user (2026-10-03). Its look, pacing, question mix and side-notes layout are the model for later chapters; `site/math-notebook/ch01/index.html` is the reference implementation.
 - Layout used in ch01: number map on the left (engine `RINGS`), notes column at x ≥ 1290; number line −4…4 with `AXIS.u = 160`.
-- Local preview: `python3 -m http.server 8765 -d site` (AnimeBook preview; use port 8793 if 8765 is occupied).
+- Local preview: `python3 -m http.server 8765 -d site` (Papermorph preview; use port 8793 if 8765 is occupied).
 - Tests: `tools/math-notebook/smoke_chNN.py` (keyboard runs through quick checks; ch01–ch03).
 - Registering: `python3 tools/math-notebook/register.py N minutes` (UNITS, previous CHAPTER.next, chapters.md row).

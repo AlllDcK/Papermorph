@@ -1,4 +1,4 @@
-// AnimeBook lesson engine: stage, drawing, timeline, questions, player.
+// Papermorph lesson engine: stage, drawing, timeline, questions, player.
 // A chapter page loads this file, defines CHAPTER and BEATS, then calls boot().
 'use strict';
 document.body.insertAdjacentHTML('afterbegin', `<div id="frame">

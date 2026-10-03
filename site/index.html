@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AnimeBook — The animated bookshelf</title>
+<title>Papermorph — The animated bookshelf</title>
 <meta name="description" content="A little library of books brought to life. Watch animated lessons, explore the ideas, and try them yourself.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d2b27'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-size='48' fill='%23f0b45a'%3E∞%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="lib/bookshelf.css">
@@ -189,7 +189,7 @@ main#contents { padding-bottom: 80px; }
 <body class="shelved">
 <main id="shelf" aria-labelledby="shelf-title">
   <header class="shelf-top">
-    <h1 id="shelf-title"><a class="shelf-brand" href="#"><span aria-hidden="true">∞</span> AnimeBook</a></h1>
+    <h1 id="shelf-title"><a class="shelf-brand" href="#"><span aria-hidden="true">∞</span> Papermorph</a></h1>
     <p>Animated books · A growing collection</p>
   </header>
   <figure class="photo-shelf" aria-label="Three shelves: STEM, picture books for children, and curious books">
@@ -225,7 +225,7 @@ main#contents { padding-bottom: 80px; }
   <dialog class="shelf-about" id="shelf-about" aria-labelledby="shelf-about-title">
     <form method="dialog"><button class="about-close" aria-label="Close">×</button></form>
     <p class="about-kicker">A note from the bookshelf</p>
-    <h2 id="shelf-about-title">About AnimeBook</h2>
+    <h2 id="shelf-about-title">About Papermorph</h2>
     <p>An independent, noncommercial educational project. Not affiliated with the authors or publishers of the reference books. Book titles and original materials belong to their respective owners.</p>
     <p>Lessons may contain errors; corrections are welcome. Reading progress stays in your browser. Books on the future shelves are previews, not available lessons.</p>
     <p>The public GitHub repository will collect the source and Skills. It is coming soon.</p>
@@ -345,7 +345,7 @@ function show(animate) {
   const apply = () => {
     document.body.classList.toggle('shelved', shelf);
     document.body.classList.toggle('open', open);
-    document.title = shelf ? 'AnimeBook — The animated bookshelf' : 'Elementary Algebra — AnimeBook';
+    document.title = shelf ? 'Papermorph — The animated bookshelf' : 'Elementary Algebra — Papermorph';
     document.body.classList.toggle('stagger', animate && open);
     const here = open ? document.getElementById(location.hash.slice(1)) : null;
     document.querySelectorAll('.here').forEach(e => e.classList.remove('here'));

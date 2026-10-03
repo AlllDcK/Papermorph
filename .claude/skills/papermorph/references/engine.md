@@ -67,7 +67,7 @@ quiz(position, [{ id: 'c-mean', prompt: ['Find the mean of ', $m('7, 3, 9'), '.'
 
 Space play/pause, ←/→ previous/next beat (Shift+←/→ during a question), Home restart, C captions, F full screen, ? help. `seek(i, play)` rebuilds and jumps; `start(i, play)` begins a beat from the current picture. While audio plays, the beat clock follows `audio.currentTime`. `?beat=N&t=S` in the URL opens a frozen frame for review. The finish card's Enter opens `CHAPTER.next`, R replays.
 
-Progress uses `animebook:progress:<book-path>`; the cover template reads the same key. Books served in different folders have separate saved places and completion lists.
+Progress uses the stable legacy key `animebook:progress:<book-path>` (keep it when renaming the project so existing readers retain their progress); the cover template reads the same key. Books served in different folders have separate saved places and completion lists.
 
 Keep `<link rel="expect" href="#bar" blocking="render">` in every chapter's head; without it Chromium may paint before the player exists and cancel the page transition from the contents page.
 

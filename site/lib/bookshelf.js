@@ -30,7 +30,7 @@
     const link = document.createElement('a');
     link.className = drawer.className;
     link.href = githubURL;
-    link.setAttribute('aria-label', 'AnimeBook on GitHub: source and Skills');
+    link.setAttribute('aria-label', 'Papermorph on GitHub: source and Skills');
     const label = document.createElement('span');
     label.className = 'github-status';
     label.textContent = 'Source & Skills ↗';

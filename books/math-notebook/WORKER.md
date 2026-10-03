@@ -3,7 +3,7 @@
 You make ONE chapter of the animated book, end to end, then report back in a few lines. The coordinator registers it.
 
 ## Paths (repo root `/Users/a1212/Projects/AnimeBook`)
-- Skill: `SKILL=/Users/a1212/Projects/AnimeBook/.claude/skills/animebook` — read `$SKILL/SKILL.md` (Chapter loop), then only the references you need: `references/authoring.md` (storyboard, narration, questions), `references/engine.md` (API), `references/review.md` (delivery pass).
+- Skill: `SKILL=/Users/a1212/Projects/AnimeBook/.claude/skills/papermorph` — read `$SKILL/SKILL.md` (Chapter loop), then only the references you need: `references/authoring.md` (storyboard, narration, questions), `references/engine.md` (API), `references/review.md` (delivery pass).
 - Book state: `books/math-notebook/BOOK.md` (conventions + helper index — follow it), `books/math-notebook/chapters.md` (your row).
 - Source text: `books/math-notebook/pages/chNN/text.md` (already extracted). Render page images when diagrams/fractions are lost in the text: `uv run --with pymupdf $SKILL/scripts/split_pages.py books/math-notebook/book.pdf --sections books/math-notebook/sections.json --out books/math-notebook/pages --only chNN`. Look only at the pages you need.
 - Write: `books/math-notebook/chapters/chNN.md` (storyboard, errata, verified answers — same shape as `chapters/ch01.md`), `content/math-notebook/chNN/narration.en.json`, `site/math-notebook/chNN/index.html`, audio via `uv run --with edge-tts $SKILL/scripts/tts.py content/math-notebook/chNN/narration.en.json site/math-notebook/chNN/audio/en`.

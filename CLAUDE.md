@@ -1,6 +1,6 @@
-# Agent 工作指南
+# Papermorph Agent 工作指南
 
-项目根目录：`/Users/a1212/Projects/AnimeBook`。
+项目名称为 **Papermorph**，Skill 位于 `.claude/skills/papermorph/`。本地项目根目录仍为 `/Users/a1212/Projects/AnimeBook`。
 先阅读 [`plan.md`](plan.md)，了解详细目标、已确认要求、候选编排和待定事项。本文件提供目录地图、素材说明和执行约定，避免重复维护完整计划。
 
 ## 当前方向
@@ -18,7 +18,7 @@
 
 ```text
 AnimeBook/
-├── CLAUDE.md           # Agent 工作指南与目录地图
+├── CLAUDE.md           # Papermorph Agent 工作指南与目录地图
 ├── plan.md             # 详细项目计划
 ├── README.md           # PDF 按章节导出图片的使用说明
 ├── sections.json       # 分组名称、章节与单元信息、PDF 页码范围
@@ -60,7 +60,7 @@ AnimeBook/
 ├── content/chNN/       # 每章英文讲稿 narration.en.json（[[mark]] 标记动画触发词）及 tts 缓存
 ├── books/math-notebook/ # 第二本：BOOK.md、chapters.md、章节分镜与 sections.json；PDF 和 pages/ 为本地参考，不入 Git
 ├── content/math-notebook/ # 第二本前三章讲稿与语音时间点
-├── .claude/skills/animebook/  # 从 PDF 到互动动画书的流程（英文）：拆书、规划、初始化、试点、逐章制作、轻量交付检查、目录与发布；
+├── .claude/skills/papermorph/  # 从 PDF 到互动动画书的流程（英文）：拆书、规划、初始化、试点、逐章制作、轻量交付检查、目录与发布；
 │                      # scripts/（outline、split_pages、tts、shot、check_blank）、assets/（引擎与模板）、references/
 ├── tools/
 │   ├── e2e_chNN.py     # 当前数学书的浏览器端到端检查；播放器或判题变化时运行相关检查
@@ -109,7 +109,7 @@ SVG 将 PNG 以 data URL 嵌入，单个文件自包含；仍然是位图，放�
 
 ## 现有工具
 
-制作工具在技能 `.claude/skills/animebook/scripts/` 里（下面用 `$SKILL` 指技能根目录）。查看章节分组、按章导出书页与文字层：
+制作工具在技能 `.claude/skills/papermorph/scripts/` 里（下面用 `$SKILL` 指技能根目录）。查看章节分组、按章导出书页与文字层：
 
 ```sh
 uv run --with pymupdf $SKILL/scripts/split_pages.py *.pdf --list
