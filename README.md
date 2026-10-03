@@ -5,6 +5,12 @@
 - *Elementary Algebra*：68 章，保留原有 `site/chNN/` 路径。
 - *Elementary Mathematics*：已完成前三章，入口在 `site/math-notebook/`；全书规划为 63 章，后续制作因 API 成本暂停。
 
+在线书架：[math.diamonddoge.org](https://math.diamonddoge.org/)。Cloudflare Pages 项目为 `animebook`，生产分支为 `main`；直接发布静态文件，无构建步骤：
+
+```sh
+npx wrangler pages deploy site --project-name animebook --branch main
+```
+
 完整制作流程、脚本、引擎与模板都在技能 `.claude/skills/animebook/`（英文，从 `SKILL.md` 读起）。本书的计划与进度见 `plan.md`，目录地图与约定见 `CLAUDE.md`。
 
 第二本书从 Book2 合并，使用独立引擎和学习进度；约定与进度见 `books/math-notebook/BOOK.md` 和 `chapters.md`，讲稿在 `content/math-notebook/`，检查脚本在 `tools/math-notebook/`。原始 PDF 和提取书页仅供本地制作，不进入 Git 或部署目录。
