@@ -22,7 +22,7 @@
 <script src="audio/en/timings.js"></script>
 <script>
 'use strict';
-const CHAPTER = { number: 4, title: 'Factors and Greatest Common Factor', minutes: 11, language: 'en' };
+const CHAPTER = { number: 4, title: 'Factors and Greatest Common Factor', minutes: 11, language: 'en', next: '../ch05/' };
 const FC_ROW = COL.whole, FC_SIZE = COL.nat;
 const fcText = (p,s,x,y,t=0,size=32,col=COL.chalk,anchor='start') => { const e=T(p,s,{x,y,size,fill:col,anchor,o:0}); show(e,t); return e; };
 const fcMath = (p,s,x,y,t=0,size=44,col=COL.chalk,anchor='middle') => { const e=M(p,[s],{x,y,size,fill:col,anchor,o:0}); show(e,t); return e; };
