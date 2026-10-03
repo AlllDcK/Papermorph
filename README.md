@@ -1,44 +1,54 @@
-# Papermorph
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="img/readme/logo_light.png">
+    <source media="(prefers-color-scheme: light)" srcset="img/readme/logo.png">
+    <img src="img/readme/logo.png" alt="Papermorph" width="600">
+  </picture>
+</p>
 
-An AI skill that turns books into animated, narrated, interactive web experiences.
+<p align="center">
+  <strong>A Skill that turns PDFs into animated interactive web books.</strong>
+</p>
 
-[Live bookshelf](https://math.diamonddoge.org/) · [MIT License](LICENSE)
+You've seen Opus 5.5 one-shot videos. This Skill takes it further: books you can explore, listen to, and interact with.
 
-## The Skill
+<p align="center">
+  <a href="https://papermorph.diamonddoge.org/">Explore the live bookshelf →</a>
+  ·
+  <a href=".claude/skills/papermorph/SKILL.md">Use the Skill</a>
+</p>
 
-The core of Papermorph is a reusable book-making Skill: [.claude/skills/papermorph/SKILL.md](.claude/skills/papermorph/SKILL.md).
+<p align="center">
+  <a href="img/readme/papermorph-preview.mp4">
+    <img src="img/readme/papermorph-preview.gif" alt="Real demo: bookshelf, animated lessons, and interactive quizzes" width="900">
+  </a>
+  <br>
+  <a href="img/readme/papermorph-preview.mp4">Watch the full 75-second demo with narration</a>
+</p>
 
-It guides an AI agent through reference preparation, book planning, storyboards, narration, animated chapters, and interactive exercises. It includes production scripts, lesson engines, and templates. Start with `SKILL.md`, then read the references needed for the current stage.
-
-Production tools use `uv`, PDF extraction, Edge TTS, and Playwright as described in the Skill. Generated books run as static websites without a backend or live AI calls.
-
-## Example books
-
-The website in `site/` showcases:
-
-- **Elementary Algebra**: 68 animated, narrated chapters.
-- **Elementary Mathematics**: three available chapters, with further production currently paused.
-
-The bookshelf is the project's showcase. Its appearance will continue to evolve as more books are added.
-
-The book cover pages credit their reference textbooks and link to the publishers. Reference PDFs, extracted source pages, private production notes, narration drafts, and unused artwork remain local and are not tracked in this repository. The bookshelf image used by the live website is included.
-
-## Preview
-
-There is no build step. Serve the website over HTTP for audio playback:
-
-```sh
-python3 -m http.server 8765 -d site
+```text
+PDF -> Book plan -> Storyboards -> Narration -> Animation & quizzes -> Web book
 ```
 
-Open `http://localhost:8765/`.
+## Get started
 
-## Deploy
-
-The current website uses Cloudflare Pages project `animebook`, production branch `main`, and domain `math.diamonddoge.org`. Deploy only `site/`:
-
-```sh
-npx wrangler pages deploy site --project-name animebook --branch main
+```bash
+git clone https://github.com/DozenTwelve/Papermorph.git
+cd Papermorph
 ```
 
-Maintain public repository documentation in English.
+Open the repository in your coding agent with Opus 5.5, then send:
+
+```text
+Follow .claude/skills/papermorph/SKILL.md to turn
+/path/to/book.pdf into an animated interactive web book.
+
+Target readers: [your audience].
+Start with one English chapter for review.
+```
+
+**Today:** Opus 5.5 only. No image models, multilingual support, or BGM yet.
+
+**Planned:** Image models and storyboarding for interactive picture books and humanities documentaries.
+
+[MIT License](LICENSE)

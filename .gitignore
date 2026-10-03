@@ -15,7 +15,13 @@ books/*/pages/
 /plan.md
 /sections.json
 /3.png
-/img/
+/img/*
+!/img/readme/
+/img/readme/*
+!/img/readme/logo.png
+!/img/readme/logo_light.png
+!/img/readme/papermorph-preview.gif
+!/img/readme/papermorph-preview.mp4
 /scripts/
 /books/
 /content/
