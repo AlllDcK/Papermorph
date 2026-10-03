@@ -1,6 +1,6 @@
 # Papermorph 项目计划
 
-> 状态：三层照片书架、Elementary Algebra（68 章）与 Elementary Mathematics（前三章）已部署到 Cloudflare Pages（`https://math.diamonddoge.org/`），待用户审阅。2026-10-03 最近一次发布提交为 `0a5deea`（书架改版、书名与参考书致谢），生产部署 ID 为 `1efcd8ad-e14c-4ca0-9f17-c5f1e801aa16`，部署地址为 `https://1efcd8ad.animebook-0a3.pages.dev/`。线上书架、封面、目录、章节跳转、进度与免责声明检查通过；82 个线上文件与本地一致，包含全部 71 章页面及抽查音频。此前发布为 `851cc01` / `b68ed3b9-0ae3-4ebb-966b-bf836c4d5f86`。下一阶段继续系统检查与打磨动画；开场留白已在引擎层处理（见 6.1）。
+> 状态：Papermorph 三层照片书架、Elementary Algebra（68 章）与 Elementary Mathematics（前三章）已部署到 Cloudflare Pages（`https://math.diamonddoge.org/`），待用户审阅。2026-10-03 最近一次发布提交为 `ddadbb5`（项目与 Skill 改名），生产部署 ID 为 `62108642-c73c-4e91-b438-74ca2c03c9ab`，部署地址为 `https://62108642.animebook-0a3.pages.dev/`。Skill 校验和本地网页检查通过；五个改动的线上文件与本地一致，原有学习进度兼容。此前发布为 `0a5deea` / `1efcd8ad-e14c-4ca0-9f17-c5f1e801aa16`（书架改版、书名与参考书致谢），当时已核对全部 71 章页面及抽查音频。下一阶段继续系统检查与打磨动画；开场留白已在引擎层处理（见 6.1）。
 > 本文供后续参与项目的 agents 阅读和执行。明确标注的“候选”“建议”“待定”不等于已经获得用户确认。
 > 当前阶段重点审阅全书与书架，检查动画编排；未确认的 Skill 封装和新书制作范围继续讨论。
 
