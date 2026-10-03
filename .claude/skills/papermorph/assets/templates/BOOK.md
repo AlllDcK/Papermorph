@@ -3,7 +3,7 @@
 Read this compact current state for chapter work. The chapter map/status lives in `chapters.md`; storyboards, errata and feedback live in `chapters/chNN.md`.
 
 ## Intake
-- Readers: … · Tone: … · Narration language: … · Guide character: … · Publish to: …
+- Readers: … · Tone: … · Narration language: … · Guide character: …
 - Slug: … · Primary language code: … · Asset approach: code/SVG by default, or agreed assets.
 - Source: `book.pdf` · Page map: `sections.json` · N pages, N chapters in N units.
 

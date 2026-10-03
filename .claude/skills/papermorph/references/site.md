@@ -1,6 +1,6 @@
-# The site: book folder, contents, bookshelf, publishing
+# The book: static folder, cover and contents
 
-The site is static: HTML, JS, CSS, MP3. No build step, backend, database or accounts; reading progress lives in the browser (`localStorage`). Only `site/` is published.
+The book is static: HTML, JS, CSS, MP3. No build step, backend, database or accounts; reading progress lives in the browser (`localStorage`). The runnable output is `site/<book>/`; source material and production notes stay outside it.
 
 ## Start a book folder
 
@@ -22,7 +22,7 @@ Use the agreed primary language: rename the narration source, load `audio/<lang>
 
 Each book has its own engine, source materials, narration and optional tests. The engine and cover derive the same progress key from the book's URL folder. Keep existing books on their current paths; their legacy progress remains intact.
 
-A chapter returns to its book's index; the cover/contents returns to the bookshelf. With no bookshelf yet, create a minimal `site/index.html` linking to the book's cover. When adding a bookshelf, use underlined text and a small arrow for the entry; preserve cover → contents → chapter navigation.
+A chapter returns to its book's index. Preserve cover → contents → chapter navigation and the return from contents to cover. The book opens directly at `/<book>/`; it needs no parent index page. Keep existing books' navigation when editing them.
 
 ## Cover and contents (`index.html`)
 
@@ -40,27 +40,15 @@ Give each unit a small sketch of its own ideas, drawn in the unit colour, with o
 
 Keep the existing infinity guide by default. For an agreed custom guide, adapt `mascotEl` and the cover drawing together, retaining blink, happy hop and wrong-answer tilt states.
 
-## Bookshelf
+## Local preview and delivery
 
-`site/index.html` with `lib/bookshelf.js` and `.css` lists the books. Add an entry to `books` in `bookshelf.js`:
-
-```js
-{ id: 'history', title: '…', subject: 'History', href: 'history/', coverTitle: ['Line one', 'line two'],
-  series: 'An animated book', description: '…', chapters: 24, units: 6,
-  artwork: '<svg viewBox="0 0 260 175" class="book-art">…</svg>', features: ['…', '…', '…'] }
-```
-
-List ready books. Folder-based entries use their own counts and artwork; their saved place is available on the book cover.
-
-## Publishing
-
-Use the user's publishing authorization. Any static host works; for Cloudflare Pages:
+Serve the static output over HTTP for audio playback:
 
 ```sh
-npx wrangler pages deploy site --project-name <project> --branch main --commit-hash $(git rev-parse --short HEAD)
+python3 -m http.server 8765 -d site
 ```
 
-Commit first, deploy the committed state, then confirm the live URL serves a changed file with a cache-busting query. Record commit, URL and deployment id in `books/<book>/releases.md`. Publish only `site/`.
+Open `http://localhost:8765/<book>/`. Confirm the cover opens the contents, ready chapter links load their lessons, and lessons return to the book's contents. Deliver `site/<book>/` with its HTML, scripts, styles and audio, the preview command and entry URL, available chapter count and unresolved issues. Source PDFs, extracted pages, narration drafts and development environments are not part of the static book.
 
 ## Languages
 

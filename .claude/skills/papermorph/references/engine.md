@@ -61,13 +61,15 @@ quiz(position, [{ id: 'c-mean', prompt: ['Find the mean of ', $m('7, 3, 9'), '.'
 - `tap(values, right, why, v => wrongWhy, onRight?)` points on the number line; `tapEls(row, idx, right, …)` tokens of a `tokens` row; `pickEls([{el, box: [x,y,w,h], label}], right, …)` any drawn objects; `pickPoint(P, [x,y], why, (x,y) => wrongWhy, onRight?, test?)` grid points (arrows + Enter or click); `sorter(items, trayXY)` drag into the set diagram (keys 1–6).
 - Answer animations run on their own clock: `fx`, `fxp`, `pulseFx`, `shakeFx`, `floatText`, `qlayer()` (a layer cleared with the question). They are finished automatically when the beat is left.
 - A new type: `build(body, api)` returns `{ reveal, check?, lock?, key?(e), hint? }` and calls `api.grade(ok, message, {right, total})`. `key` handles its shortcuts (return true when used); `hint` lists the keys under the prompt. Every action needs a key; the help overlay (`?`) lists the global ones.
-- Scores: `SCORE[id]` keeps the first try; a multi-row question scores one per row.
+- Scores: `SCORE[id]` keeps the first try across revisits and step jumps; restarting the chapter clears it. A multi-row question scores one per row. A correct retry changes the feedback, not the first-attempt score.
 
 ## Player
 
 Space play/pause, ←/→ previous/next beat (Shift+←/→ during a question), Home restart, C captions, F full screen, ? help. `seek(i, play)` rebuilds and jumps; `start(i, play)` begins a beat from the current picture. While audio plays, the beat clock follows `audio.currentTime`. `?beat=N&t=S` in the URL opens a frozen frame for review. The finish card's Enter opens `CHAPTER.next`, R replays.
 
 Progress uses the stable legacy key `animebook:progress:<book-path>` (keep it when renaming the project so existing readers retain their progress); the cover template reads the same key. Books served in different folders have separate saved places and completion lists.
+
+Treat saved progress as optional: malformed JSON, `null` or a non-object value starts with empty progress; only an array of positive integer chapter numbers is used for completion. Preserve each existing book's key when applying engine fixes.
 
 Keep `<link rel="expect" href="#bar" blocking="render">` in every chapter's head; without it Chromium may paint before the player exists and cancel the page transition from the contents page.
 

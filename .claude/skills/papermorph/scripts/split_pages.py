@@ -31,7 +31,7 @@ def main():
     ap.add_argument("--out", type=Path, default=Path("book_pages"))
     ap.add_argument("--dpi", type=int, default=150)
     ap.add_argument("--list", action="store_true", help="print the map and stop")
-    ap.add_argument("--only", nargs="*", help="render only these section folders")
+    ap.add_argument("--only", nargs="+", help="render only these section folders")
     ap.add_argument("--overwrite", action="store_true")
     ap.add_argument("--text-only", action="store_true", help="write text.md files, skip the images")
     ap.add_argument("--pages", help="preview a page or inclusive range (e.g. 3 or 1-12), independently of the map")
@@ -60,6 +60,10 @@ def main():
                 nxt = en + 1
             if nxt != len(doc) + 1:
                 ap.error(f"the map ends at page {nxt - 1}; the PDF has {len(doc)} pages")
+            if a.only:
+                unknown = set(a.only) - seen
+                if unknown:
+                    ap.error(f"unknown section folders: {', '.join(sorted(unknown))}")
         print(f"{len(doc)} pages, {len(sections)} sections, {a.dpi} dpi")
         if a.list:
             for s in sections:

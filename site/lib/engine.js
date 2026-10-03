@@ -989,7 +989,7 @@ function quiz(pos, qs, done, label = 'Quick check') {
     const api = {
       grade(ok, msg, score) {
         if (resolved) return;
-        if (first) { SCORE[q.id] = score || { right: +ok, total: 1 }; first = false; }
+        if (first) { if (!Object.hasOwn(SCORE, q.id)) SCORE[q.id] = score || { right: +ok, total: 1 }; first = false; }
         say(ok ? 'ok' : 'no', [ok ? 'Correct. ' : 'Not quite. ', ...[].concat(msg || [])]);
         if (guide) {
           mood(guide, ok ? 'happy' : 'oops');
@@ -1220,9 +1220,9 @@ const grid = (items, cols, { multi = true, text = false } = {}) => (body, api) =
 function rat(str) {
   const t = String(str).trim().replace(/^[−–]/, '-').replace(/\s+/g, ' ');
   let m = t.match(/^(-?)(\d+)(?:\.(\d+))?$/);
-  if (m) { const d = 10 ** (m[3] || '').length; return [(m[1] ? -1 : 1) * (Number(m[2]) * d + Number(m[3] || 0)), d]; }
+  if (m) { const d = 10 ** (m[3] || '').length, n = (m[1] ? -1 : 1) * (Number(m[2]) * d + Number(m[3] || 0)); return Number.isSafeInteger(n) && Number.isSafeInteger(d) ? [n, d] : null; }
   m = t.match(/^(-?)(?:(\d+) )?(\d+) ?\/ ?(\d+)$/);
-  if (m && Number(m[4]) > 0) { const d = Number(m[4]); return [(m[1] ? -1 : 1) * (Number(m[2] || 0) * d + Number(m[3])), d]; }
+  if (m && Number(m[4]) > 0) { const d = Number(m[4]), n = (m[1] ? -1 : 1) * (Number(m[2] || 0) * d + Number(m[3])); return Number.isSafeInteger(n) && Number.isSafeInteger(d) ? [n, d] : null; }
   return null;
 }
 const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
@@ -1267,7 +1267,7 @@ const blanks = rowsIn => (body, api) => {
       r.boxes.forEach(b => { b.classList.toggle('good', ok); b.classList.toggle('bad', !ok); });
     } else for (const b of r.boxes) {
       const want = rat(b.dataset.ans), got = rat(b.value);
-      const good = !!got && got[0] * want[1] === want[0] * got[1] && (!b.dataset.lowest || lowest(got));
+      const good = !!got && !!want && BigInt(got[0]) * BigInt(want[1]) === BigInt(want[0]) * BigInt(got[1]) && (!b.dataset.lowest || lowest(got));
       b.classList.toggle('good', good);
       b.classList.toggle('bad', !good);
       ok = ok && good;
@@ -1610,7 +1610,12 @@ fit();
 // ?beat=N&t=S opens a paused frame, for reviewing a single moment.
 // Per-browser progress shared with the contents page: last chapter opened, chapters finished.
 function progress(f) {
-  try { const p = JSON.parse(localStorage.getItem('progress') || '{}'); f(p); localStorage.setItem('progress', JSON.stringify(p)); } catch {}
+  try {
+    const saved = JSON.parse(localStorage.getItem('progress') || '{}');
+    const p = saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+    p.done = Array.isArray(p.done) ? p.done.filter(n => Number.isInteger(n) && n > 0) : [];
+    f(p); localStorage.setItem('progress', JSON.stringify(p));
+  } catch {}
 }
 function boot() {
   $('coverK').textContent = `Chapter ${CHAPTER.number}`;

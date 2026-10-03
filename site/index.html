@@ -288,8 +288,11 @@ const UNITS = [
 const HUES = ['#f4a48c', '#86c9e8', '#f3c95c', '#e8a0c8', '#8fd6b0', '#bba8ee', '#f0b45a'];
 const id = n => 'ch' + String(n).padStart(2, '0');
 let P = {};
-try { P = JSON.parse(localStorage.getItem('progress') || '{}') || {}; } catch {}
-const done = new Set(P.done || []);
+try {
+  const saved = JSON.parse(localStorage.getItem('progress') || '{}');
+  if (saved && typeof saved === 'object' && !Array.isArray(saved)) P = saved;
+} catch {}
+const done = new Set(Array.isArray(P.done) ? P.done.filter(n => Number.isInteger(n) && n > 0) : []);
 
 // Contents.
 let n = 0, total = 0, i = 0;   // i staggers the entrance, in reading order
@@ -308,7 +311,7 @@ document.querySelectorAll('.unit').forEach(u => seen.observe(u));
 const finished = [...done].filter(k => k <= total).length;
 document.getElementById('prog').innerHTML = finished ? `<b>${finished}</b> of ${total} finished` : `${total} chapters`;
 document.getElementById('meta').textContent = `${total} chapters · ${UNITS.length} units · with sound`;
-const last = P.last && document.getElementById(id(P.last));
+const last = Number.isInteger(P.last) && document.getElementById(id(P.last));
 if (last) {
   const r = document.getElementById('resume');
   r.hidden = false;

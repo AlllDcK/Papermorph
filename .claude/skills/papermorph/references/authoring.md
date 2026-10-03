@@ -47,7 +47,8 @@ Principles that held up over a whole book:
 - Write for the ear: short sentences, one idea each. Say math in words ("negative seven halves", "x squared"); the picture shows the symbols.
 - Match the audience: plain, warm, never childish. Explain why, not only how.
 - Question beats get one short line ("Quick check. Find the mean."); the card holds the question.
-- `tts.py` caches word timings beside the script; the output folder receives `<beat>.mp3` and `timings.js` (duration, marks, sentence captions).
+- `tts.py` caches word timings beside the narration JSON; the output folder receives `<beat>.mp3` and `timings.js` (duration, marks, sentence captions). Moving or adding `[[marks]]` reuses the spoken-text cache and recalculates timings. Existing caches made with raw-text keys are reused for an unchanged beat and then upgraded; changing its marks before that upgrade may require one new synthesis.
+- Audio is replaced only after synthesis and timing validation succeed, and each completed beat is cached immediately. After a later failure, rerun the same command to reuse completed beats rather than regenerating the chapter.
 
 ## Questions
 
@@ -68,6 +69,7 @@ New types are welcome when the content calls for one; each needs keyboard play (
 - The prompt is HTML text; put math in it with `$m(...)`.
 - Feedback: right → `why` (and an animation via `fx`/`onRight`); wrong → a hint aimed at that mistake; after a wrong try, Show answer.
 - Grade meaning: equal values match (6/8 = 3/4) unless the lowest form is asked for; sets and pairs in any order; no denominators of zero; never judge irrationality from finitely many digits.
+- The built-in numeric parser uses safe integer numerators and denominators and exact integer products for equality. For answers outside that range, use a subject-specific input and grader rather than allowing rounded values to pass.
 - Place cards so they don't cover the object being asked about (`BAND` under a number line, `TOPR` top right, a custom `{x, y, w, cls: 'side'}` beside a figure, `SCREEN` for practice).
 
 ## Content rules

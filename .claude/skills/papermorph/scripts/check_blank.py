@@ -68,5 +68,12 @@ if __name__ == "__main__":
     ap.add_argument("chapters", nargs="*")
     ap.add_argument("--url", default="http://localhost:8765/")
     a = ap.parse_args()
+    if not a.book_dir.is_dir():
+        ap.error(f"book directory does not exist: {a.book_dir}")
     chs = a.chapters or sorted(d.name for d in a.book_dir.glob("ch[0-9][0-9]") if d.is_dir())
+    if not chs:
+        ap.error(f"no chapter folders in {a.book_dir}")
+    missing = [ch for ch in chs if not (a.book_dir / ch / "index.html").is_file()]
+    if missing:
+        ap.error(f"chapter pages not found: {', '.join(missing)}")
     sys.exit(asyncio.run(main(a.book_dir, chs, a.url if a.url.endswith("/") else a.url + "/")))

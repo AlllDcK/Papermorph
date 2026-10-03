@@ -158,11 +158,6 @@ main#contents { padding-bottom: 80px; }
 .stagger .top { animation: rise .6s var(--ease) backwards; }
 .stagger .unit h2, .stagger .ch { animation: rise .6s var(--ease) backwards; animation-delay: calc(min(var(--i), 14) * 32ms + 80ms); }
 
-.back-shelf { color: var(--dim); font: 13px var(--ui); text-decoration: none; white-space: nowrap; }
-.back-shelf:hover { color: var(--chalk); }
-.cover-back { position: absolute; top: 24px; left: 24px; }
-.contents-back { margin-left: 16px; }
-
 /* ---------- page-to-page motion ---------- */
 @view-transition { navigation: auto; }
 ::view-transition-group(*) { animation-duration: .5s; animation-timing-function: var(--ease); }
@@ -170,7 +165,6 @@ main#contents { padding-bottom: 80px; }
 ::view-transition-old(lesson) { animation-duration: .18s; }
 @media (max-width: 560px) {
   .home strong { font-size: 18px; }
-  .contents-back { margin-left: 0; font-size: 11px; }
   #contents .top { flex-wrap: wrap; gap: 8px 12px; }
   .unit-art { width: calc(100% - 32px); right: 16px; opacity: .32; }
   .unit h2 { min-height: 0; padding-top: 104px; }
@@ -205,14 +199,12 @@ main#contents { padding-bottom: 80px; }
     <a class="btn quiet" id="resume" hidden></a>
   </div>
   <p class="meta" id="meta"></p>
-  <a class="back-shelf cover-back" href="../">← Back to the bookshelf</a>
 </section>
 
 <main id="contents">
   <header class="top">
     <a class="home" href="#book" aria-label="Back to the cover"><svg class="mascot" id="guideSmall" width="52" height="36"></svg><strong>BOOK <i>&amp;</i> TITLE</strong></a>
     <span class="prog" id="prog"></span>
-    <a class="back-shelf contents-back" href="../">← Bookshelf</a>
   </header>
   <div id="units"></div>
 </main>
@@ -227,8 +219,11 @@ const HUES = ['#f4a48c', '#86c9e8', '#f3c95c', '#e8a0c8', '#8fd6b0', '#bba8ee', 
 const id = n => 'ch' + String(n).padStart(2, '0');
 let P = {};
 const BOOK_PROGRESS_KEY = 'animebook:progress:' + new URL('.', location.href).pathname;
-try { P = JSON.parse(localStorage.getItem(BOOK_PROGRESS_KEY) || '{}'); } catch {}
-const done = new Set(P.done || []);
+try {
+  const saved = JSON.parse(localStorage.getItem(BOOK_PROGRESS_KEY) || '{}');
+  if (saved && typeof saved === 'object' && !Array.isArray(saved)) P = saved;
+} catch {}
+const done = new Set(Array.isArray(P.done) ? P.done.filter(n => Number.isInteger(n) && n > 0) : []);
 
 // Contents.
 let n = 0, total = 0, i = 0;   // i staggers the entrance, in reading order
@@ -247,7 +242,7 @@ document.querySelectorAll('.unit').forEach(u => seen.observe(u));
 const finished = [...done].filter(k => k <= total).length;
 document.getElementById('prog').innerHTML = finished ? `<b>${finished}</b> of ${total} finished` : `${total} chapter${total === 1 ? '' : 's'}`;
 document.getElementById('meta').textContent = `${total} chapters · ${UNITS.length} units · with sound`;
-const last = P.last && document.getElementById(id(P.last));
+const last = Number.isInteger(P.last) && document.getElementById(id(P.last));
 if (last) {
   const r = document.getElementById('resume');
   r.hidden = false;

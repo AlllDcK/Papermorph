@@ -19,6 +19,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import edge_tts
@@ -44,6 +45,8 @@ def split_marks(raw):
     # MARK.split alternates text, name, text, name, ...
     for i, part in enumerate(MARK.split(raw)):
         if i % 2:
+            if part in marks:
+                raise ValueError(f"duplicate mark {part!r} in one beat")
             marks[part] = pos
         else:
             clean.append(part)
@@ -91,6 +94,17 @@ def duration(mp3):
     return round(float(r.stdout), 3)
 
 
+def write_atomic(path, text):
+    """Replace output only after its complete contents have been written."""
+    with tempfile.NamedTemporaryFile(dir=path.parent, prefix=f".{path.name}-", delete=False) as f:
+        tmp = Path(f.name)
+    try:
+        tmp.write_text(text, encoding="utf-8")
+        tmp.replace(path)
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
 async def main(src, out_dir):
     spec = json.loads(Path(src).read_text())
     out_dir = Path(out_dir)
@@ -99,21 +113,48 @@ async def main(src, out_dir):
     cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
     voice, rate = spec["voice"], spec["rate"]
     result = {}
+    public = lambda v: {k: v[k] for k in ("dur", "marks", "cues")}
+    live = {b: public(v) for b, v in cache.items()
+            if {"dur", "marks", "cues"} <= v.keys() and (out_dir / f"{b}.mp3").exists()}
+    timings_path = out_dir / "timings.js"
     for beat, raw in spec["beats"].items():
-        key = hashlib.sha1(f"{voice}|{rate}|{raw}".encode()).hexdigest()
         mp3 = out_dir / f"{beat}.mp3"
         old = cache.get(beat)
         clean, marks = split_marks(raw)
-        if old and old.get("key") == key and "words" in old and mp3.exists():
+        key = hashlib.sha1(f"{voice}|{rate}|{clean}".encode()).hexdigest()
+        # Existing caches included [[marks]] in the key; reuse an unchanged old beat once,
+        # then save its spoken-text key so future mark edits do not regenerate audio.
+        legacy_key = hashlib.sha1(f"{voice}|{rate}|{raw}".encode()).hexdigest()
+        reusable = old and old.get("key") in (key, legacy_key) and "words" in old and mp3.exists() and mp3.stat().st_size > 0
+        tmp = None
+        if reusable:
             words = old["words"]
+            clip = mp3
         else:
-            words = await synth(clean, voice, rate, mp3)
-            print(f"{beat}: synthesized")
-        result[beat] = {"key": key, "dur": duration(mp3), "words": words,
-                        "marks": mark_times(clean, marks, words), "cues": caption_cues(clean, words)}
-    cache_path.write_text(json.dumps(result, indent=1))
-    js = {b: {"dur": v["dur"], "marks": v["marks"], "cues": v["cues"]} for b, v in result.items()}
-    (out_dir / "timings.js").write_text("window.TIMINGS = " + json.dumps(js, indent=1) + ";\n")
+            with tempfile.NamedTemporaryFile(dir=out_dir, prefix=f".{beat}-", suffix=".mp3", delete=False) as f:
+                tmp = Path(f.name)
+            clip = tmp
+        try:
+            if not reusable:
+                words = await synth(clean, voice, rate, clip)
+            entry = {"key": key, "dur": duration(clip), "words": words,
+                     "marks": mark_times(clean, marks, words), "cues": caption_cues(clean, words)}
+            if tmp:
+                tmp.replace(mp3)
+                print(f"{beat}: synthesized")
+            result[beat] = entry
+            cache[beat] = entry
+            # A later failed beat must not discard the successful beats' cache.
+            write_atomic(cache_path, json.dumps(cache, indent=1))
+            # Keep the successful MP3's timings consistent even if a later beat fails.
+            live[beat] = public(entry)
+            write_atomic(timings_path, "window.TIMINGS = " + json.dumps(live, indent=1) + ";\n")
+        finally:
+            if tmp:
+                tmp.unlink(missing_ok=True)
+    write_atomic(cache_path, json.dumps(result, indent=1))
+    js = {b: public(v) for b, v in result.items()}
+    write_atomic(timings_path, "window.TIMINGS = " + json.dumps(js, indent=1) + ";\n")
 
 
 if __name__ == "__main__":
