@@ -32,20 +32,31 @@ PDF -> Book plan -> Storyboards -> Narration -> Animation & quizzes -> Web book
 
 ## Get started
 
+Install in your project directory:
+
 ```bash
-git clone https://github.com/DozenTwelve/Papermorph.git
-cd Papermorph
+npx skills add DozenTwelve/Papermorph --skill papermorph --agent claude-code
 ```
 
-Open the repository in your coding agent with Opus 5.5, then send:
+In Claude Code with Opus 5.5, run:
 
 ```text
-Follow .claude/skills/papermorph/SKILL.md to turn
-/path/to/book.pdf into an animated interactive web book.
+/papermorph Turn /path/to/book.pdf into
+an animated interactive web book.
 
 Target readers: [your audience].
 Start with one English chapter for review.
 ```
+
+## Try the examples locally
+
+```bash
+git clone https://github.com/DozenTwelve/Papermorph.git
+cd Papermorph
+python3 -m http.server 8765 -d site
+```
+
+Open [localhost:8765](http://localhost:8765/).
 
 **Today:** Opus 5.5 only. No image models, multilingual support, or BGM yet.
 
