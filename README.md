@@ -10,7 +10,8 @@
   <strong>A Skill that turns PDFs into animated interactive web books.</strong>
 </p>
 
-You've seen Opus 5.5 one-shot videos. This Skill takes it further: books you can explore, listen to, and interact with.
+You've seen Opus 5.5 one-shot videos.
+This Skill takes it further: books you can explore, listen to, and interact with.
 
 <p align="center">
   <a href="https://papermorph.diamonddoge.org/">Explore the live bookshelf →</a>
@@ -29,6 +30,12 @@ You've seen Opus 5.5 one-shot videos. This Skill takes it further: books you can
 ```text
 PDF -> Book plan -> Storyboards -> Narration -> Animation & quizzes -> Web book
 ```
+
+**Today:** Opus 5.5 only. No image models, multilingual support, or BGM yet.
+
+**Planned:** Image models and storyboarding for interactive picture books and humanities documentaries.
+
+**Milestones:** Expand the bookshelf—from STEM textbooks to picture books and social science titles—and release new Skills.
 
 ## Get started
 
@@ -56,10 +63,6 @@ cd Papermorph
 python3 -m http.server 8765 -d site
 ```
 
-Open [localhost:8765](http://localhost:8765/).
-
-**Today:** Opus 5.5 only. No image models, multilingual support, or BGM yet.
-
-**Planned:** Image models and storyboarding for interactive picture books and humanities documentaries.
+Open [localhost:8765](http://localhost:8765/)
 
 [MIT License](LICENSE)
