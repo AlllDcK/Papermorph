@@ -1,9 +1,6 @@
-/* Website-only book navigation. The picture and hotspot positions live in index.html/bookshelf.css.
- * Set githubURL when the public repository is ready; keep it null until then.
- */
+/* Website-only book navigation. The picture, links and hotspot positions live in index.html/bookshelf.css. */
 'use strict';
 (() => {
-  const githubURL = null;
   const about = document.getElementById('shelf-about');
   document.getElementById('shelf-about-button').addEventListener('click', () => about.showModal());
   const books = [
@@ -24,17 +21,5 @@
     resume.style.left = cover.classList.contains('algebra-book') ? '11%' : '40.8%';
     resume.style.top = '5.7%';
     document.getElementById('shelf-books').append(resume);
-  }
-  if (githubURL) {
-    const drawer = document.querySelector('.github-drawer');
-    const link = document.createElement('a');
-    link.className = drawer.className;
-    link.href = githubURL;
-    link.setAttribute('aria-label', 'Papermorph on GitHub: source and Skills');
-    const label = document.createElement('span');
-    label.className = 'github-status';
-    label.textContent = 'Source & Skills ↗';
-    link.append(label);
-    drawer.replaceWith(link);
   }
 })();

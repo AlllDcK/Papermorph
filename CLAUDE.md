@@ -68,10 +68,11 @@ AnimeBook/
 ├── site/               # 可部署的静态站点（只部署此目录）
 │   ├── index.html      # 书架、书封与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
 │   ├── assets/bookshelf.png # 用户提供的 3.png 原图副本，三层照片书架，仅用于网站
-│   ├── lib/            # 共用引擎 engine.js / engine.css；书架点击区域样式、继续阅读与 GitHub 配置在 bookshelf.*；目录页单元小图 unit-art.js
+│   ├── lib/            # 共用引擎 engine.js / engine.css；书架点击区域样式与继续阅读在 bookshelf.*，GitHub 链接在 index.html；目录页单元小图 unit-art.js
 │   ├── chNN/           # ch01–ch68 每章一个目录：index.html（本章步骤与题目）、audio/en/（MP3 与 timings.js）
 │   └── math-notebook/  # 第二本：封面与目录、独立 lib/ 引擎、unit-art.js、ch01–ch03 与现有 MP3
-├── .git/               # 本地 Git 仓库，尚未配置远程
+├── LICENSE             # 用户创建 GitHub 仓库时选择的 MIT 许可证
+├── .git/               # origin: https://github.com/DozenTwelve/Papermorph.git
 └── .DS_Store           # macOS 自动生成的目录信息
 ```
 
@@ -104,7 +105,7 @@ SVG 将 PNG 以 data URL 嵌入，单个文件自包含；仍然是位图，放�
 5. 数学判题检查数学含义。第一章的自然数按从 1 开始的约定，whole numbers 包含 0；同一个数可以属于多个类别。
 6. 数学公式与图形应保持准确。角色、颜色和动效不能遮挡标签或造成集合关系、数轴位置等歧义。
 7. 站点运行时不依赖 Python、在线 TTS、后端或数据库。制作工具与发布资源分开，原书及开发环境不随站点部署。
-8. Git 仅在本地使用。没有用户明确指示，不添加远程仓库、不 push、不发布站点；保留用户已有的修改。
+8. 用户已授权将本项目同步到 `origin`（`https://github.com/DozenTwelve/Papermorph.git`）并发布到现有 Cloudflare Pages 项目 `animebook`。保留用户已有的修改，不强推或覆盖远程历史；其他远程或发布目标需用户明确指示。
 9. audiobook 项目尚未查看。用户授权参考时再检查实际实现，不推测它的路径、接口或素材规格。
 
 ## 现有工具

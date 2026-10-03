@@ -1,5 +1,9 @@
 # Papermorph
 
+An AI skill that turns books into animated, narrated, interactive web experiences.
+
+Source & Skill: [DozenTwelve/Papermorph](https://github.com/DozenTwelve/Papermorph) · [MIT License](LICENSE).
+
 把一本书（PDF）做成带动画、语音和互动练习的网页书。网站在 `site/`，首页书架目前收录：
 
 - *Elementary Algebra*：68 章，保留原有 `site/chNN/` 路径。
