@@ -1,0 +1,22 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter two. Positive and negative numbers. [[sub]]Every number except zero sits on one side of zero or the other.",
+    "sides": "Here's the number line again, this time from negative eight to eight. [[zero]]Zero sits right in the middle. Zero is neither positive nor negative. It's the dividing point. [[pos]]Numbers greater than zero are positive. On a number line, they're to the right of zero. [[neg]]Numbers less than zero are negative. They're to the left. [[mirror]]The two sides mirror each other, with zero in between.",
+    "signs": "How can you tell them apart when they're written down? [[plus]]A positive number can have a plus sign, but it doesn't need one. [[same]]Plus four and four mean exactly the same thing. [[minus]]A negative number always has a minus sign in front: negative four. [[need]]Leave that sign off, and you've written a different number. [[ends]]Now look at the arrows on the ends. [[inf]]They mean the numbers keep going forever: to infinity on the right, [[ninf]]and to negative infinity on the left. [[word]]Infinity means endless, without any limit.",
+    "q1": "Quick check. Is each number positive, negative, or neither?",
+    "world": "Why do we need negative numbers at all? [[use]]Because lots of things in the world come in opposite pairs. [[r1]]Money you owe, a debt, is negative. Money you keep, your savings, is positive. [[r2]]Temperatures below zero are negative. Above zero, positive. [[r3]]Below sea level is negative. Above sea level is positive. [[r4]]Money taken out of a bank account is negative. Money put in is positive. [[r5]]Even electric charges come in negative and positive. [[pair]]In every pair, zero is the starting point, and the two sides go in opposite directions.",
+    "owe": "Let's try one. [[story]]Devin borrows two dollars from his friend Stanley. [[coins]]Stanley hands over the money. [[owes]]Now Devin owes two dollars. Owing is a debt, so it's negative: [[neg]]negative two. [[pos]]For Stanley, it's the other way around. He is owed two dollars: positive two.",
+    "q2": "Quick check. Find each amount on the number line.",
+    "vertical": "A number line doesn't have to lie flat. [[up]]Stand it up, and you get a thermometer. [[warm]]On a warm day it might be twenty degrees: positive twenty. [[drop]]When the temperature falls to ten degrees below zero, [[cold]]that's negative ten. [[sea]]Heights work the same way, with sea level as zero. [[gull]]A gull thirty feet above the water is at positive thirty. [[sub]]A submarine thirty feet below is at negative thirty. [[rule]]On an upright number line, above zero is positive, and below zero is negative.",
+    "opposites": "Look at five and negative five. [[five]]Five is five steps to the right of zero. [[nfive]]Negative five is five steps to the left. [[opp]]Same distance from zero, opposite sides. Numbers like these are called opposites. [[flip]]To find a number's opposite, flip it across zero. [[eight]]What's the opposite of eight? Flip it: negative eight. [[zero]]And zero is its own opposite, because flipping doesn't move it.",
+    "oppopp": "Now flip twice. [[start]]Start with negative six. [[first]]Its opposite is six. [[second]]Now take the opposite of six, and you're back at negative six. [[rule]]This is the opposites of opposites property. The opposite of the opposite of a number is the number itself. [[home]]Two flips always bring you home.",
+    "q3": "Quick check. Flip across zero.",
+    "wrap": "To sum up. [[w1]]Positive numbers are greater than zero, negative numbers are less than zero, and zero is neither. [[w2]]A negative number always shows its minus sign. A plus sign is optional. [[w3]]Opposite quantities, like owing and saving, or below and above, get opposite signs. [[w4]]Opposites are the same distance from zero, on opposite sides. And the opposite of the opposite is the number itself. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Write the integer for each quantity.",
+    "final2": "Now find the opposites.",
+    "final3": "Last one. True or false?",
+    "finish": "Great job. That's the end of chapter two."
+  }
+}

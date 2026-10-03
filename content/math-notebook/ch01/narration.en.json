@@ -1,0 +1,24 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter one. Types of numbers, and the number line. [[sub]]Every number belongs to a family, and some numbers belong to several families at once.",
+    "natural": "Let's start with the numbers you learned first: the ones you count with. [[one]]One, two, three, four, five, and on and on. [[ring]]These are the natural numbers. Some teachers call them the counting numbers. [[nofrac]]No zero, no fractions, no negatives. Just counting.",
+    "whole": "Now add one more number: [[zero]]zero. [[ring]]The natural numbers plus zero make the whole numbers. [[around]]Notice the new ring goes around the old one. Every natural number is also a whole number. [[still]]Whole numbers still have no fractions, no decimals, and nothing negative.",
+    "integers": "What about numbers below zero? [[neg]]Negative one, negative two, negative three, and so on. [[ring]]Put the whole numbers together with their negatives, and you get the integers. [[around]]Again, the new ring wraps around the old ones. Every whole number is an integer too. [[note]]Integers are still whole steps: no fractions, no decimals.",
+    "q1": "Quick check. Pick every family each number belongs to.",
+    "rational": "Next up: fractions. [[ratio]]A rational number is any number you can write as one integer divided by another. Think of its root word: ratio. [[half]]One half is rational. So is [[quarter]]zero point two five, because it equals one fourth. [[d412]]Four point one two is four hundred twelve hundredths. [[seven]]Here's the surprise: negative seven is rational too, because it's negative seven over one. Every integer can be written that way. [[ring]]So the rational ring goes around all the integers.",
+    "repeat": "What about one third? [[div]]Divide one by three and you get zero point three three three, and the threes never stop. [[bar]]We write that with a little bar over the three. The bar means: this part repeats forever. [[rule]]So a decimal that ends, or a decimal that repeats, is rational. [[fly]]One third goes in the rational ring.",
+    "irrational": "But some numbers can't be written as a fraction at all. [[pi]]Pi is three point one four one five nine two six five, and it keeps going, with no block of digits that repeats. [[root]]The square root of two is one point four one four two one three, and it never repeats either. [[ring]]These are irrational numbers. Their decimals never end and never repeat. [[sep]]They get their own ring, outside the rational numbers. A number is rational or irrational, never both. [[proof]]By the way, a few digits can't prove a number is irrational. Mathematicians proved it for pi and the square root of two.",
+    "real": "Finally, [[ring]]put the rational and irrational numbers together. These are the real numbers: every number you can find on a number line. [[ex]]Take negative two. [[int]]It's an integer, [[rat]]so it's also rational, [[real]]and it's real. [[nest]]A number belongs to its own ring and to every ring around it.",
+    "q2": "Quick check. Put each number in its smallest ring.",
+    "line": "Now let's line the numbers up. [[line]]A number line puts numbers in order. [[dir]]Smaller numbers are on the left. Larger numbers are on the right. [[two]]Two is larger than one and larger than zero, so it sits to their right. [[three]]Negative three is smaller than negative two and negative one, so it sits to their left.",
+    "place": "Every rational number has a spot, [[f1]]not just the integers. [[a]]Negative two point three eight sits a little past negative two. [[b]]Negative three fourths is between negative one and zero. [[c]]One half is halfway from zero to one. [[d]]And the square root of four? It looks irrational, but it's exactly two. [[e]]Three and one eighth is just past three. [[irr]]Irrational numbers have spots too. The square root of two is about one point four one. [[all]]Together, the real numbers fill the whole line.",
+    "q3": "Quick check. Find the points on the number line.",
+    "wrap": "To sum up. [[w1]]Each family adds new numbers: zero for the whole numbers, negatives for the integers, fractions for the rationals. [[w2]]Rational numbers can be written as a fraction. Their decimals end or repeat. [[w3]]Irrational decimals never end and never repeat. Rational and irrational together make the real numbers. [[w4]]On a number line, smaller is left and larger is right. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Classify each number in every family it belongs to.",
+    "final2": "Four more numbers to classify.",
+    "final3": "Last one. Left or right of zero?",
+    "finish": "Nice work. That's the end of chapter one."
+  }
+}

@@ -6,3 +6,6 @@ __pycache__/
 *.pdf
 book_pages/
 .wrangler/
+
+# Extracted references for books in their own folders.
+books/*/pages/

@@ -1,0 +1,24 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-4%",
+  "beats": {
+    "intro": "Chapter three. Absolute value. [[sub]]Forget which way. How far is a number from zero?",
+    "distance": "Here's our number line again. [[far]]How far is negative four from zero? [[hops]]Let's count the steps: [[h1]]one, [[h2]]two, [[h3]]three, [[h4]]four. [[steps]]Four steps. Walking left or walking right, a distance is just a length, so the distance is four. [[def]]That distance has a special name: absolute value. The absolute value of a number is its distance from zero. [[bars]]To write it, put two straight bars around the number. [[read]]You read this as: the absolute value of negative four is four.",
+    "itself": "What about a positive number, like seven? [[seven]]Seven is seven steps from zero, to the right. [[same]]So the absolute value of seven is seven. For a positive number, the absolute value is just the number itself. [[zero]]And zero? Zero is zero steps away from itself, so the absolute value of zero is zero. [[never]]A distance can be zero, but it can never be negative. So an absolute value is never negative.",
+    "q1": "Quick check. Think distance, not direction.",
+    "pair": "Now look at five and negative five. [[five]]Five is five steps to the right of zero. [[nfive]]Negative five is five steps to the left. [[lift]]Lift both distances off the line and lay them side by side. [[same]]Exactly the same length. Opposites always have the same absolute value: the absolute value of negative five and the absolute value of five are both five. [[split]]So a number like negative five tells you two things. [[sign]]Its sign tells you which side of zero it's on. [[size]]Its absolute value tells you how far away it is.",
+    "world": "Absolute value shows up whenever you care about how much, and not which way. [[diver]]A diver swims thirty feet below sea level. Her position is negative thirty. [[depth]]But her depth, how far down she is, is thirty feet: the absolute value of negative thirty. [[bal]]Or say Maya's bank balance is negative forty-two dollars and seventy-five cents. [[owe]]That means she owes forty-two dollars and seventy-five cents. The size of her debt is the absolute value of her balance. [[how]]Positions and balances carry a sign. Depths, distances and amounts owed are absolute values.",
+    "q2": "Quick check. How much, without the sign?",
+    "inside": "Absolute value bars are also grouping symbols, like parentheses. [[first]]That means you finish the work inside the bars first. [[five]]Here it's five minus three. Start at five, [[back]]and step three back. You land on two. [[inside]]So the inside becomes two. [[abs]]Then take the absolute value. Two is two steps from zero, so the answer is two. [[rule]]Inside first, then the absolute value.",
+    "outside": "Sometimes there's a sign outside the bars. [[six]]This one says: negative, the absolute value of six. Think inside, then outside. [[inside]]Inside: the absolute value of six is six. [[then]]Outside: a minus sign in front means the opposite. [[flip]]And the opposite of six is negative six. [[seven]]Now try: negative, the absolute value of negative seven. [[inside2]]Inside: the absolute value of negative seven is seven. [[wrong]]Careful here. The two minus signs don't cancel each other, so the answer is not seven. [[flip2]]The minus outside flips seven over to negative seven. [[rule]]Inside first, then outside.",
+    "q3": "Quick check. Inside first, then outside.",
+    "times": "One more thing. [[front]]A number right in front of the bars means multiply, just like a number in front of parentheses. [[inside]]Inside first: the absolute value of negative four is four. [[times]]Then multiply: two times four. [[tapes]]Two distances of four, laid end to end, [[eight]]make eight.",
+    "ways": "By the way, multiplication can be written in several ways, not only with a times sign. [[ways]]You can use a dot, two sets of parentheses, or a number touching parentheses. [[same]]All of these mean two times four, which is eight. [[var]]With letters, you just write them side by side. [[ab]]a b means a times b, [[three]]and three x means three times x. [[word]]A letter like x is called a variable. It stands for a number we don't know yet.",
+    "wrap": "Let's wrap up. [[w1]]Absolute value is distance from zero. [[w2]]It's never negative, and opposites share the same absolute value. [[w3]]The bars group: work inside first, then apply any sign outside. [[w4]]And a number in front of the bars means multiply. [[end]]Now try the chapter practice.",
+    "final1": "Chapter practice. Find each absolute value.",
+    "final2": "Now some with work inside or outside the bars.",
+    "final3": "Absolute value in the real world.",
+    "final4": "Last set. True or false?",
+    "finish": "That's chapter three. Nice work."
+  }
+}

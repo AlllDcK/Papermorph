@@ -1,0 +1,512 @@
+[
+  {
+    "folder": "00_front",
+    "title": "Front matter",
+    "start": 1,
+    "end": 12
+  },
+  {
+    "folder": "ch01",
+    "title": "Chapter 1: Types of Numbers and the Number Line",
+    "start": 13,
+    "end": 22,
+    "chapter_start": 14,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch02",
+    "title": "Chapter 2: Positive and Negative Numbers",
+    "start": 23,
+    "end": 30,
+    "chapter_start": 23,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch03",
+    "title": "Chapter 3: Absolute Value",
+    "start": 31,
+    "end": 36,
+    "chapter_start": 31,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch04",
+    "title": "Chapter 4: Factors and Greatest Common Factor",
+    "start": 37,
+    "end": 44,
+    "chapter_start": 37,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch05",
+    "title": "Chapter 5: Multiples and Least Common Multiple",
+    "start": 45,
+    "end": 50,
+    "chapter_start": 45,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch06",
+    "title": "Chapter 6: Fraction Basics: Types of Fractions and Adding and Subtracting Fractions",
+    "start": 51,
+    "end": 60,
+    "chapter_start": 51,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch07",
+    "title": "Chapter 7: Multiplying and Dividing Fractions",
+    "start": 61,
+    "end": 64,
+    "chapter_start": 61,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch08",
+    "title": "Chapter 8: Adding and Subtracting Decimals",
+    "start": 65,
+    "end": 68,
+    "chapter_start": 65,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch09",
+    "title": "Chapter 9: Multiplying Decimals",
+    "start": 69,
+    "end": 72,
+    "chapter_start": 69,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch10",
+    "title": "Chapter 10: Dividing Decimals",
+    "start": 73,
+    "end": 76,
+    "chapter_start": 73,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch11",
+    "title": "Chapter 11: Adding Positive and Negative Numbers",
+    "start": 77,
+    "end": 82,
+    "chapter_start": 77,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch12",
+    "title": "Chapter 12: Subtracting Positive and Negative Numbers",
+    "start": 83,
+    "end": 86,
+    "chapter_start": 83,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch13",
+    "title": "Chapter 13: Multiplying and Dividing Positive and Negative Numbers",
+    "start": 87,
+    "end": 90,
+    "chapter_start": 87,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch14",
+    "title": "Chapter 14: Inequalities",
+    "start": 91,
+    "end": 96,
+    "chapter_start": 91,
+    "unit": "UNIT 1: The Number System"
+  },
+  {
+    "folder": "ch15",
+    "title": "Chapter 15: Ratios",
+    "start": 97,
+    "end": 102,
+    "chapter_start": 98,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch16",
+    "title": "Chapter 16: Unit Rate and Unit Price",
+    "start": 103,
+    "end": 106,
+    "chapter_start": 103,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch17",
+    "title": "Chapter 17: Proportions",
+    "start": 107,
+    "end": 114,
+    "chapter_start": 107,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch18",
+    "title": "Chapter 18: Converting Measurements",
+    "start": 115,
+    "end": 122,
+    "chapter_start": 115,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch19",
+    "title": "Chapter 19: Percent",
+    "start": 123,
+    "end": 128,
+    "chapter_start": 123,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch20",
+    "title": "Chapter 20: Percent Word Problems",
+    "start": 129,
+    "end": 134,
+    "chapter_start": 129,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch21",
+    "title": "Chapter 21: Taxes and Fees",
+    "start": 135,
+    "end": 142,
+    "chapter_start": 135,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch22",
+    "title": "Chapter 22: Discounts and Markups",
+    "start": 143,
+    "end": 152,
+    "chapter_start": 143,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch23",
+    "title": "Chapter 23: Gratuity and Commission",
+    "start": 153,
+    "end": 158,
+    "chapter_start": 153,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch24",
+    "title": "Chapter 24: Simple Interest",
+    "start": 159,
+    "end": 166,
+    "chapter_start": 159,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch25",
+    "title": "Chapter 25: Percent Rate of Change",
+    "start": 167,
+    "end": 170,
+    "chapter_start": 167,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch26",
+    "title": "Chapter 26: Tables and Ratios",
+    "start": 171,
+    "end": 176,
+    "chapter_start": 171,
+    "unit": "UNIT 2: Ratios, Proportions, and Percents"
+  },
+  {
+    "folder": "ch27",
+    "title": "Chapter 27: Expressions",
+    "start": 177,
+    "end": 184,
+    "chapter_start": 178,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch28",
+    "title": "Chapter 28: Properties",
+    "start": 185,
+    "end": 194,
+    "chapter_start": 185,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch29",
+    "title": "Chapter 29: Like Terms",
+    "start": 195,
+    "end": 200,
+    "chapter_start": 195,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch30",
+    "title": "Chapter 30: Exponents",
+    "start": 201,
+    "end": 208,
+    "chapter_start": 201,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch31",
+    "title": "Chapter 31: Order of Operations",
+    "start": 209,
+    "end": 214,
+    "chapter_start": 209,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch32",
+    "title": "Chapter 32: Scientific Notation",
+    "start": 215,
+    "end": 220,
+    "chapter_start": 215,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch33",
+    "title": "Chapter 33: Square and Cube Roots",
+    "start": 221,
+    "end": 226,
+    "chapter_start": 221,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch34",
+    "title": "Chapter 34: Comparing Irrational Numbers",
+    "start": 227,
+    "end": 230,
+    "chapter_start": 227,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch35",
+    "title": "Chapter 35: Equations",
+    "start": 231,
+    "end": 236,
+    "chapter_start": 231,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch36",
+    "title": "Chapter 36: Solving for Variables",
+    "start": 237,
+    "end": 242,
+    "chapter_start": 237,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch37",
+    "title": "Chapter 37: Solving Multistep Equations",
+    "start": 243,
+    "end": 248,
+    "chapter_start": 243,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch38",
+    "title": "Chapter 38: Solving and Graphic Inequalities",
+    "start": 249,
+    "end": 254,
+    "chapter_start": 249,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch39",
+    "title": "Chapter 39: Word Problems with Equations and Inequalities",
+    "start": 255,
+    "end": 262,
+    "chapter_start": 255,
+    "unit": "UNIT 3: Expressions and Equations"
+  },
+  {
+    "folder": "ch40",
+    "title": "Chapter 40: Introduction to Geometry",
+    "start": 263,
+    "end": 278,
+    "chapter_start": 264,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch41",
+    "title": "Chapter 41: Angles",
+    "start": 279,
+    "end": 288,
+    "chapter_start": 279,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch42",
+    "title": "Chapter 42: Quadrilaterals and Area",
+    "start": 289,
+    "end": 298,
+    "chapter_start": 289,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch43",
+    "title": "Chapter 43: Triangles and Area",
+    "start": 299,
+    "end": 306,
+    "chapter_start": 299,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch44",
+    "title": "Chapter 44: The Pythagorean Theorem",
+    "start": 307,
+    "end": 312,
+    "chapter_start": 307,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch45",
+    "title": "Chapter 45: Circles, Circumference, and Area",
+    "start": 313,
+    "end": 320,
+    "chapter_start": 313,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch46",
+    "title": "Chapter 46: Three-Dimensional Figures",
+    "start": 321,
+    "end": 329,
+    "chapter_start": 321,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch47",
+    "title": "Chapter 47: Volume",
+    "start": 330,
+    "end": 338,
+    "chapter_start": 330,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch48",
+    "title": "Chapter 48: Surface Area",
+    "start": 339,
+    "end": 348,
+    "chapter_start": 339,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch49",
+    "title": "Chapter 49: Angles, Triangles, and Transversal Lines",
+    "start": 349,
+    "end": 356,
+    "chapter_start": 349,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch50",
+    "title": "Chapter 50: Similar Figures and Scale Drawings",
+    "start": 357,
+    "end": 366,
+    "chapter_start": 357,
+    "unit": "UNIT 4: Geometry"
+  },
+  {
+    "folder": "ch51",
+    "title": "Chapter 51: Introduction to Statistics",
+    "start": 367,
+    "end": 376,
+    "chapter_start": 368,
+    "unit": "UNIT 5: Statistics and Probability"
+  },
+  {
+    "folder": "ch52",
+    "title": "Chapter 52: Measures of Central Tendency and Variation",
+    "start": 377,
+    "end": 386,
+    "chapter_start": 377,
+    "unit": "UNIT 5: Statistics and Probability"
+  },
+  {
+    "folder": "ch53",
+    "title": "Chapter 53: Displaying Data",
+    "start": 387,
+    "end": 406,
+    "chapter_start": 387,
+    "unit": "UNIT 5: Statistics and Probability"
+  },
+  {
+    "folder": "ch54",
+    "title": "Chapter 54: Probability",
+    "start": 407,
+    "end": 416,
+    "chapter_start": 407,
+    "unit": "UNIT 5: Statistics and Probability"
+  },
+  {
+    "folder": "ch55",
+    "title": "Chapter 55: The Coordinate Plane",
+    "start": 417,
+    "end": 428,
+    "chapter_start": 418,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch56",
+    "title": "Chapter 56: Relations, Lines, and Functions",
+    "start": 429,
+    "end": 442,
+    "chapter_start": 429,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch57",
+    "title": "Chapter 57: Slope",
+    "start": 443,
+    "end": 457,
+    "chapter_start": 443,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch58",
+    "title": "Chapter 58: Linear Equations and Functions",
+    "start": 458,
+    "end": 467,
+    "chapter_start": 458,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch59",
+    "title": "Chapter 59: Simultaneous Linear Equations and Functions",
+    "start": 468,
+    "end": 479,
+    "chapter_start": 468,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch60",
+    "title": "Chapter 60: Nonlinear Functions",
+    "start": 480,
+    "end": 491,
+    "chapter_start": 480,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch61",
+    "title": "Chapter 61: Polygons and the Coordinate Plane",
+    "start": 492,
+    "end": 498,
+    "chapter_start": 492,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch62",
+    "title": "Chapter 62: Transformations",
+    "start": 499,
+    "end": 519,
+    "chapter_start": 499,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  },
+  {
+    "folder": "ch63",
+    "title": "Chapter 63: Proportional Relationships and Graphs",
+    "start": 520,
+    "end": 530,
+    "chapter_start": 520,
+    "unit": "UNIT 6: The Coordinate Plane and Functions"
+  }
+]

@@ -11,6 +11,29 @@
     href: '#book', coverTitle: ['Pre-Algebra', '& Algebra'], series: 'An animated workbook',
     description: 'From the first number line to the shape of an equation. See the math unfold, one idea at a time.',
     contents: '#units',
+  }, {
+    id: 'math-notebook', title: 'Ace Math & the Big Fat Notebook', subject: 'Mathematics',
+    href: 'math-notebook/', coverTitle: ['Ace Math', '& the Big Fat Notebook'], series: 'An animated workbook',
+    description: 'Explore middle-school math as numbers find their families, cross zero, and reveal their distance along the number line.',
+    chapters: 3, units: 1,
+    features: ['3 narrated chapters available', 'Sort numbers and explore the number line', 'Quick checks and chapter practice'],
+    artwork: `<svg viewBox="0 0 260 175" class="book-art" style="height:90px" aria-hidden="true">
+      <g fill="none" stroke-width="2" stroke-linecap="round">
+        <ellipse cx="130" cy="66" rx="96" ry="48" stroke="#bba8ee"/>
+        <ellipse cx="107" cy="66" rx="68" ry="37" stroke="#e8a0c8"/>
+        <ellipse cx="91" cy="66" rx="46" ry="27" stroke="#f3c95c"/>
+        <ellipse cx="80" cy="66" rx="29" ry="17" stroke="#86c9e8"/>
+        <ellipse cx="73" cy="66" rx="16" ry="9" stroke="#f4a48c"/>
+        <path d="M27 141H233 M31 137L27 141L31 145 M229 137L233 141L229 145" stroke="#a8c6ba"/>
+        <path d="M62 136V146 M96 136V146 M130 133V149 M164 136V146 M198 136V146" stroke="#a8c6ba"/>
+        <path d="M62 125V120H198V125" stroke="#f0b45a"/>
+      </g>
+      <circle cx="62" cy="141" r="4" fill="#f4a48c"/>
+      <circle cx="198" cy="141" r="4" fill="#86c9e8"/>
+      <g fill="#d3ded5" font-family="Georgia,serif" font-size="13" text-anchor="middle">
+        <text x="62" y="164">−2</text><text x="130" y="164">0</text><text x="198" y="164">2</text>
+      </g>
+    </svg>`,
   }];
   const el = (tag, cls, text) => {
     const node = document.createElement(tag);
