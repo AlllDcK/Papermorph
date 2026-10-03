@@ -1,4 +1,4 @@
-# Chapter worker brief (math-notebook)
+# Chapter worker brief (Elementary Mathematics; slug `math-notebook`)
 
 You make ONE chapter of the animated book, end to end, then report back in a few lines. The coordinator registers it.
 

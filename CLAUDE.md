@@ -5,7 +5,7 @@
 
 ## 当前方向
 
-- 网站已收录两本书：第一本 68 章；第二本 Math Notebook 的前三章从 Book2 合并。第二本的约定与进度在 `books/math-notebook/`，后续章节因 API 成本暂停，需用户授权后再制作。
+- 网站已收录两本书：Elementary Algebra（第一本，68 章）；Elementary Mathematics（第二本，前三章从 Book2 合并）。第二本的约定与进度在 `books/math-notebook/`，后续章节因 API 成本暂停，需用户授权后再制作。
 - 以参考书为基础重新创作数学动画练习册，先做第一章实验。
 - 成品是尽量轻量、自包含的静态站点，无应用后端和数据库。
 - 数学教学动画是核心。用户已验证纯 JS 动画的可行性，允许实现 agent 自行处理动画细节；技术栈尚未选定。
@@ -67,7 +67,8 @@ AnimeBook/
 │   └── math-notebook/  # 第二本：smoke_ch01–ch03.py 与 register.py
 ├── site/               # 可部署的静态站点（只部署此目录）
 │   ├── index.html      # 书架、书封与章节目录（同一页，hash 切换；章节数据在 UNITS；localStorage 记进度）
-│   ├── lib/            # 共用引擎 engine.js / engine.css；书架数据与样式 bookshelf.js / bookshelf.css；目录页单元小图 unit-art.js
+│   ├── assets/bookshelf.png # 用户提供的 3.png 原图副本，三层照片书架，仅用于网站
+│   ├── lib/            # 共用引擎 engine.js / engine.css；书架点击区域样式、继续阅读与 GitHub 配置在 bookshelf.*；目录页单元小图 unit-art.js
 │   ├── chNN/           # ch01–ch68 每章一个目录：index.html（本章步骤与题目）、audio/en/（MP3 与 timings.js）
 │   └── math-notebook/  # 第二本：封面与目录、独立 lib/ 引擎、unit-art.js、ch01–ch03 与现有 MP3
 ├── .git/               # 本地 Git 仓库，尚未配置远程

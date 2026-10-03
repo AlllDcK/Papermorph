@@ -1,8 +1,9 @@
-# Everything You Need to Ace Math in One Big Fat Notebook — book plan
+# Elementary Mathematics — book plan
 
 Read this compact current state for chapter work. The chapter map/status lives in `chapters.md`; storyboards, errata and feedback live in `chapters/chNN.md`.
 
 ## Intake
+- Display name: Elementary Mathematics (user, 2026-10-03). Inspired by [Everything You Need to Ace Math in One Big Fat Notebook](https://www.hachettebookgroup.com/titles/workman-publishing/everything-you-need-to-ace-math-in-one-big-fat-notebook/9780761160960/?lens=workman-publishing-company); this credit is displayed on the book cover.
 - Readers: middle schoolers (11–14) · Tone: light, upbeat, notebook-style (warm, a little funny, never childish) · Narration language: English · Guide character: default infinity guide · Publish to: local preview only for now.
 - Slug: `math-notebook` · Primary language code: `en` · Asset approach: code/SVG only.
 - Source: `book.pdf` · Page map: `sections.json` · 530 pages, 63 chapters in 6 units.

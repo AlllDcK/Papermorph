@@ -20,15 +20,23 @@
 
 先以第一章验证完整教学体验，形成可复用的制作方法，再逐步扩展到其他章节。用户曾在大学线性代数内容上验证过 agent 制作纯 JavaScript 动画的能力，当时没有加入语音。用户认可 agent 自行处理动画的能力；本项目应围绕清楚的教学编排发挥这种能力，不预先要求复杂的动画框架。
 
-### 1.1 书架首版（2026-10-02）
+### 1.1 书架（2026-10-03 更新）
 
-首页为公开书架，点击书封、标题或文字入口先进入书本身的封面页，再通过封面页打开目录，继续进入章节动画；不要跳过书封页。首版展示已有数学书，书架入口使用轻巧的下划线文字与箭头，不使用大块实底按钮。保留章节深链接和浏览器内的学习进度，继续阅读可直接到上次章节；从书封、目录可回到书架。网站不设登录、支付或访客在线创作系统，制作能力后续通过开源 Skill 分享。
+首页为公开书架，点击书封先进入书本身的封面页，再通过封面页打开目录，继续进入章节动画。用户觉得封面到目录多一次跳转，但明确暂时保留。保留章节深链接和浏览器内的学习进度，继续阅读可直接到上次章节；从书封、目录可回到书架。网站不设登录、支付或访客在线创作系统，制作能力后续通过开源 Skill 分享。
+
+用户要求参考 Dynamicland 的照片书架，改成三层：第一层 STEM（目前为 Math）；第二层给小孩看的绘本；第三层更有趣的书。用户提供根目录 `3.png`（1086×1448），网站使用原图副本 `site/assets/bookshelf.png`。用户明确纠正适配含义：书架横向铺满浏览器，保留原图比例向下浏览，点击区域和标签同步缩放；顶部品牌融入书柜的上沿，底部信息融入抽屉木纹，不留独立黑色页眉页脚。详细声明由底部 About & disclaimer 打开。桌面优先，不做单独的手机设计。顶层前两本分别接现有的 Elementary Algebra 与 Elementary Mathematics，标签写实际课程名称和可用章节数；物理书及后两层为 Coming soon，仅作展示。用户要求移除了额外添加的 PICTURE BOOKS / CURIOUS BOOKS 小标签。图中下两层的书不代表已有课程。
+
+每层 Skill 纸张入口的方案已被用户取消；底部 GitHub 将来统一承载源码和 Skills。仓库尚未上线，当前仅显示 Coming soon，不设置假链接；以后在 `site/lib/bookshelf.js` 的 `githubURL` 填入仓库地址。底部保留独立教育项目、非原书作者或出版社关联、内容纠错与浏览器保存进度的简短说明。这次首页视觉属于网站实现，不进入制作 Skill；Skill 当前仍含有书架说明，但用户要求先检查，尚未修改。
 
 目录页每个单元的标题区是一条“黑板带”（用户 2026-10-03 指出目录页太单调）：右侧是该单元数学内容的粉笔线条小图，用单元颜色绘制，背后一层同色柔光；单元第一次滚动进入视野时逐笔画出，之后保留一个与内容相关的小循环动作（如交换律中 a、b 互换，数轴上跳点，饼图填充，天平摆动，坐标线上走点，转盘转动，函数机器进出，面积格依次亮起，平方差缺角闪现，√2 对角线重画，根点脉动，抛物线伸缩）。全部由代码绘制，不使用外部图片；图画在 `site/lib/unit-art.js`，样式与动作在 `site/index.html`；系统设置减少动态时只显示静态完成图。
 
-书架样式与数据在 `site/lib/bookshelf.css` 和 `site/lib/bookshelf.js`，第一本数学书的章节和单元数量由现有目录自动读取。入口不带 hash 时展示书架，`#book` 展示第一本书封面，`#contents` / `#chNN` 展示其目录；原有章节链接和引擎路径保持兼容。第二本位于 `site/math-notebook/`，书架列出当前可用的 3 章、1 个单元；63 章、6 个单元的全书规划仅在制作资料中记录，不显示未制作的章节入口。新书增加独立目录及书架条目，不展示未制作的占位作品。
+书架的照片与入口在 `site/index.html`，点击区域样式在 `site/lib/bookshelf.css`，继续阅读与未来 GitHub 链接配置在 `site/lib/bookshelf.js`。入口不带 hash 时展示书架，`#book` 展示第一本书封面，`#contents` / `#chNN` 展示其目录；原有章节链接和引擎路径保持兼容。第二本位于 `site/math-notebook/`，书架标出当前可用的 3 章；63 章、6 个单元的全书规划仅在制作资料中记录，不显示未制作的章节入口。
 
 ## 2. 已确定的要求
+
+2026-10-03 用户确定两本作品名称：第一本（已完成 68 章）为 **Elementary Algebra**，第二本（目前更新到第 3 章）为 **Elementary Mathematics**。书架、封面、目录及章节浏览器标题统一使用这些名称；参考教材的原始名称保留在来源记录中，已有 URL、目录 slug 和学习进度键保持兼容。
+
+两本书的书封中转页标注 Inspired by 并链接出版社页面：Elementary Algebra → [Everything You Need to Ace Pre-Algebra and Algebra 1 in One Big Fat Notebook](https://www.hachettebookgroup.com/titles/workman-publishing/everything-you-need-to-ace-pre-algebra-and-algebra-1-in-one-big-fat-notebook/9781523504381/?lens=workman-publishing-company)；Elementary Mathematics → [Everything You Need to Ace Math in One Big Fat Notebook](https://www.hachettebookgroup.com/titles/workman-publishing/everything-you-need-to-ace-math-in-one-big-fat-notebook/9780761160960/?lens=workman-publishing-company)。
 
 | 项目 | 决定 |
 | --- | --- |

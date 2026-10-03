@@ -54,6 +54,9 @@ h1 i { color: var(--task); font-style: italic; }
 .btn.quiet:hover { border-color: var(--dim); }
 .btn svg { width: 15px; height: 15px; fill: currentColor; }
 .meta { margin: 30px 0 0; color: var(--faint); font-size: 15px; letter-spacing: .04em; }
+.inspiration { max-width: 48em; margin: 22px 0 0; color: var(--dim); font-size: 14px; line-height: 1.6; text-wrap: balance; }
+.inspiration a { text-decoration-color: var(--faint); text-underline-offset: 3px; }
+.inspiration a:hover { color: var(--chalk); text-decoration-color: currentColor; }
 /* Faint chalk notes around the edges of the board. */
 .chalk { position: absolute; inset: 0; z-index: -1; pointer-events: none; animation: none !important; }
 .chalk span { position: absolute; font: italic 400 clamp(22px, 3vw, 38px) var(--book); color: var(--chalk); opacity: 0; white-space: nowrap;
@@ -186,21 +189,47 @@ main#contents { padding-bottom: 80px; }
 <body class="shelved">
 <main id="shelf" aria-labelledby="shelf-title">
   <header class="shelf-top">
-    <a class="shelf-brand" href="#" aria-label="AnimeBook bookshelf"><span class="brand-mark" aria-hidden="true">∞</span>AnimeBook<span class="brand-dot" aria-hidden="true"></span></a>
-    <span class="shelf-top-note">A little library, brought to life.</span>
+    <h1 id="shelf-title"><a class="shelf-brand" href="#"><span aria-hidden="true">∞</span> AnimeBook</a></h1>
+    <p>Animated books · A growing collection</p>
   </header>
-  <section class="shelf-intro">
-    <p class="shelf-eyebrow"><span aria-hidden="true"></span>The animated bookshelf</p>
-    <h1 id="shelf-title">Good books.<br><em>In motion.</em></h1>
-    <p>Ideas you can see, stories you can step into.<br>Pick a book. Let it come to life.</p>
-    <svg class="intro-doodle" viewBox="0 0 180 130" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M25 86Q45 67 83 83V28Q48 10 25 26Z M83 83Q118 66 151 85V27Q118 9 83 28 M83 83V103 M18 100Q45 88 77 101 M90 101Q123 87 158 103"/><path class="doodle-line" pathLength="1" d="M37 39Q51 32 68 38 M37 51Q51 44 68 50 M98 37Q115 31 136 38 M99 50Q117 43 136 51"/><path d="M160 10V20 M155 15H165 M11 48V56 M7 52H15"/></g></svg>
-  </section>
-  <section class="shelf-collection" aria-labelledby="collection-title">
-    <div class="collection-heading"><h2 id="collection-title">On the shelf</h2><span id="shelf-count"></span></div>
-    <div id="shelf-books"></div>
-    <noscript><p>Open <a href="ch01/">Chapter 1: Types of numbers</a>. JavaScript enables the bookshelf and interactive lessons.</p></noscript>
-  </section>
-  <footer class="shelf-footer"><span>Made to be watched. Built to be explored.</span><span>One book at a time.<span class="footer-star" aria-hidden="true">✳</span></span></footer>
+  <figure class="photo-shelf" aria-label="Three shelves: STEM, picture books for children, and curious books">
+    <img class="shelf-photo" src="assets/bookshelf.png" width="1086" height="1448" alt="A wooden bookshelf. Math and physics books on the top shelf, illustrated children's stories on the middle shelf, and philosophy and history books on the bottom shelf. The lower two shelves are marked Coming Soon, and a GitHub emblem is on the drawer." fetchpriority="high">
+    <div id="shelf-books">
+      <section class="shelf-tier" aria-labelledby="stem-title">
+        <h2 class="visually-hidden" id="stem-title">STEM · Mathematics</h2>
+        <a class="book-hotspot algebra-book" data-book="pre-algebra" href="#book" aria-label="Open Elementary Algebra, 68 narrated chapters">
+          <span class="book-caption"><strong>Elementary Algebra <span aria-hidden="true">↗</span></strong><small>68 narrated chapters</small></span>
+        </a>
+        <a class="book-hotspot math-book" data-book="math-notebook" href="math-notebook/" aria-label="Open Elementary Mathematics, 3 narrated chapters">
+          <span class="book-caption"><strong>Elementary Mathematics <span aria-hidden="true">↗</span></strong><small>3 narrated chapters</small></span>
+        </a>
+        <span class="physics-pending">Physics · Coming soon</span>
+      </section>
+      <section class="shelf-tier" aria-labelledby="picture-title">
+        <h2 class="visually-hidden" id="picture-title">Picture books for children · Coming soon</h2>
+      </section>
+      <section class="shelf-tier" aria-labelledby="curious-title">
+        <h2 class="visually-hidden" id="curious-title">Curious books · Coming soon</h2>
+      </section>
+    </div>
+    <div class="github-drawer" aria-label="GitHub repository and Skills: coming soon">
+      <span class="github-status">Repository &amp; Skills · Coming soon</span>
+    </div>
+    <noscript><p class="shelf-noscript">Book links work without JavaScript. The animated lessons require JavaScript.</p></noscript>
+  </figure>
+  <footer class="shelf-footer">
+    <span>Made one book at a time.</span>
+    <button type="button" id="shelf-about-button">About &amp; disclaimer</button>
+    <span>Independent · Noncommercial</span>
+  </footer>
+  <dialog class="shelf-about" id="shelf-about" aria-labelledby="shelf-about-title">
+    <form method="dialog"><button class="about-close" aria-label="Close">×</button></form>
+    <p class="about-kicker">A note from the bookshelf</p>
+    <h2 id="shelf-about-title">About AnimeBook</h2>
+    <p>An independent, noncommercial educational project. Not affiliated with the authors or publishers of the reference books. Book titles and original materials belong to their respective owners.</p>
+    <p>Lessons may contain errors; corrections are welcome. Reading progress stays in your browser. Books on the future shelves are previews, not available lessons.</p>
+    <p>The public GitHub repository will collect the source and Skills. It is coming soon.</p>
+  </dialog>
 </main>
 <section id="cover">
   <div class="chalk" aria-hidden="true">
@@ -214,19 +243,20 @@ main#contents { padding-bottom: 80px; }
   </div>
   <svg class="mascot draw" id="guide" width="210" height="147"></svg>
   <p class="kicker">An animated workbook</p>
-  <h1>Pre-Algebra <i>&amp;</i> Algebra</h1>
+  <h1>Elementary <i>Algebra</i></h1>
   <p class="lede">Lessons drawn and narrated step by step, quick checks inside the picture, and practice at the end of every chapter.</p>
   <div class="acts">
     <a class="btn go" href="#contents">Open the book<svg viewBox="0 0 16 16"><path d="M6 2.5 11.5 8 6 13.5 4.6 12.1 8.7 8 4.6 3.9z"/></svg></a>
     <a class="btn quiet" id="resume" hidden></a>
   </div>
   <p class="meta" id="meta"></p>
+  <p class="inspiration">Inspired by <a href="https://www.hachettebookgroup.com/titles/workman-publishing/everything-you-need-to-ace-pre-algebra-and-algebra-1-in-one-big-fat-notebook/9781523504381/?lens=workman-publishing-company" target="_blank" rel="noopener noreferrer"><i>Everything You Need to Ace Pre-Algebra and Algebra 1 in One Big Fat Notebook</i></a>.</p>
   <a class="back-shelf cover-back" href="#">← Back to the bookshelf</a>
 </section>
 
 <main id="contents">
   <header class="top">
-    <a class="home" href="#book" aria-label="Back to the cover"><svg class="mascot" id="guideSmall" width="52" height="36"></svg><strong>Pre-Algebra <i>&amp;</i> Algebra</strong></a>
+    <a class="home" href="#book" aria-label="Back to the cover"><svg class="mascot" id="guideSmall" width="52" height="36"></svg><strong>Elementary <i>Algebra</i></strong></a>
     <span class="prog" id="prog"></span>
     <a class="back-shelf contents-back" href="#">← Bookshelf</a>
   </header>
@@ -260,7 +290,7 @@ const UNITS = [
 const HUES = ['#f4a48c', '#86c9e8', '#f3c95c', '#e8a0c8', '#8fd6b0', '#bba8ee', '#f0b45a'];
 const id = n => 'ch' + String(n).padStart(2, '0');
 let P = {};
-try { P = JSON.parse(localStorage.getItem('progress') || '{}'); } catch {}
+try { P = JSON.parse(localStorage.getItem('progress') || '{}') || {}; } catch {}
 const done = new Set(P.done || []);
 
 // Contents.
@@ -315,7 +345,7 @@ function show(animate) {
   const apply = () => {
     document.body.classList.toggle('shelved', shelf);
     document.body.classList.toggle('open', open);
-    document.title = shelf ? 'AnimeBook — The animated bookshelf' : 'Pre-Algebra and Algebra, Animated';
+    document.title = shelf ? 'AnimeBook — The animated bookshelf' : 'Elementary Algebra — AnimeBook';
     document.body.classList.toggle('stagger', animate && open);
     const here = open ? document.getElementById(location.hash.slice(1)) : null;
     document.querySelectorAll('.here').forEach(e => e.classList.remove('here'));

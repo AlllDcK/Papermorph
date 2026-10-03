@@ -2,8 +2,8 @@
 
 把一本书（PDF）做成带动画、语音和互动练习的网页书。网站在 `site/`，首页书架目前收录：
 
-- *Pre-Algebra & Algebra*：68 章，保留原有 `site/chNN/` 路径。
-- *Ace Math & the Big Fat Notebook*：已完成前三章，入口在 `site/math-notebook/`；全书规划为 63 章，后续制作因 API 成本暂停。
+- *Elementary Algebra*：68 章，保留原有 `site/chNN/` 路径。
+- *Elementary Mathematics*：已完成前三章，入口在 `site/math-notebook/`；全书规划为 63 章，后续制作因 API 成本暂停。
 
 完整制作流程、脚本、引擎与模板都在技能 `.claude/skills/animebook/`（英文，从 `SKILL.md` 读起）。本书的计划与进度见 `plan.md`，目录地图与约定见 `CLAUDE.md`。
 
