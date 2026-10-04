@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Multiplying and Dividing Positive and Negative Numbers — Elementary Mathematics</title><link rel="stylesheet" href="../lib/engine.css"><link rel="expect" href="#bar" blocking="render"><style>.screen .blanks .math{font-size:38px}.side .keys{font-size:20px}</style></head><body>
 <script src="../lib/engine.js"></script><script src="audio/en/timings.js"></script><script>
 'use strict';
-const CHAPTER={number:13,title:'Multiplying and Dividing Positive and Negative Numbers',minutes:14,language:'en'};
+const CHAPTER={number:13,title:'Multiplying and Dividing Positive and Negative Numbers',minutes:14,language:'en', next: '../ch14/' };
 const smColor=v=>v>0?POS:v<0?NEG:COL.chalk;
 const smV=v=>({t:num(v),fill:smColor(v)}),smOperand=v=>({t:v<0?'('+num(v)+')':num(v),fill:smColor(v)});
 const smText=(p,s,x,y,t=0,size=30,col=COL.chalk,anchor='start')=>{const e=T(p,s,{x,y,size,fill:col,anchor,o:0});show(e,t);return e;};
