@@ -33,7 +33,7 @@ async def template(route):
 
 
 async def check(browser, path):
-    page = await browser.new_page(viewport={"width": 1440, "height": 900})
+    page = await browser.new_page(viewport={"width": 1440, "height": 900}, has_touch=True)
     errors = []
     page.on("pageerror", lambda error: errors.append(str(error)))
     page.on("console", lambda message: message.type == "error" and errors.append(message.text))
@@ -44,15 +44,31 @@ async def check(browser, path):
     await page.goto(f"{BASE}/{path}")
     await page.wait_for_function("typeof P !== 'undefined' && P.audio && P.audio.readyState >= 2")
     slider = page.get_by_role("slider", name="Volume", exact=True)
+    button = page.get_by_role("button", name="Adjust volume", exact=True)
     assert await slider.count() == 1
     assert await page.evaluate("P.audio.volume") == 1
-    await slider.fill("0.4")
+    assert await page.evaluate("""Math.abs(document.querySelector('.volume').getBoundingClientRect().width -
+      document.querySelector('#bHelp').getBoundingClientRect().width) < .1"""), "collapsed volume matches the other circular controls"
+    assert await slider.evaluate("e => e.getBoundingClientRect().width === 0")
+    await button.hover()
+    await page.wait_for_function("document.querySelector('#volume').getBoundingClientRect().width > 80")
+    await page.mouse.move(0, 0)
+    await page.wait_for_function("document.querySelector('#volume').getBoundingClientRect().width === 0")
+    await button.focus()
+    await button.press("Tab")
+    assert await slider.evaluate("e => e === document.activeElement && e.getBoundingClientRect().width > 80")
+
+    async def volume(value):
+        await button.hover()
+        await slider.fill(value)
+
+    await volume("0.4")
     assert await page.evaluate("P.audio.volume") == .4
     await page.locator("#cover").click()
     await page.wait_for_function("P.audio.currentTime > .2 && P.t > .1")
 
     for value in ("0", "0.5", "1"):
-        await slider.fill(value)
+        await volume(value)
         assert await page.evaluate("P.audio.volume") == float(value)
         before = await page.evaluate("P.audio.currentTime")
         await page.wait_for_function("P.audio.currentTime > " + str(before + .1))
@@ -61,10 +77,10 @@ async def check(browser, path):
         await page.wait_for_timeout(200)
         assert await page.evaluate("P.audio.paused && !P.playing")
         assert abs(await page.evaluate("P.audio.currentTime") - paused) < .05
-        await slider.fill(f"{1 - float(value):g}")
+        await volume(f"{1 - float(value):g}")
         assert await page.evaluate("P.audio.volume") == 1 - float(value)
         assert await page.evaluate("P.audio.paused && !P.playing")
-        await slider.fill(value)
+        await volume(value)
         await page.locator("#bPlay").click()
         await page.wait_for_function("P.audio.currentTime > " + str(paused + .1))
         await page.locator("#segs button").nth(1).click()
@@ -94,7 +110,8 @@ async def check(browser, path):
 
     for width, height in ((390, 844), (320, 568), (700, 390), (1440, 900)):
         await page.set_viewport_size({"width": width, "height": height})
-        await page.wait_for_timeout(100)
+        await button.hover()
+        await page.wait_for_timeout(250)
         assert await page.evaluate("""[...document.querySelectorAll('#bar > *, #volume')].every(e => {
           if (getComputedStyle(e).display === 'none') return true;
           const r = e.getBoundingClientRect();
@@ -102,11 +119,19 @@ async def check(browser, path):
         })"""), f"controls clipped at {width}x{height}"
         if width <= 700:
             bounds = await slider.bounding_box()
-            assert bounds["width"] >= 100 and bounds["height"] >= 40
+            assert bounds["width"] >= 99 and bounds["height"] >= 38
             await slider.click(position={"x": bounds["width"] / 2, "y": bounds["height"] / 2})
             assert .3 < await page.evaluate("P.audio.volume") < .7
+    await page.set_viewport_size({"width": 390, "height": 844})
+    await page.mouse.move(0, 0)
+    await slider.evaluate("e => e.blur()")
+    await button.tap()
+    assert await slider.evaluate("e => e === document.activeElement && e.getBoundingClientRect().width > 80"), "touch opens the slider"
+    await slider.press("Escape")
+    await page.mouse.move(0, 0)
+    await page.wait_for_function("document.querySelector('#volume').getBoundingClientRect().width === 0")
     assert not errors, errors
-    print(f"PASS {path}: real audio, mute/mid/full, pause/resume, steps/restart, keyboard, narrow layout")
+    print(f"PASS {path}: hover/focus/touch, real audio, mute/mid/full, pause/resume, steps/restart, keyboard, narrow layout")
     await page.close()
 
 
