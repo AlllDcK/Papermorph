@@ -5,7 +5,7 @@
 <style>.screen .blanks .line{gap:14px}.screen input.box{min-width:110px}</style></head><body>
 <script src="../lib/engine.js"></script><script src="audio/en/timings.js"></script><script>
 'use strict';
-const CHAPTER={number:7,title:'Multiplying and Dividing Fractions',minutes:12,language:'en'};
+const CHAPTER={number:7,title:'Multiplying and Dividing Fractions',minutes:12,language:'en', next: '../ch08/' };
 const FM_A=COL.whole,FM_B=COL.nat;
 const fmText=(p,s,x,y,t=0,size=32,col=COL.chalk,anchor='start')=>{const e=T(p,s,{x,y,size,fill:col,anchor,o:0});show(e,t);return e;};
 const fmMath=(p,s,x,y,t=0,size=48,col=COL.chalk,anchor='middle')=>{const e=M(p,Array.isArray(s)?s:[s],{x,y,size,fill:col,anchor,o:0});show(e,t);return e;};
