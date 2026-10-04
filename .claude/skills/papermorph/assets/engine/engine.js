@@ -72,6 +72,9 @@ document.body.insertAdjacentHTML('afterbegin', `<div id="frame">
     </button>
     <div class="segs" id="segs"></div>
     <div class="step" id="stepName"></div>
+    <label class="volume" for="volume">Volume
+      <input id="volume" type="range" min="0" max="1" step="0.05" value="1" title="Volume (0 = muted)">
+    </label>
     <button class="icon txt" id="bHelp" aria-label="Keyboard shortcuts (?)" title="Keyboard shortcuts (?)">?</button>
     <button class="icon cc" id="bCC" aria-pressed="false" aria-label="Captions (C)" title="Captions (C)">CC</button>
     <button class="icon" id="bFull" aria-label="Full screen">
@@ -1479,6 +1482,7 @@ function start(i, play) {
   evalTo(0);
   const a = P.audio = new Audio(`audio/${CHAPTER.language || 'en'}/${BEATS[i].id}.mp3`);
   a.preload = 'auto';
+  a.volume = +$('volume').value;
   a.onerror = () => { if (P.audio === a) soundFailed(); };
   const b = BEATS[i];
   if (b.ask) b.ask(() => { if (P.i === i) { evalTo(Infinity); start(i + 1, true); } });
@@ -1564,6 +1568,7 @@ $('stage').addEventListener('click', e => {
   if (!b.ask && !e.target.closest('.qlayer')) togglePlay();
 });
 $('bPlay').onclick = togglePlay;
+$('volume').oninput = () => { if (P.audio) P.audio.volume = +$('volume').value; };
 $('bBack').onclick = () => { hideCover(); back1(); };
 $('bRestart').onclick = restart;
 $('bCC').onclick = () => setCaptions(!captions);
@@ -1581,8 +1586,8 @@ document.addEventListener('keydown', e => {
   if (e.altKey || e.metaKey || e.ctrlKey) return;
   const k = e.key;
   if (!$('help').hidden) { if (k === 'Escape' || k === '?') { e.preventDefault(); toggleHelp(); } return; }
-  if (e.target.matches?.('input')) {        // typing an answer: only Enter (check) and Escape (leave the box) are ours
-    if (k === 'Enter' && P.keys) { e.preventDefault(); P.keys(e); }
+  if (e.target.matches?.('input')) {        // Keep native input keys; only answer boxes use Enter to check.
+    if (k === 'Enter' && e.target.type !== 'range' && P.keys) { e.preventDefault(); P.keys(e); }
     else if (k === 'Escape') e.target.blur();
     return;
   }
@@ -1604,7 +1609,7 @@ document.addEventListener('keydown', e => {
 // Mouse clicks should not leave focus on a control, so Enter and Space keep meaning "check" and "play".
 $('frame').addEventListener('mousedown', e => { if (e.target.closest('button, [tabindex]')) e.preventDefault(); });
 $('bHelp').onclick = toggleHelp;
-const fit = () => document.documentElement.style.setProperty('--k', Math.min(innerWidth / 1640, innerHeight / 1000));
+const fit = () => document.documentElement.style.setProperty('--k', Math.min(innerWidth / 1640, (innerHeight - (innerWidth <= 700 ? 120 : 0)) / 1000));
 addEventListener('resize', fit);
 fit();
 
