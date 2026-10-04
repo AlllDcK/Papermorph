@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Adding and Subtracting Decimals — Elementary Mathematics</title><link rel="stylesheet" href="../lib/engine.css"><link rel="expect" href="#bar" blocking="render"><style>.screen .blanks .math{font-size:38px}.side .keys{font-size:20px}</style></head><body>
 <script src="../lib/engine.js"></script><script src="audio/en/timings.js"></script><script>
 'use strict';
-const CHAPTER={number:8,title:'Adding and Subtracting Decimals',minutes:11,language:'en'};
+const CHAPTER={number:8,title:'Adding and Subtracting Decimals',minutes:11,language:'en', next: '../ch09/' };
 const dcText=(p,s,x,y,t=0,size=30,col=COL.chalk,anchor='start')=>{const e=T(p,s,{x,y,size,fill:col,anchor,o:0});show(e,t);return e;};
 const dcMath=(p,s,x,y,t=0,size=48,col=COL.chalk,anchor='middle')=>{const e=M(p,[s],{x,y,size,fill:col,anchor,o:0});show(e,t);return e;};
 const dcTitle=(p,s,sub='')=>{dcText(p,s,100,120,.1,43);if(sub)dcText(p,sub,100,170,.15,27,COL.dim);};
