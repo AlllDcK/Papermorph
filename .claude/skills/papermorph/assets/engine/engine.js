@@ -72,8 +72,12 @@ document.body.insertAdjacentHTML('afterbegin', `<div id="frame">
     </button>
     <div class="segs" id="segs"></div>
     <div class="step" id="stepName"></div>
-    <label class="volume" for="volume">Volume
-      <input id="volume" type="range" min="0" max="1" step="0.05" value="1" title="Volume (0 = muted)">
+    <label class="volume" for="volume" title="Volume (0 = muted)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 9v6h4l5 4V5L7 9z" fill="currentColor"/>
+        <path d="M16 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <input id="volume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume">
     </label>
     <button class="icon txt" id="bHelp" aria-label="Keyboard shortcuts (?)" title="Keyboard shortcuts (?)">?</button>
     <button class="icon cc" id="bCC" aria-pressed="false" aria-label="Captions (C)" title="Captions (C)">CC</button>
@@ -1568,7 +1572,10 @@ $('stage').addEventListener('click', e => {
   if (!b.ask && !e.target.closest('.qlayer')) togglePlay();
 });
 $('bPlay').onclick = togglePlay;
-$('volume').oninput = () => { if (P.audio) P.audio.volume = +$('volume').value; };
+$('volume').oninput = () => {
+  $('volume').style.setProperty('--volume', +$('volume').value * 100 + '%');
+  if (P.audio) P.audio.volume = +$('volume').value;
+};
 $('bBack').onclick = () => { hideCover(); back1(); };
 $('bRestart').onclick = restart;
 $('bCC').onclick = () => setCaptions(!captions);

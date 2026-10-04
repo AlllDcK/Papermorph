@@ -106,9 +106,19 @@ button[hidden] { display: none; }
 .seg.ask { background: #2d4a57; }
 .seg.ask i { background: var(--quiz); }
 .step { width: 300px; flex: none; color: var(--dim); font-size: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
-.volume { display: flex; align-items: center; gap: 8px; flex: none; font-size: 19px; color: var(--dim); }
-.volume input { width: 120px; height: 44px; margin: 0; accent-color: var(--chalk); cursor: pointer; }
-.volume input:focus-visible { outline: 3px solid var(--task); outline-offset: 2px; }
+.volume { display: flex; align-items: center; gap: 10px; flex: none; height: 44px; padding: 0 12px;
+  border: 1px solid var(--edge); border-radius: 999px; background: var(--panel); color: var(--chalk); }
+.volume:hover { background: #2b3f36; border-color: var(--faint); }
+.volume:has(input:focus-visible) { outline: 2px solid var(--task); outline-offset: 3px; }
+.volume svg { width: 20px; height: 20px; flex: none; }
+.volume input { appearance: none; width: 100px; height: 42px; margin: 0; background: transparent; cursor: pointer; }
+.volume input:focus-visible { outline: none; }
+.volume input::-webkit-slider-runnable-track { height: 4px; border-radius: 999px;
+  background: linear-gradient(to right, var(--chalk) var(--volume, 100%), var(--faint) var(--volume, 100%)); }
+.volume input::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; margin-top: -4px; border: 0; border-radius: 50%; background: var(--chalk); }
+.volume input::-moz-range-track { height: 4px; border-radius: 999px; background: var(--faint); }
+.volume input::-moz-range-progress { height: 4px; border-radius: 999px; background: var(--chalk); }
+.volume input::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--chalk); }
 /* Keep the control strip usable without scaling down its touch targets. */
 @media (max-width: 700px) {
   #frame { top: calc(50% - 50px); overflow: visible; }
@@ -118,7 +128,6 @@ button[hidden] { display: none; }
   .step { display: none; }
   .segs, .volume { order: 1; }
   .segs { min-width: 80px; margin: 0; }
-  .volume { font-size: 16px; }
 }
 .sound-note { position: absolute; left: 24px; top: 20px; margin: 0; padding: 8px 18px; border-radius: 12px; background: rgba(15, 22, 19, .85); color: var(--dim); font-size: 19px; }
 .sound-note[hidden] { display: none; }
