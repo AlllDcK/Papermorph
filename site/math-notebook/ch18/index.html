@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Converting Measurements — Elementary Mathematics</title><link rel="stylesheet" href="../lib/engine.css"><link rel="expect" href="#bar" blocking="render"><style>.band .prompt{font-size:27px}.side .keys{font-size:19px}.screen .blanks .bline{gap:12px}.screen .blanks .box{width:9ch!important}.screen .blanks .why{font-size:22px}.screen .blanks .bline svg tspan{font-style:normal}</style></head><body>
 <script src="../lib/engine.js"></script><script src="audio/en/timings.js"></script><script>
 'use strict';
-const CHAPTER={number:18,title:'Converting Measurements',minutes:13,language:'en'};
+const CHAPTER={number:18,title:'Converting Measurements',minutes:13,language:'en', next: '../ch19/' };
 // Entrances from ch17. Blue marks conserved quantities; amber marks new unit readings.
 const cvText=(p,s,x,y,t=0,size=30,col=COL.chalk,anchor='start')=>{const e=T(p,s,{x,y,size,fill:col,anchor,o:0});show(e,t);return e;};
 const cvMath=(p,s,x,y,t=0,size=52,col=COL.chalk)=>{const e=M(p,Array.isArray(s)?s:[s],{x,y,size,fill:col,anchor:'middle',o:0});e.querySelectorAll('tspan').forEach(span=>{if(!/^[xy]$/.test(span.textContent))span.setAttribute('font-style','normal');});show(e,t);return e;};
