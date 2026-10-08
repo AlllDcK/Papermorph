@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Уравнение теплопроводности: смешанная задача и метод Фурье</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render"><!-- hold the first frame until the player exists, so the page transition can run -->
+<style>
+/* This chapter: an answer box raised into an exponent (e^{−□t}); calmer full-screen prompts for long problem statements. */
+.box.sup { height: 40px; font-size: 24px; vertical-align: 22px; margin: 0 2px; }
+.screen .prompt { font-size: 34px; line-height: 1.45; }
+</style>
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="audio/ru/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = { number: 1, title: 'Уравнение теплопроводности: смешанная задача и метод Фурье', minutes: 15, language: 'ru' };
+
+/* ---------- chapter drawing helpers (prefix mp: methods of mathematical physics) ---------- */
+const PI = Math.PI;
+const C_PHI = COL.int, C_BC = COL.whole, C_SRC = COL.rat;   // initial data, boundary data, sources (BOOK.md)
+const MODE = [COL.irr, COL.real, COL.nat, COL.task];        // Fourier modes k = 1, 2, 3, 4
+const fmt = (v, d = 2) => v.toFixed(d).replace('.', ',');   // decimal comma
+const cm = (fill, ...parts) => ({ m: parts, fill });         // coloured inline math for mpRow
+const mline = (p, parts, x, y, t0, fill = COL.chalk, size = 44, anchor = 'start') => { const e = M(p, [].concat(parts), { x, y, size, fill, anchor, o: 0 }); show(e, t0); return e; };
+const text = (p, str, x, y, t0, { size = 28, fill = COL.chalk, anchor = 'start', weight = 500 } = {}) => { const e = T(p, str, { x, y, size, fill, anchor, weight, o: 0 }); show(e, t0); return e; };
+
+// Words and math side by side on one baseline: items are strings or $m(...) / cm(colour, ...).
+function mpRow(p, items, x, y, t0, { size = 28, msize = Math.round(size * 1.3), fill = COL.chalk, weight = 500, anchor = 'start' } = {}) {
+  const g = G(p, { o: 0 });
+  let cx = 0;
+  for (const it of [].concat(items)) {
+    if (typeof it === 'string') {
+      T(g, it, { x: cx, size, fill, weight });
+      ctx2d.font = `${weight} ${size}px ${UI}`;
+      cx += ctx2d.measureText(it).width;
+    } else cx += M(g, it.m, { x: cx, size: msize, fill: it.fill || fill, anchor: 'start' })._w;
+  }
+  put(g, { x: anchor === 'middle' ? x - cx / 2 : anchor === 'end' ? x - cx : x, y });
+  g._w = cx;
+  show(g, t0);
+  return g;
+}
+// A formula in an amber frame.
+function mpBox(p, parts, x, y, t0, { size = 44, color = COL.task, fill = COL.chalk, anchor = 'start' } = {}) {
+  const g = G(p, { o: 0 }), m = M(g, parts, { x, y, size, fill, anchor });
+  const tall = parts.some(q => q && q.f), x1 = anchor === 'middle' ? x - m._w / 2 : anchor === 'end' ? x - m._w : x;
+  mk('rect', { x: x1 - 18, y: y - size * (tall ? 1.15 : 1), width: m._w + 36, height: size * (tall ? 1.75 : 1.4), rx: 12, fill: 'none', stroke: color, 'stroke-width': 3 }, g);
+  show(g, t0);
+  return g;
+}
+// Frame around one token of a tokens() row.
+function mpFrame(p, tok, row, color, t0) {
+  const e = mk('rect', { x: tok._px - tok._w / 2 - 8, y: row.y - row.size * 1.05, width: tok._w + 16, height: row.size * 1.6, rx: 10, fill: 'none', stroke: color, 'stroke-width': 3 }, p);
+  put(e, { o: 0 });
+  show(e, t0, .3);
+  return e;
+}
+// Curly brace under x1..x2 at height y.
+function mpBrace(p, x1, x2, y, color, t0) {
+  const c = (x1 + x2) / 2, e = path(p, `M${x1} ${y}q0 12 12 12H${c - 12}q12 0 12 12q0 -12 12 -12H${x2 - 12}q12 0 12 -12`, { stroke: color, 'stroke-width': 3 }, { d: 0 });
+  draw(e, t0, .6);
+  return e;
+}
+function mpArrow(p, x1, y1, x2, y2, color = COL.task, w = 4) {
+  const a = Math.atan2(y2 - y1, x2 - x1), hx = s => x2 - 15 * Math.cos(a + s * .5), hy = s => y2 - 15 * Math.sin(a + s * .5);
+  const g = G(p, { o: 0 });
+  path(g, `M${x1} ${y1}L${x2} ${y2}`, { stroke: color, 'stroke-width': w });
+  path(g, `M${hx(1)} ${hy(1)}L${x2} ${y2}L${hx(-1)} ${hy(-1)}`, { stroke: color, 'stroke-width': w });
+  return g;
+}
+// A vertical arrow from y1 whose tip can move: g.set(y2).
+function mpVArrow(p, x, y1, y2, color = COL.task) {
+  const g = G(p, { o: 0 }), shaft = path(g, '', { stroke: color, 'stroke-width': 4 }), head = path(g, '', { stroke: color, 'stroke-width': 4 });
+  g.set = yy => {
+    const s = yy < y1 ? 1 : -1;
+    shaft.setAttribute('d', `M${x} ${y1}V${yy}`);
+    head.setAttribute('d', Math.abs(yy - y1) < 16 ? '' : `M${x - 9} ${yy + 14 * s}L${x} ${yy}L${x + 9} ${yy + 14 * s}`);
+  };
+  g.set(y2);
+  return g;
+}
+const dotAt = (p, x, y, color, r = 9) => { const g = G(p, { x, y, s: 0, o: 0 }); mk('circle', { r, fill: color, stroke: COL.board, 'stroke-width': 2.5 }, g); return g; };
+
+// Heat colours for the rod: zero is dark, warm values glow amber to pale yellow, negative values glow blue.
+const H_COLD = '#78b4dc', H_ZERO = '#2a434d', H_WARM = '#d97f3a', H_HOT = '#f8dc96';
+function heat(v) {
+  if (v < 0) return mix(H_ZERO, H_COLD, Math.min(1, -v));
+  return v < .55 ? mix(H_ZERO, H_WARM, v / .55) : mix(H_WARM, H_HOT, Math.min(1, (v - .55) / .45));
+}
+// Graph of a profile u(x) on [0, L]: (x0, y0) is the point (0, 0), w px for the whole segment, k px per unit of u.
+function mpGraph(p, { x0, y0, w, L = PI, k = 150, lo = -1, hi = 1, t0 = .1, end = 'π', yl = 'u' }) {
+  const g = G(p, { o: 0 }), ax = { stroke: COL.dim, 'stroke-width': 2.5 };
+  const X = x => x0 + w * x / L, Y = u => y0 - k * u;
+  path(g, `M${x0 - 14} ${y0}H${x0 + w + 46}`, ax);
+  path(g, `M${x0 + w + 34} ${y0 - 8}L${x0 + w + 46} ${y0}L${x0 + w + 34} ${y0 + 8}`, ax);
+  path(g, `M${x0} ${Y(lo) + 8}V${Y(hi) - 34}`, ax);
+  path(g, `M${x0 - 8} ${Y(hi) - 22}L${x0} ${Y(hi) - 34}L${x0 + 8} ${Y(hi) - 22}`, ax);
+  path(g, `M${x0 + w} ${y0 - 9}V${y0 + 9}`, ax);
+  M(g, ['x'], { x: x0 + w + 52, y: y0 + 34, size: 30, fill: COL.dim });
+  M(g, [yl], { x: x0 - 24, y: Y(hi) - 26, size: 30, fill: COL.dim });
+  M(g, ['0'], { x: x0 - 18, y: y0 + 34, size: 28, fill: COL.dim });
+  M(g, [end], { x: x0 + w, y: y0 + 36, size: 28, fill: COL.dim });
+  show(g, t0);
+  const d = (f, n = 120) => {
+    let s = '';
+    for (let i = 0; i <= n; i++) { const x = L * i / n; s += (i ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(f(x)).toFixed(1); }
+    return s;
+  };
+  return { g, X, Y, L, x0, y0, w, k, d };
+}
+const mpCurve = (gr, f, color = COL.chalk, width = 4.5, o = 0) => path(gr.g, gr.d(f), { stroke: color, 'stroke-width': width }, { o });
+const mpSet = (gr, e, f) => e.setAttribute('d', gr.d(f));
+// The rod, split into thin cells coloured by temperature: rod.set(u) with u(x) on [0, L].
+function mpRod(p, { x0, y, w, h = 46, L = PI, n = 64, scale = 1, t0 = .1, hatch = false }) {
+  const g = G(p, { o: 0 });
+  const cells = Array.from({ length: n }, (_, i) => mk('rect', { x: x0 + w * i / n, y, width: w / n + .8, height: h, fill: heat(0) }, g));
+  mk('rect', { x: x0, y, width: w, height: h, rx: 3, fill: 'none', stroke: COL.dim, 'stroke-width': 2 }, g);
+  if (hatch) for (let i = 0; i <= w - 12; i += 26) {
+    path(g, `M${x0 + i} ${y - 6}l12 -12`, { stroke: COL.faint, 'stroke-width': 2 });
+    path(g, `M${x0 + i} ${y + h + 18}l12 -12`, { stroke: COL.faint, 'stroke-width': 2 });
+  }
+  g.set = f => cells.forEach((c, i) => c.setAttribute('fill', heat(f(L * (i + .5) / n) / scale)));
+  show(g, t0);
+  return g;
+}
+// Blue clamps on the rod ends: the boundary values are held there.
+function mpClamps(p, x0, w, y, h, t0) {
+  const g = G(p, { o: 0 });
+  for (const x of [x0 - 16, x0 + w]) mk('rect', { x, y: y - 18, width: 16, height: h + 36, rx: 5, fill: C_BC }, g);
+  show(g, t0);
+  return g;
+}
+// "t = 0,00" that follows the model time: clock.set(τ).
+function mpClock(p, x, y, t0, { size = 34, anchor = 'end' } = {}) {
+  const t = T(p, '', { x, y, size, font: MATH, fill: COL.dim, anchor, o: 0 });
+  mk('tspan', { 'font-style': 'italic' }, t).textContent = 't';
+  const v = mk('tspan', {}, t);
+  v.textContent = ' = 0,00';
+  t.set = τ => { v.textContent = ' = ' + fmt(τ); };
+  show(t, t0);
+  return t;
+}
+// Mode spectrum: one bar per mode in its colour; bars.set([T1, T2, …]).
+function mpBars(p, { x0, y0, k = 100, n = 4, gap = 78, bw = 38, t0 = .1 }) {
+  const g = G(p, { o: 0 });
+  path(g, `M${x0 - 34} ${y0}H${x0 + (n - 1) * gap + 34}`, { stroke: COL.dim, 'stroke-width': 2 });
+  const bars = MODE.slice(0, n).map((c, i) => {
+    M(g, ['k = ' + (i + 1)], { x: x0 + i * gap, y: y0 + 32, size: 22, fill: c });
+    return mk('rect', { x: x0 + i * gap - bw / 2, y: y0, width: bw, height: 0, rx: 3, fill: c }, g);
+  });
+  g.set = vals => vals.forEach((v, i) => {
+    if (!bars[i]) return;
+    const hh = Math.abs(v) * k;
+    bars[i].setAttribute('y', v >= 0 ? y0 - hh : y0);
+    bars[i].setAttribute('height', hh);
+  });
+  show(g, t0);
+  return g;
+}
+// Run model time τ from T0 to T1 between t0 and t0 + dur.
+const mpRun = (upd, t0, dur, T0, T1, ease = lin) => prog(q => upd(T0 + (T1 - T0) * q), t0, dur, ease);
+
+// The domain Q = {0 < x < l, t > 0}: bottom edge yellow (initial condition), sides blue (boundary conditions).
+const DOM = { x0: 190, y0: 790, w: 500, top: 150 };
+(() => {   // shading of the half-strip, fading upwards (t → ∞)
+  const lg = mk('linearGradient', { id: 'mpFade', x1: 0, y1: 1, x2: 0, y2: 0 }, document.querySelector('#stage defs'));
+  mk('stop', { offset: 0, 'stop-color': COL.chalk, 'stop-opacity': .13 }, lg);
+  mk('stop', { offset: .7, 'stop-color': COL.chalk, 'stop-opacity': .06 }, lg);
+  mk('stop', { offset: 1, 'stop-color': COL.chalk, 'stop-opacity': 0 }, lg);
+})();
+function mpDomain(p, t0) {
+  const { x0, y0, w, top } = DOM, g = G(p, { o: 0 }), ax = { stroke: COL.dim, 'stroke-width': 2.5 };
+  mk('rect', { x: x0, y: top, width: w, height: y0 - top, fill: 'url(#mpFade)' }, g);
+  path(g, `M${x0 - 30} ${y0}H${x0 + w + 90}`, ax);
+  path(g, `M${x0 + w + 78} ${y0 - 8}L${x0 + w + 90} ${y0}L${x0 + w + 78} ${y0 + 8}`, ax);
+  path(g, `M${x0} ${y0 + 30}V${top - 50}`, ax);
+  path(g, `M${x0 - 8} ${top - 38}L${x0} ${top - 50}L${x0 + 8} ${top - 38}`, ax);
+  M(g, ['x'], { x: x0 + w + 94, y: y0 + 38, size: 32, fill: COL.dim });
+  M(g, ['t'], { x: x0 - 30, y: top - 36, size: 32, fill: COL.dim });
+  M(g, ['0'], { x: x0 - 22, y: y0 + 38, size: 30, fill: COL.dim });
+  M(g, ['l'], { x: x0 + w, y: y0 + 40, size: 30, fill: COL.dim });
+  const q = M(g, ['Q'], { x: x0 + w / 2, y: (y0 + top) / 2 + 40, size: 84, fill: COL.dim });
+  const edge = (d, c) => path(g, d, { stroke: c, 'stroke-width': 8 }, { d: 0 });
+  const bottom = edge(`M${x0} ${y0}H${x0 + w}`, C_PHI);
+  const left = edge(`M${x0} ${y0}V${top + 70}`, C_BC), right = edge(`M${x0 + w} ${y0}V${top + 70}`, C_BC);
+  const dots = G(g, { o: 0 });   // the sides go on for ever
+  for (const x of [x0, x0 + w]) path(dots, `M${x} ${top + 54}V${top}`, { stroke: C_BC, 'stroke-width': 5, 'stroke-dasharray': '2 13' });
+  show(g, t0);
+  return { g, q, bottom, left, right, dots };
+}
+// Click targets on the domain (q1): left side, bottom, right side, inside.
+function domPicks() {
+  const { x0, y0, w, top } = DOM, d = S.dom;
+  return [
+    { el: d.left, box: [x0 - 30, top + 40, 60, y0 - top - 72], label: 'левая сторона' },
+    { el: d.bottom, box: [x0 + 34, y0 - 30, w - 68, 60], label: 'нижнее основание' },
+    { el: d.right, box: [x0 + w - 30, top + 40, 60, y0 - top - 72], label: 'правая сторона' },
+    { el: d.q, box: [x0 + 56, top + 60, w - 112, y0 - top - 130], label: 'внутренность Q' },
+  ];
+}
+// Three mode graphs sin(kπx/L), k = 1, 2, 3, side by side.
+function mpTrio(p, t0, { L = 1, end = 'l', titles }) {
+  return [0, 1, 2].map(i => {
+    const gr = mpGraph(p, { x0: 110 + i * 500, y0: 330, w: 360, L, k: 105, lo: -1.1, hi: 1.1, end, t0: t0 + i * .25 });
+    mline(p, titles[i], 110 + i * 500 + 180, 160, t0 + i * .25, MODE[i], 34, 'middle');
+    const c = mpCurve(gr, x => Math.sin((i + 1) * PI * x / L), MODE[i]);
+    show(c, t0 + .3 + i * .25);
+    return { gr, c, i };
+  });
+}
+// supBlanks: blanks whose {box, sup: true} boxes sit raised in an exponent.
+const supBlanks = rows => (body, api) => {
+  const ctl = blanks(rows)(body, api), boxes = body.querySelectorAll('input.box');
+  let i = 0;
+  rows.forEach(r => r.parts.forEach(q => { if (q && q.box !== undefined) { if (q.sup) boxes[i].classList.add('sup'); i++; } }));
+  return ctl;
+};
+const LEFTCARD = { x: 50, y: 110, w: 790, cls: 'side', maxH: 600 };
+const RIGHTCARD = { x: 780, y: 120, w: 780, cls: 'side', maxH: 700 };
+const SUMS = [1, 2, 5, 15];   // numbers of odd terms in the partial sums of the sine series of 1 (ex. 1.2)
+const sum1 = (x, N) => { let s = 0; for (let n = 1; n <= N; n++) s += 4 / (PI * (2 * n - 1)) * Math.sin((2 * n - 1) * x); return s; };
+const heat12 = (x, τ) => { let s = 0; for (let n = 1; n <= 40; n++) { const m = 2 * n - 1; s += 4 / (PI * m ** 3) * (1 - Math.exp(-m * m * τ)) * Math.sin(m * x); } return s; };
+
+/* ---------- beats: [id, title, run(m, D), { ask }?] ---------- */
+const BEATS = [
+  ['intro', 'Глава 1', (m, D) => {
+    const g = G(scene, { o: 0, y: 24 });
+    T(g, 'Часть 1 · Отрезок: диффузия и колебания · Глава 1', { x: 800, y: 290, size: 28, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Уравнение теплопроводности', { x: 800, y: 400, size: 84, weight: 600, anchor: 'middle' });
+    T(g, 'смешанная задача и метод Фурье', { x: 800, y: 470, size: 42, fill: COL.task, anchor: 'middle' });
+    tw(g, { o: 1, y: 0 }, .2, 1.1, out);
+    const rod = mpRod(scene, { x0: 560, y: 548, w: 480, h: 32, t0: .9 });
+    rod.set(x => Math.sin(x));
+    prog(q => rod.set(x => Math.exp(-2.4 * q) * Math.sin(x)), 1.6, Math.max(2, D - 2.8), io);
+    const r = text(scene, 'Как остывает стержень и почему для этого хватает синусов', 800, 680, m('sub'), { size: 32, fill: COL.dim, anchor: 'middle' });
+    tw(g, { o: 0, y: -24 }, D - .9, .8); hide(r, D - .9, .8); hide(rod, D - .9, .8);
+  }],
+
+  ['rod', 'Стержень', (m) => {
+    const p = panel(0), X0 = 330, W = 940, RY = 170, RH = 50;
+    const phi = s => .25 + .2 * s + .6 * Math.sin(PI * s);
+    const rod = mpRod(p, { x0: X0, y: RY, w: W, h: RH, L: 1, t0: .3 });
+    mpRow(p, ['стержень длины ', $m('l')], X0, 132, .5, { size: 28, fill: COL.dim });
+    const hatch = G(p, { o: 0 });
+    for (let i = 0; i <= W - 12; i += 26) {
+      path(hatch, `M${X0 + i} ${RY - 6}l12 -12`, { stroke: COL.dim, 'stroke-width': 2 });
+      path(hatch, `M${X0 + i} ${RY + RH + 18}l12 -12`, { stroke: COL.dim, 'stroke-width': 2 });
+    }
+    show(hatch, m('side'));
+    text(p, 'боковая поверхность теплоизолирована', X0, 280, m('side', .4), { size: 26, fill: COL.dim });
+    const gr = mpGraph(p, { x0: X0, y0: 720, w: W, L: 1, k: 330, lo: 0, hi: 1.1, end: 'l', t0: m('phi') });
+    draw(mpCurve(gr, phi, C_PHI, 5, 1), m('phi', .3), 1.2);
+    prog(q => rod.set(s => q * phi(s)), m('phi', .3), 1.2);
+    mpRow(p, [cm(C_PHI, 'φ(x)'), ' — температура при ', $m('t = 0')], X0 + 40, 350, m('phi', .8), { size: 26 });
+    mpClamps(p, X0, W, RY, RH, m('ends'));
+    mline(p, ['α', Sub('0'), '(t)'], X0 - 30, RY + 36, m('ends', .2), C_BC, 36, 'end');
+    mline(p, ['α', Sub('l'), '(t)'], X0 + W + 30, RY + 36, m('ends', .6), C_BC, 36);
+    for (const [s, t] of [[0, .3], [1, .7]]) pop(dotAt(p, gr.X(s), gr.Y(phi(s)), C_BC, 10), m('ends', t));
+    [.3, .55, .8].forEach((s, i) => {   // heat sources: small pink sparks on the rod
+      const g = G(p, { x: X0 + W * s, y: RY + RH / 2, s: 0, o: 0 });
+      mk('circle', { r: 7, fill: C_SRC }, g);
+      for (let a = 0; a < 8; a++) path(g, `M${11 * Math.cos(a * PI / 4)} ${11 * Math.sin(a * PI / 4)}L${17 * Math.cos(a * PI / 4)} ${17 * Math.sin(a * PI / 4)}`, { stroke: C_SRC, 'stroke-width': 2.5 });
+      pop(g, m('src', .1 + i * .2));
+    });
+    mpRow(p, [cm(C_SRC, 'f(x, t)'), ' — источники тепла'], X0 + W, 132, m('src', .5), { size: 26, anchor: 'end' });
+    const xs = gr.X(.7);
+    const cut = path(p, `M${xs} ${RY - 22}V${720}`, { stroke: COL.task, 'stroke-width': 3, 'stroke-dasharray': '8 8' }, { o: 0 });
+    show(cut, m('u'));
+    pop(dotAt(p, xs, gr.Y(phi(.7)), COL.task, 9), m('u', .3));
+    mpRow(p, [$m('u(x, t)'), ' — температура в сечении ', $m('x'), ' в момент ', $m('t')], 800, 800, m('u', .4), { size: 30, anchor: 'middle' });
+    mpRow(p, ['Та же задача — диффузия вещества в трубке: ', $m('u'), ' — концентрация, ', $m('a²'), ' — коэффициент диффузии'], 800, 858, m('diff'), { size: 24, fill: COL.dim, anchor: 'middle' });
+  }],
+
+  ['equation', 'Уравнение', (m) => {
+    const p = panel(0);
+    const row = tokens(p, [[F('∂u', '∂t')], '  −  ', 'a²', [F('∂²u', '∂x²')], '  =  ', { t: 'f(x, t)', fill: C_SRC }], { x: 800, y: 170, size: 62, anchor: 'middle', o: 0 });
+    row.forEach((e, i) => show(e, .3 + i * .05));
+    // Left terms are labelled to the left, right terms to the right; a short leader drops from each term to its label.
+    const lab = (i, items, y, color, side, t0) => {
+      const e = row[i], l = e._px - e._w / 2, r = e._px + e._w / 2;
+      draw(path(p, `M${l + 4} 212H${r - 4}M${e._px} 212V${y - 26}`, { stroke: color, 'stroke-width': 2.5 }, { d: 0 }), t0, .4);
+      return mpRow(p, items, side < 0 ? e._px + 14 : e._px - 14, y, t0 + .2, { size: 25, fill: color, anchor: side < 0 ? 'end' : 'start' });
+    };
+    lab(0, ['скорость изменения'], 262, COL.task, -1, m('ut'));
+    lab(2, [cm(COL.task, 'a² > 0'), ':  температуропроводность'], 316, COL.task, -1, m('a2'));
+    lab(3, ['изгиб профиля'], 262, COL.task, 1, m('uxx'));
+    lab(5, ['источники тепла'], 316, C_SRC, 1, m('f'));
+    mpRow(p, ['кратко:  ', $m('u', Sub('t'), ' − a²u', Sub('xx'), ' = f')], 1560, 120, m('short'), { size: 26, fill: COL.dim, anchor: 'end' });
+    // A hump and a dip: u = 0.5 + 0.3 e^{−4τ} sin 2x solves u_t = u_xx with both ends at 0.5.
+    const u = τ => x => .5 + .3 * Math.exp(-4 * τ) * Math.sin(2 * x);
+    const rod = mpRod(p, { x0: 380, y: 375, w: 840, h: 40, t0: m('why', -1) });
+    rod.set(u(0));
+    const gr = mpGraph(p, { x0: 380, y0: 820, w: 840, L: PI, k: 330, lo: 0, hi: .95, end: 'l', t0: m('why', -1) });
+    const c = mpCurve(gr, u(0), COL.chalk, 5);
+    show(c, m('why', -.6));
+    const down = mpArrow(p, gr.X(PI / 4), gr.Y(.8) - 82, gr.X(PI / 4), gr.Y(.8) - 16, H_COLD);
+    show(down, m('why', 2.6));
+    const dl = mpRow(p, [cm(H_COLD, 'u', Sub('xx'), ' < 0'), '  остывает'], gr.X(PI / 4) + 22, gr.Y(.8) - 44, m('why', 2.9), { size: 24, fill: H_COLD });
+    const up = mpArrow(p, gr.X(3 * PI / 4), gr.Y(0) - 8, gr.X(3 * PI / 4), gr.Y(.2) + 16, H_WARM);
+    show(up, m('valley'));
+    const ul = mpRow(p, [cm(H_WARM, 'u', Sub('xx'), ' > 0'), '  нагревается'], gr.X(3 * PI / 4) + 22, gr.Y(.1) + 12, m('valley', .3), { size: 24, fill: H_WARM });
+    for (const e of [down, dl, up, ul]) hide(e, m('flat', 2.2), .8);
+    mpRun(τ => { mpSet(gr, c, u(τ)); rod.set(u(τ)); }, m('flat', .3), 3.5, 0, .4, io);
+  }],
+
+  ['domain', 'Область и условия', (m) => {
+    const p = panel(0), { x0, y0, w, top } = DOM;
+    const d = S.dom = mpDomain(p, .3);
+    draw(d.bottom, m('bottom'), .8);
+    draw(d.left, m('sides'), .8); draw(d.right, m('sides'), .8); show(d.dots, m('sides', .6));
+    const sg = S.stmt = G(p);
+    mline(sg, [F('∂u', '∂t'), ' − a²', F('∂²u', '∂x²'), ' = f(x, t),    (x, t) ∈ Q'], 780, 210, m('strip'), COL.chalk, 42);
+    mpRow(sg, ['Первый порядок по ', $m('t'), '  →  одно условие'], 780, 310, m('order1'), { size: 28, fill: COL.dim });
+    mpRow(sg, [cm(C_PHI, 'u(x, 0) = φ(x)'), '   начальное условие'], 780, 372, m('bottom'), { size: 26, msize: 40 });
+    mpRow(sg, ['Второй порядок по ', $m('x'), '  →  два условия'], 780, 470, m('order2'), { size: 28, fill: COL.dim });
+    mline(sg, ['u(0, t) = α', Sub('0'), '(t),    u(l, t) = α', Sub('l'), '(t)'], 780, 532, m('sides'), C_BC, 40);
+    text(sg, 'граничные (краевые) условия', 780, 580, m('sides', .4), { size: 26 });
+    text(sg, 'Смешанная (начально-краевая) задача', 780, 690, m('mixed'), { size: 34, fill: COL.task, weight: 600 });
+    // A horizontal slice t = const is the rod at one moment: it rises and cools.
+    const sl = S.slice = G(p, { o: 0 }), n = 40;
+    const cells = Array.from({ length: n }, (_, i) => mk('rect', { x: x0 + w * i / n, y: -9, width: w / n + .8, height: 18, fill: heat(Math.sin(PI * (i + .5) / n)) }, sl));
+    mk('rect', { x: x0, y: -9, width: w, height: 18, fill: 'none', stroke: COL.chalk, 'stroke-width': 1.5 }, sl);
+    T(sl, 'стержень в момент t', { x: x0 + w / 2, y: -22, size: 24, fill: COL.chalk, anchor: 'middle' });
+    put(sl, { y: y0 - 40 });
+    show(sl, m('slice'));
+    prog(q => {
+      put(sl, { y: y0 - 40 - q * (y0 - top - 200) });
+      cells.forEach((c, i) => c.setAttribute('fill', heat(Math.exp(-2.5 * q) * Math.sin(PI * (i + .5) / n))));
+    }, m('slice', .5), 3.5, io);
+  }],
+
+  ['q1', 'Быстрая проверка', () => {
+    hide(S.stmt, 0, .4); hide(S.slice, 0, .4);
+  }, { ask: done => quiz(RIGHTCARD, [{
+    id: 'c-edge', prompt: ['Где задано условие ', $m('u(l, t) = α', Sub('l'), '(t)'), '? Щёлкните по этой части полуполосы.'],
+    build: pickEls(domPicks(), 2, ['Это правая сторона ', $m('x = l'), ': правый конец стержня в любой момент.'],
+      i => [['Левая сторона — это ', $m('x = 0'), ', там задано ', $m('α', Sub('0'), '(t)'), '.'],
+        ['Нижнее основание — это ', $m('t = 0'), ', там задано начальное условие.'], null,
+        ['Внутри ', $m('Q'), ' выполняется уравнение, а условия задают на границе.']][i]),
+  }, {
+    id: 'c-inside', prompt: ['А где должно выполняться само уравнение?'],
+    build: pickEls(domPicks(), 3, ['Уравнение выполняется внутри ', $m('Q'), ', а на границе ', $m('Γ'), ' заданы условия.'],
+      i => ['На боковых сторонах заданы граничные условия.', 'На нижнем основании задано начальное условие.', 'На боковых сторонах заданы граничные условия.'][i]),
+  }], done) }],
+
+  ['classic', 'Классическое решение', (m) => {
+    const { x0, y0, w } = DOM, g = S.def = G(S.panel);
+    mpRow(g, [$m('u(x, t)'), ' — классическое решение, если:'], 780, 190, m('def'), { size: 32, weight: 600 });
+    mpRow(g, ['•  непрерывна в ', $m('Q ∪ Γ'), ', то есть вместе с границей,'], 780, 252, m('def', 1), { size: 27 });
+    mpRow(g, ['    и принимает на ', $m('Γ'), ' заданные значения;'], 780, 294, m('def', 1.6), { size: 27 });
+    mpRow(g, ['•  ', $m('u', Sub('t')), ' и ', $m('u', Sub('xx')), ' непрерывны в ', $m('Q'), ','], 780, 352, m('deriv'), { size: 27 });
+    mpRow(g, ['    и уравнение выполнено в каждой точке ', $m('Q'), '.'], 780, 394, m('deriv', .8), { size: 27 });
+    const cs = S.corners = G(S.panel);
+    for (const x of [x0, x0 + w]) {
+      const c = G(cs, { x, y: y0, s: 0, o: 0 });
+      mk('circle', { r: 17, fill: 'none', stroke: COL.task, 'stroke-width': 4 }, c);
+      pop(c, m('corner')); pulse(c, m('corner', .6), 1.4); pulse(c, m('corner', 1.4), 1.4);
+    }
+    // Near x = 0: the initial profile starts at φ(0) = 0.7, the end is held at α₀(0) = 0.2 — a jump.
+    const gr = mpGraph(g, { x0: 880, y0: 830, w: 520, L: 1, k: 210, lo: 0, hi: 1, end: 'l', t0: m('jump', -.4) });
+    const phi = s => .7 - .25 * s + .15 * Math.sin(PI * s);
+    draw(mpCurve(gr, phi, C_PHI, 5, 1), m('jump'), .8);
+    mline(g, ['φ(x)'], gr.X(.55), gr.Y(phi(.55)) - 18, m('jump', .3), C_PHI, 30, 'middle');
+    const a0 = dotAt(g, gr.X(0), gr.Y(.2), C_BC, 10);
+    pop(a0, m('jump', .6));
+    const lbl = mline(g, ['α', Sub('0'), '(0)'], gr.X(0) - 18, gr.Y(.2) + 10, m('jump', .6), C_BC, 30, 'end');
+    const gap = path(g, `M${gr.X(0) + 16} ${gr.Y(.22)}V${gr.Y(.68)}`, { stroke: COL.bad, 'stroke-width': 4, 'stroke-dasharray': '7 7' }, { o: 0 });
+    show(gap, m('jump', 1.2));
+    const no = text(g, '✗ скачок', gr.X(0) + 30, gr.Y(.45), m('jump', 1.4), { size: 28, fill: COL.bad, weight: 600 });
+    mpBox(g, ['φ(0) = α', Sub('0'), '(0),      φ(l) = α', Sub('l'), '(0)'], 800, 510, m('agree'), { size: 40 });
+    tw(a0, { y: gr.Y(.7) }, m('agree', 1), 1);
+    tw(lbl, { y: gr.Y(.7) + 10 }, m('agree', 1), 1);
+    hide(gap, m('agree', 1), .4); hide(no, m('agree', 1), .4);
+    text(g, '✓ согласовано', gr.X(0) + 30, gr.Y(.45), m('agree', 2), { size: 28, fill: COL.good, weight: 600 });
+    pop(dotAt(g, gr.X(1), gr.Y(phi(1)), C_BC, 10), m('agree', 2.4));
+  }],
+
+  ['q2', 'Быстрая проверка', () => {
+    hide(S.def, 0, .4);
+  }, { ask: done => quiz({ x: 770, y: 70, w: 800, cls: 'side', maxH: 770 }, [{
+    id: 'c-agree', prompt: ['На отрезке ', $m('[0, π]'), ' заданы ', $m('φ(x)'), ' и значения на концах. Согласованы ли данные?'],
+    build: grid([
+      { parts: [$m('φ = sin x'), ';  ', $m('α', Sub('0'), ' = 0,  α', Sub('l'), ' = 0')], ans: ['y'], why: [$m('sin 0 = 0'), ' и ', $m('sin π = 0'), '.'] },
+      { parts: [$m('φ = cos x'), ';  ', $m('α', Sub('0'), ' = 1,  α', Sub('l'), ' = 1')], ans: ['n'], why: [$m('φ(π) = cos π = −1'), ', а ', $m('α', Sub('l'), '(0) = 1'), '.'] },
+      { parts: [$m('φ = 3x − 2 sin 2x'), ';  ', $m('α', Sub('0'), ' = 0,  α', Sub('l'), ' = 3π')], ans: ['y'], why: [$m('φ(0) = 0'), ' и ', $m('φ(π) = 3π − 2 sin 2π = 3π'), '.'] },
+      { parts: [$m('φ = 1 + x'), ';  ', $m('α', Sub('0'), ' = e', E('−t'), ',  α', Sub('l'), ' = 1')], ans: ['n'], why: [$m('φ(0) = 1 = α', Sub('0'), '(0)'), ', но ', $m('φ(π) = 1 + π ≠ 1'), '.'] },
+    ], [['y', 'да', COL.good], ['n', 'нет', COL.bad]], { multi: false, text: true }),
+  }], done) }],
+
+  ['ex1', 'Пример: стержень остывает', (m) => {
+    const p = panel(0), L = S.ex1 = { left: G(p) };
+    mline(L.left, ['u', Sub('t'), ' − u', Sub('xx'), ' = 0,     0 < x < π'], 80, 190, .3, COL.chalk, 42);
+    mline(L.left, ['u(0, t) = u(π, t) = 0'], 80, 330, .9, C_BC, 42);
+    mline(L.left, ['u(x, 0) = sin x'], 80, 260, m('init'), C_PHI, 42);
+    mpBox(L.left, ['u(x, t) = A(t) sin x'], 80, 452, m('guess'), { size: 46 });
+    mpRow(L.left, ['форма — синус, меняется только высота ', $m('A(t)')], 80, 530, m('guess', 2.6), { size: 26, fill: COL.dim });
+    mpRow(L.left, [cm(C_BC, 'sin 0 = sin π = 0'), '   ⇒   граничные условия выполнены'], 80, 620, m('bc', .3), { size: 26 });
+    L.rod = mpRod(p, { x0: 900, y: 170, w: 600, t0: .3 });
+    mpClamps(p, 900, 600, 170, 46, .9);
+    L.gr = mpGraph(p, { x0: 900, y0: 760, w: 600, L: PI, k: 380, lo: 0, hi: 1.1, t0: .5 });
+    L.phi = mpCurve(L.gr, Math.sin, C_PHI, 5, 1);
+    draw(L.phi, m('init', .2), 1.1);
+    prog(q => L.rod.set(x => q * Math.sin(x)), m('init', .2), 1.1);
+    L.arrow = mpVArrow(p, L.gr.X(PI / 2), L.gr.Y(0), L.gr.Y(1));
+    show(L.arrow, m('guess', .4));
+    L.alab = mline(p, ['A(t)'], L.gr.X(PI / 2) + 18, L.gr.Y(.5), m('guess', .6), COL.task, 34);
+    for (const x of [0, PI]) { const e = dotAt(p, L.gr.X(x), L.gr.Y(0), C_BC, 11); pop(e, m('bc')); pulse(e, m('bc', .8), 1.5); }
+  }],
+
+  ['ex1b', 'Подставляем в уравнение', (m) => {
+    const L = S.ex1, p = S.panel;
+    hide(L.left, 0, .4);
+    mline(p, ['u', Sub('t'), ' = A′(t) sin x'], 80, 180, m('ut'), COL.chalk, 42);
+    mline(p, ['u', Sub('xx'), ' = −A(t) sin x'], 80, 250, m('uxx'), COL.chalk, 42);
+    mline(p, ['[A′(t) + A(t)] sin x = 0'], 80, 345, m('sub'), COL.chalk, 42);
+    mline(p, ['A′ + A = 0,     A(0) = 1'], 80, 440, m('ode'), COL.task, 42);
+    mline(p, ['A(t) = e', E('−t')], 80, 530, m('sol'), COL.chalk, 46);
+    mpBox(p, ['u(x, t) = e', E('−t'), ' sin x'], 80, 650, m('ans'), { size: 50 });
+    const c = mpCurve(L.gr, Math.sin, COL.chalk, 5);
+    show(c, m('cool'), .3);
+    tw(L.phi, { o: .3 }, m('cool'), .5);
+    const clock = mpClock(p, 1500, 320, m('cool'));
+    mpRun(τ => {
+      const A = Math.exp(-τ);
+      mpSet(L.gr, c, x => A * Math.sin(x));
+      L.rod.set(x => A * Math.sin(x));
+      const o = Math.min(1, Math.max(0, (A - .12) * 5));   // the arrow and its label fade as the arch flattens
+      L.arrow.set(L.gr.Y(A)); put(L.arrow, { o });
+      put(L.alab, { y: L.gr.Y(A / 2) + 10, o });
+      clock.set(τ);
+    }, m('cool', .4), 5, 0, 3, lin);
+  }],
+
+  ['modes', 'Синусы как базис', (m) => {
+    const p = panel(0);
+    const trio = mpTrio(p, .3, { titles: [['sin ', F('πx', 'l')], ['sin ', F('2πx', 'l')], ['sin ', F('3πx', 'l')]] });
+    trio.forEach(({ gr }, i) => [0, 1].forEach(x => { const e = dotAt(p, gr.X(x), gr.Y(0), C_BC, 9); pop(e, m('ends', .2 + i * .2)); pulse(e, m('ends', 1.2), 1.5); }));
+    mpRow(p, ['все обращаются в ноль при ', $m('x = 0'), ' и ', $m('x = l')], 800, 500, m('ends', .8), { size: 26, fill: C_BC, anchor: 'middle' });
+    mline(p, ['(sin ', F('kπx', 'l'), ')″ = −λ', Sub('k'), ' sin ', F('kπx', 'l'), ',        λ', Sub('k'), ' = (', F('kπ', 'l'), ')', E('2')], 800, 600, m('d2'), COL.chalk, 46, 'middle');
+    trio.forEach(({ gr, i }) => {   // u_xx drawn to scale 1 : λ_k — the same sine, turned over
+      const e = path(gr.g, gr.d(x => -Math.sin((i + 1) * PI * x)), { stroke: MODE[i], 'stroke-width': 3, 'stroke-dasharray': '9 8' }, { o: 0 });
+      tw(e, { o: .8 }, m('d2', 1.5 + i * .3), .5);
+    });
+    mpRow(p, ['штрихом — вторая производная в масштабе ', $m('1 : λ', Sub('k'))], 800, 668, m('d2', 2), { size: 24, fill: COL.dim, anchor: 'middle' });
+    mpRow(p, ['ортогональны:  ', $m('∫', Lim('0', 'l'), ' sin ', F('kπx', 'l'), ' sin ', F('mπx', 'l'), ' dx = 0'), '  при  ', $m('k ≠ m')], 110, 765, m('basis'), { size: 28 });
+    mpRow(p, ['базис: любую разумную функцию на ', $m('[0, l]'), ' можно разложить в ряд по ним (в смысле среднего квадратичного)'], 110, 840, m('basis', 2), { size: 25, fill: COL.dim });
+  }],
+
+  ['expand', 'Разложение по модам', (m) => {
+    const p = panel(0), O = [150, 430], V = [430, 230];
+    const ax = { stroke: COL.dim, 'stroke-width': 2.5 };
+    const vg = G(p, { o: 0 });
+    path(vg, `M${O[0]} ${O[1]}H${530}`, ax); path(vg, `M520 ${O[1] - 8}L532 ${O[1]}L520 ${O[1] + 8}`, ax);
+    path(vg, `M${O[0]} ${O[1]}V150`, ax); path(vg, `M${O[0] - 8} 162L${O[0]} 150L${O[0] + 8} 162`, ax);
+    show(vg, .3);
+    const v = mpArrow(p, O[0], O[1], V[0], V[1], COL.chalk, 5);
+    show(v, m('vec'));
+    mline(p, ['v'], V[0] + 14, V[1] - 8, m('vec', .2), COL.chalk, 36);
+    draw(path(p, `M${V[0]} ${V[1]}V${O[1]}M${V[0]} ${V[1]}H${O[0]}`, { stroke: COL.dim, 'stroke-width': 2.5, 'stroke-dasharray': '7 7' }, { d: 0 }), m('vec', .8), .7);
+    draw(path(p, `M${O[0]} ${O[1]}H${V[0]}`, { stroke: MODE[0], 'stroke-width': 9 }, { d: 0 }), m('vec', 1.4), .6);
+    draw(path(p, `M${O[0]} ${O[1]}V${V[1]}`, { stroke: MODE[2], 'stroke-width': 9 }, { d: 0 }), m('vec', 1.8), .6);
+    mline(p, ['v', Sub('1')], (O[0] + V[0]) / 2, O[1] + 44, m('vec', 1.6), MODE[0], 34, 'middle');
+    mline(p, ['v', Sub('2')], O[0] - 16, (O[1] + V[1]) / 2 + 10, m('vec', 2), MODE[2], 34, 'end');
+    text(p, 'вектор = сумма проекций на оси', 340, 512, m('vec', 2.4), { size: 26, fill: COL.dim, anchor: 'middle' });
+    const phi = x => Math.sin(x) + .5 * Math.sin(3 * x);
+    const gr = mpGraph(p, { x0: 760, y0: 420, w: 720, L: PI, k: 210, lo: -.6, hi: 1.1, t0: m('fun', -.5) });
+    text(p, '(здесь l = π)', 1480, 492, m('fun', -.3), { size: 22, fill: COL.dim, anchor: 'end' });
+    const c = mpCurve(gr, phi, C_PHI, 5, 1);
+    draw(c, m('fun'), 1.1);
+    mline(p, ['φ(x)'], gr.X(PI / 2), gr.Y(.5) + 46, m('fun', .6), C_PHI, 32, 'middle');
+    const c1 = mpCurve(gr, phi, MODE[0], 4.5), c3 = mpCurve(gr, phi, MODE[2], 4.5);
+    show(c1, m('split'), .2); show(c3, m('split'), .2);
+    tw(c, { o: .3 }, m('split', .3), .6);
+    prog(q => {
+      mpSet(gr, c1, x => phi(x) + q * (Math.sin(x) - phi(x)));
+      mpSet(gr, c3, x => phi(x) + q * (.5 * Math.sin(3 * x) - phi(x)));
+    }, m('split', .2), 1.6);
+    mline(p, ['sin x'], gr.X(PI / 2), gr.Y(1) - 14, m('split', 1.9), MODE[0], 32, 'middle');
+    mline(p, ['0,5 sin 3x'], gr.X(PI / 2), gr.Y(-.5) + 44, m('split', 2.1), MODE[2], 32, 'middle');
+    mline(p, ['φ(x) = ∑', Lim('k=1', '∞'), ' φ', Sub('k'), ' sin ', F('kπx', 'l'), ',      φ', Sub('k'), ' = ', F('2', 'l'), ' ∫', Lim('0', 'l'), ' φ(x) sin ', F('kπx', 'l'), ' dx'], 90, 660, m('coef'), COL.chalk, 40);
+    mpRow(p, ['спектр ', $m('φ', Sub('k'))], 1290, 692, m('bars'), { size: 26, anchor: 'middle', fill: COL.dim });
+    const bars = mpBars(p, { x0: 1175, y0: 830, k: 100, t0: m('bars') });
+    prog(q => bars.set([q, 0, .5 * q, 0]), m('bars', .3), 1);
+    mpBox(p, ['u(x, t) = ∑', Lim('k=1', '∞'), ' T', Sub('k'), '(t) sin ', F('kπx', 'l')], 110, 800, m('series'), { size: 44 });
+  }],
+
+  ['split', 'Уравнение распадается', (m) => {
+    const p = panel(0);
+    mline(p, ['u', Sub('t'), ' = ∑ T′', Sub('k'), ' sin ', F('kπx', 'l'), ',          u', Sub('xx'), ' = −∑ λ', Sub('k'), 'T', Sub('k'), ' sin ', F('kπx', 'l')], 800, 150, .3, COL.dim, 40, 'middle');
+    const sinp = [' sin ', F('kπx', 'l')];
+    const r1 = tokens(p, [['∑ '], ['(T′', Sub('k'), ' + a²λ', Sub('k'), 'T', Sub('k'), ')'], [...sinp, ' = ∑ '], ['f', Sub('k'), '(t)'], sinp], { x: 800, y: 260, size: 44, anchor: 'middle', o: 0 });
+    r1.forEach(e => show(e, m('ux', 2.5)));
+    const r2 = tokens(p, [['∑ '], ['T', Sub('k'), '(0)'], [...sinp, ' = ∑ '], ['φ', Sub('k')], sinp], { x: 800, y: 350, size: 44, anchor: 'middle', o: 0 });
+    r2.forEach(e => show(e, m('ux', 3.2)));
+    for (const [row, t] of [[r1, 0], [r2, .6]]) { mpFrame(p, row[1], row, COL.task, m('match', .5 + t)); mpFrame(p, row[3], row, COL.task, m('match', .8 + t)); }
+    text(p, 'сравниваем коэффициенты при каждом синусе', 800, 425, m('match', 1.6), { size: 26, fill: COL.task, anchor: 'middle' });
+    [0, 1, 2].forEach(i => {
+      const k = String(i + 1), bx = 90 + i * 500, t0 = m('odes', i * .5);
+      draw(path(p, `M800 440L${bx + 210} 488`, { stroke: MODE[i], 'stroke-width': 2.5 }, { d: 0 }), t0, .5);
+      const b = G(p, { o: 0 });
+      mk('rect', { x: bx, y: 490, width: 420, height: 160, rx: 16, fill: 'none', stroke: MODE[i], 'stroke-width': 3 }, b);
+      M(b, ['k = ' + k], { x: bx + 22, y: 526, size: 24, fill: MODE[i], anchor: 'start' });
+      M(b, ['T′', Sub(k), ' + a²λ', Sub(k), 'T', Sub(k), ' = f', Sub(k), '(t)'], { x: bx + 210, y: 576, size: 34, anchor: 'middle' });
+      M(b, ['T', Sub(k), '(0) = φ', Sub(k)], { x: bx + 210, y: 628, size: 34, anchor: 'middle' });
+      show(b, t0 + .4);
+    });
+    text(p, '⋯', 1548, 580, m('odes', 1.6), { size: 40, fill: COL.dim, anchor: 'middle' });
+    text(p, 'Одно уравнение в частных производных → независимые задачи Коши, по одной на моду', 800, 740, m('odes', 3), { size: 29, fill: COL.task, anchor: 'middle', weight: 600 });
+  }],
+
+  ['formula', 'Решение для моды', (m) => {
+    const p = panel(0);
+    const row = tokens(p, [['T', Sub('k'), '(t) = '], ['φ', Sub('k'), 'e', E(['−a²λ', Sub('k'), 't'])], [' + '], ['∫', Lim('0', 't'), ' e', E(['−a²λ', Sub('k'), '(t − s)']), 'f', Sub('k'), '(s) ds']],
+      { x: 800, y: 250, size: 54, anchor: 'middle', o: 0 });
+    row.forEach(e => show(e, .3));
+    const under = (i, color, lines, t0) => {
+      const e = row[i];
+      mpBrace(p, e._px - e._w / 2, e._px + e._w / 2, 296, color, t0);
+      lines.forEach((items, j) => mpRow(p, items, e._px, 362 + j * 34, t0 + .4 + j * .2, { size: 26, fill: color, anchor: 'middle' }));
+    };
+    under(1, C_PHI, [['начальное тепло моды'], ['затухает']], m('decay'));
+    under(3, C_SRC, [['вклад источников'], ['к моменту ', $m('t')]], m('src'));
+    text(p, 'формальное решение', 800, 480, m('formal'), { size: 28, fill: COL.task, anchor: 'middle', weight: 600 });
+    mpBox(p, ['u(x, t) = ∑', Lim('k=1', '∞'), ' T', Sub('k'), '(t) sin ', F('kπx', 'l')], 800, 590, m('formal', .2), { size: 54, anchor: 'middle' });
+    text(p, 'Сходится ли ряд и можно ли дифференцировать его почленно — проверим в п. 4.3.', 800, 720, m('formal', 3.5), { size: 27, fill: COL.dim, anchor: 'middle' });
+  }],
+
+  ['decay', 'Высокие моды гаснут быстрее', (m) => {
+    const p = panel(0);
+    mline(p, ['a² = 1,   f = 0,   l = π'], 80, 190, .3, COL.dim, 38);
+    mline(p, ['φ(x) = sin x + 0,5 sin 3x'], 80, 262, m('two'), C_PHI, 40);
+    mline(p, ['T', Sub('k'), '(t) = φ', Sub('k'), 'e', E(['−λ', Sub('k'), 't']), ',     λ', Sub('k'), ' = k²'], 80, 360, m('each'), COL.chalk, 40);
+    mline(p, ['T', Sub('1'), ' = e', E('−t')], 80, 450, m('fast'), MODE[0], 40);
+    mline(p, ['T', Sub('3'), ' = 0,5 e', E('−9t'), '   — в 9 раз быстрее'], 80, 520, m('fast', .6), MODE[2], 40);
+    const rod = mpRod(p, { x0: 880, y: 170, w: 620, t0: .3 });
+    const gr = mpGraph(p, { x0: 880, y0: 720, w: 620, L: PI, k: 340, lo: 0, hi: 1.1, t0: .3 });
+    const u = τ => x => Math.exp(-τ) * Math.sin(x) + .5 * Math.exp(-9 * τ) * Math.sin(3 * x);
+    const c0 = mpCurve(gr, u(0), C_PHI, 4, 0), c = mpCurve(gr, u(0), COL.chalk, 5);
+    show(c, m('two', .3)); show(c0, m('two', .3));
+    prog(q => rod.set(x => q * u(0)(x)), m('two', .3), 1);
+    tw(c0, { o: .3 }, m('smooth'), .5);
+    const bars = mpBars(p, { x0: 200, y0: 820, k: 120, t0: m('each') });
+    bars.set([1, 0, .5, 0]);
+    const clock = mpClock(p, 1500, 300, m('fast'));
+    const upd = τ => { mpSet(gr, c, u(τ)); rod.set(u(τ)); bars.set([Math.exp(-τ), 0, .5 * Math.exp(-9 * τ), 0]); clock.set(τ); };
+    mpRun(upd, m('smooth', .2), 3.6, 0, .35, lin);
+    mpRun(upd, m('slow'), 4, .35, 2.5, io);
+  }],
+
+  ['q3', 'Быстрая проверка', () => {
+    const p = panel(0);
+    S.trio = mpTrio(p, .2, { L: PI, end: 'π', titles: [['sin x'], ['sin 2x'], ['sin 3x']] });
+  }, { ask: done => quiz(BAND, [{
+    id: 'c-fast', prompt: ['Источников нет, ', $m('a² = 1'), '. Какая мода затухает быстрее всех? Щёлкните по графику.'],
+    build: pickEls(S.trio.map(({ c, gr }, i) => ({ el: c, box: [gr.x0 - 30, 130, gr.w + 90, 330], label: ['sin x', 'sin 2x', 'sin 3x'][i] })), 2,
+      [$m('λ', Sub('3'), ' = 9'), ': мода ', $m('sin 3x'), ' гаснет как ', $m('e', E('−9t')), '.'],
+      i => [[$m('λ', Sub('1'), ' = 1'), ' — это самая медленная мода.'], [$m('λ', Sub('2'), ' = 4'), ', но у третьей моды ', $m('λ', Sub('3'), ' = 9'), '.']][i],
+      () => S.trio.forEach(({ c, gr, i }) => fxp(q => mpSet(gr, c, x => Math.exp(-((i + 1) ** 2) * 1.2 * q) * Math.sin((i + 1) * x)), 0, 2.4, lin))),
+  }, {
+    id: 'c-exp', prompt: [$m('u', Sub('t'), ' = u', Sub('xx')), ' на ', $m('(0, π)'), ', концы при нуле, ', $m('u(x, 0) = sin 2x'), '. Впишите показатель.'],
+    build: supBlanks([{ parts: ['u(x, t) = e', E('−'), { box: '4', sup: true }, E('t'), ' sin 2x'], test: v => Math.abs(v[0]) === 4,
+      why: [$m('λ', Sub('2'), ' = 2² = 4'), ', поэтому ', $m('T', Sub('2'), ' = e', E('−4t')), '.'], hint: [$m('(sin 2x)″ = −4 sin 2x'), '.'] }]),
+  }], done) }],
+
+  ['ex3', 'Пример с источником', (m) => {
+    const p = panel(0);
+    mpRow(p, [$m('u', Sub('t'), ' − u', Sub('xx'), ' = '), cm(C_SRC, 'sin x'), $m(',    0 < x < π')], 70, 170, .3, { size: 28, msize: 38 });
+    mline(p, ['u(0, t) = u(π, t) = 0'], 70, 300, .8, C_BC, 38);
+    mline(p, ['u(x, 0) = sin 2x'], 70, 235, m('prob', 1.6), C_PHI, 38);
+    mpRow(p, [cm(C_SRC, 'f'), ' — мода ', $m('k = 1'), ',     ', cm(C_PHI, 'φ'), ' — мода ', $m('k = 2')], 70, 392, m('only'), { size: 28 });
+    mline(p, ['u = T', Sub('1'), '(t) sin x + T', Sub('2'), '(t) sin 2x'], 70, 460, m('only', 3), COL.chalk, 38);
+    mline(p, ['T′', Sub('1'), ' + T', Sub('1'), ' = 1,  T', Sub('1'), '(0) = 0  ⇒  T', Sub('1'), ' = 1 − e', E('−t')], 70, 550, m('t1'), MODE[0], 34);
+    mline(p, ['T′', Sub('2'), ' + 4T', Sub('2'), ' = 0,  T', Sub('2'), '(0) = 1  ⇒  T', Sub('2'), ' = e', E('−4t')], 70, 620, m('t2'), MODE[1], 34);
+    mpBox(p, ['u = (1 − e', E('−t'), ') sin x + e', E('−4t'), ' sin 2x'], 70, 735, m('ans'), { size: 40 });
+    const u = τ => x => (1 - Math.exp(-τ)) * Math.sin(x) + Math.exp(-4 * τ) * Math.sin(2 * x);
+    const rod = mpRod(p, { x0: 900, y: 150, w: 600, t0: .3 });
+    const gr = mpGraph(p, { x0: 900, y0: 470, w: 600, L: PI, k: 200, lo: -1.05, hi: 1.05, t0: .3 });
+    const c = mpCurve(gr, u(0), COL.chalk, 5);
+    show(c, m('prob', 1.6));
+    prog(q => rod.set(x => q * u(0)(x)), m('prob', 1.6), 1);
+    mline(p, ['sin x'], gr.X(PI / 2), gr.Y(1) - 14, m('ans', .6), MODE[0], 28, 'middle');
+    const bars = mpBars(p, { x0: 1060, y0: 830, k: 110, n: 2, t0: m('t1') });
+    mpRow(p, ['коэффициенты ', $m('T', Sub('k'), '(t)')], 1100, 692, m('t1'), { size: 24, fill: COL.dim, anchor: 'middle' });
+    bars.set([0, 1]);
+    const clock = mpClock(p, 1500, 262, m('play'));
+    mpRun(τ => { mpSet(gr, c, u(τ)); rod.set(u(τ)); bars.set([1 - Math.exp(-τ), Math.exp(-4 * τ)]); clock.set(τ); }, m('play', .3), 5.5, 0, 3, io);
+  }],
+
+  ['q4', 'Быстрая проверка', () => {}, { ask: done => quiz({ x: 50, y: 120, w: 790, cls: 'side', maxH: 540 }, [{
+    id: 'c-limit', prompt: ['Каким станет профиль ', $m('u(x, t)'), ' при ', $m('t → ∞'), '?'],
+    build: choice([[$m('sin x')], [$m('0')], [$m('sin 2x')], [$m('sin x + sin 2x')]], 0,
+      [$m('T', Sub('1'), ' = 1 − e', E('−t'), ' → 1'), ', а ', $m('T', Sub('2'), ' = e', E('−4t'), ' → 0'), ': источник поддерживает первую моду.'],
+      [null, ['Источник ', $m('sin x'), ' работает всё время: ', $m('T', Sub('1'), ' → 1'), ', а не 0.'],
+        ['Мода ', $m('sin 2x'), ' гаснет как ', $m('e', E('−4t')), '.'], [$m('e', E('−4t'), ' → 0'), ', поэтому вторая мода исчезает.']]),
+  }], done) }],
+
+  ['ex2', 'Пример: равномерный нагрев', (m) => {
+    const p = panel(0), L = S.ex2 = { mid: G(p) };
+    mpRow(p, [$m('u', Sub('t'), ' − u', Sub('xx'), ' = '), cm(C_SRC, '1'), $m(',    0 < x < π')], 70, 170, .3, { size: 28, msize: 38 });
+    mline(p, ['u(x, 0) = 0'], 70, 235, .8, C_PHI, 38);
+    mline(p, ['u(0, t) = u(π, t) = 0'], 70, 300, 1.2, C_BC, 38);
+    mline(L.mid, ['1 = ∑ f', Sub('k'), ' sin kx,      f', Sub('k'), ' = ', F('2', 'π'), ' ∫', Lim('0', 'π'), ' sin kx dx'], 70, 405, m('expand'), COL.chalk, 36);
+    mline(L.mid, ['f', Sub('k'), ' = ', F('2', 'πk'), ' (1 − (−1)', E('k'), ')'], 70, 490, m('expand', 3.5), COL.chalk, 38);
+    mpRow(L.mid, ['чётные ', $m('k'), ':  ', $m('f', Sub('k'), ' = 0'), ';     нечётные:  ', $m('f', Sub('k'), ' = ', F('4', 'πk'))], 70, 575, m('even'), { size: 28 });
+    const bars = mpBars(L.mid, { x0: 150, y0: 800, k: 75, t0: m('even', .6) });
+    prog(q => bars.set([q * 4 / PI, 0, q * 4 / (3 * PI), 0]), m('even', .9), 1);
+    L.gr = mpGraph(p, { x0: 880, y0: 700, w: 620, L: PI, k: 330, lo: 0, hi: 1.3, t0: .5 });
+    L.one = path(L.gr.g, `M${L.gr.X(0)} ${L.gr.Y(1)}H${L.gr.X(PI)}`, { stroke: C_SRC, 'stroke-width': 3, 'stroke-dasharray': '10 9' }, { o: 0 });
+    show(L.one, .9);
+    mline(p, ['f = 1'], L.gr.X(PI) + 12, L.gr.Y(1) - 10, 1.1, C_SRC, 28);
+    L.sums = SUMS.map((N, i) => {
+      const e = mpCurve(L.gr, x => sum1(x, N), C_SRC, 4);
+      const lab = text(L.mid, `${N} ${['слагаемое', 'слагаемых', 'слагаемых', 'слагаемых'][i]}`, 1490, 300, m('sums', i * 1.5), { size: 26, fill: C_SRC, anchor: 'end' });
+      show(e, m('sums', i * 1.5), .4);
+      if (i < SUMS.length - 1) { tw(e, { o: .18 }, m('sums', (i + 1) * 1.5), .4); hide(lab, m('sums', (i + 1) * 1.5), .3); }
+      return e;
+    });
+    for (const x of [0, PI]) { const e = dotAt(L.mid, L.gr.X(x), L.gr.Y(0), C_SRC, 10); pop(e, m('ends')); pulse(e, m('ends', .8), 1.5); }
+    text(L.mid, 'на концах каждая сумма равна 0', L.gr.X(.15), L.gr.Y(0) + 72, m('ends', .5), { size: 24, fill: C_SRC });
+  }],
+
+  ['ex2b', 'Стержень прогревается', (m) => {
+    const L = S.ex2, p = S.panel;
+    hide(L.mid, 0, .4);
+    L.sums.forEach(e => hide(e, 0, .4));
+    tw(L.one, { o: .35 }, 0, .4);
+    const rod = mpRod(p, { x0: 880, y: 150, w: 620, scale: 1.25, t0: .3 });
+    mline(p, ['T′', Sub('k'), ' + k²T', Sub('k'), ' = f', Sub('k'), ',    T', Sub('k'), '(0) = 0'], 70, 405, .3, COL.chalk, 36);
+    mline(p, ['T', Sub('k'), '(t) = ', F(['f', Sub('k')], 'k²'), ' (1 − e', E('−k²t'), ')'], 70, 490, m('tk'), COL.chalk, 40);
+    mline(p, ['u = ∑', Lim('n=1', '∞'), ' ', F('4', 'π(2n − 1)³'), ' (1 − e', E('−(2n − 1)²t'), ') sin (2n − 1)x'], 70, 590, m('odd'), COL.chalk, 34);
+    const c = mpCurve(L.gr, () => 0, COL.chalk, 5, 1);
+    const clock = mpClock(p, 1500, 300, m('play'));
+    mpRun(τ => { mpSet(L.gr, c, x => heat12(x, τ)); rod.set(x => heat12(x, τ)); clock.set(τ); }, m('play', .2), 6, 0, 3, io);
+    const par = mpCurve(L.gr, x => x * (PI - x) / 2, COL.task, 3);
+    par.setAttribute('stroke-dasharray', '10 9');
+    show(par, m('limit'));
+    mline(p, [F('x(π − x)', '2')], L.gr.X(PI / 2), L.gr.Y(PI * PI / 8) - 20, m('limit', .3), COL.task, 32, 'middle');
+    mpRow(p, ['при ', $m('t → ∞'), ':   ', $m('u → ', F('x(π − x)', '2'))], 70, 700, m('limit'), { size: 28 });
+    mpRow(p, ['решение ', $m('−u″ = 1'), ',  ', $m('u(0) = u(π) = 0')], 70, 785, m('limit', 3), { size: 26, fill: COL.dim });
+  }],
+
+  ['reduce', 'Неоднородные граничные условия', (m) => {
+    const p = panel(0);
+    const w = s => .25 + .5 * s, v = s => .45 * Math.sin(PI * s) + .12 * Math.sin(2 * PI * s);
+    const gr = mpGraph(p, { x0: 880, y0: 640, w: 620, L: 1, k: 330, lo: 0, hi: 1.2, end: 'l', t0: .3 });
+    const c = mpCurve(gr, s => w(s) + v(s), COL.chalk, 5);
+    show(c, .5);
+    const d0 = dotAt(p, gr.X(0), gr.Y(w(0)), C_BC, 10), d1 = dotAt(p, gr.X(1), gr.Y(w(1)), C_BC, 10);
+    pop(d0, .7); pop(d1, .8);
+    const l0 = mline(p, ['α', Sub('0')], gr.X(0) - 18, gr.Y(w(0)) + 10, .9, C_BC, 32, 'end');
+    const l1 = mline(p, ['α', Sub('l')], gr.X(1) + 18, gr.Y(w(1)) + 10, 1, C_BC, 32);
+    const ul = mline(p, ['u'], gr.X(.5) + 26, gr.Y(.95) - 14, .9, COL.chalk, 34);
+    const line = path(gr.g, gr.d(w, 2), { stroke: C_BC, 'stroke-width': 4 }, { d: 0 });
+    draw(line, m('line'), .9);
+    const wl = mline(p, ['w'], gr.X(.62), gr.Y(w(.62)) + 44, m('line', .5), C_BC, 34);
+    mline(p, ['w(x, t) = α', Sub('0'), '(t) + ', F('x', 'l'), ' [α', Sub('l'), '(t) − α', Sub('0'), '(t)]'], 70, 185, m('line', .6), C_BC, 36);
+    mline(p, ['u = v + w'], 70, 270, m('sub'), COL.task, 42);
+    prog(q => {
+      mpSet(gr, c, s => w(s) * (1 - q) + v(s));
+      line.setAttribute('d', gr.d(s => w(s) * (1 - q), 2));
+      put(d0, { y: gr.Y(w(0) * (1 - q)) }); put(d1, { y: gr.Y(w(1) * (1 - q)) });
+      put(wl, { y: gr.Y(w(.62) * (1 - q)) + 44 });
+    }, m('sub', .4), 2);
+    hide(l0, m('sub', .4), .4); hide(l1, m('sub', .4), .4); hide(ul, m('sub', .4), .4); hide(wl, m('sub', 2), .4);
+    mline(p, ['v'], gr.X(.5) + 26, gr.Y(.45) - 14, m('sub', 2.2), COL.chalk, 34);
+    mline(p, ['v(0, t) = v(l, t) = 0'], 70, 345, m('zero'), COL.chalk, 36);
+    mpRow(p, [$m('w', Sub('xx'), ' = 0'), ':  ', $m('w'), ' линейна по ', $m('x')], 70, 425, m('wxx'), { size: 26, msize: 36 });
+    mline(p, ['v', Sub('t'), ' − a²v', Sub('xx'), ' = F,      F = f − w', Sub('t')], 70, 515, m('newf'), COL.chalk, 36);
+    mline(p, ['v(x, 0) = Φ(x) = φ(x) − w(x, 0)'], 70, 595, m('newphi'), COL.chalk, 36);
+    mpRow(p, ['согласование для ', $m('u'), '   ⇒   согласование для ', $m('v')], 70, 695, m('agree'), { size: 27, fill: COL.dim });
+  }],
+
+  ['reduce2', 'Пример: концы нагреваются', (m) => {
+    const p = panel(0);
+    mpRow(p, [$m('u', Sub('t'), ' − u', Sub('xx'), ' = '), cm(C_SRC, '1'), $m(',    0 < x < π')], 70, 170, .3, { size: 28, msize: 38 });
+    mline(p, ['u(x, 0) = sin x'], 70, 235, .8, C_PHI, 38);
+    mline(p, ['u(0, t) = u(π, t) = t'], 70, 300, 1.3, C_BC, 38);
+    mpRow(p, [cm(C_BC, 'w = t'), ':  концы равны, прямая горизонтальна'], 70, 392, m('w'), { size: 26, msize: 38 });
+    mline(p, ['F = 1 − w', Sub('t'), ' = 1 − 1 = 0'], 70, 462, m('F'), COL.chalk, 38);
+    mline(p, ['Φ = sin x − w(x, 0) = sin x'], 70, 532, m('Phi'), COL.chalk, 38);
+    mpRow(p, [$m('v = e', E('−t'), ' sin x'), '   как в первом примере'], 70, 612, m('same'), { size: 26, msize: 38 });
+    mpBox(p, ['u = e', E('−t'), ' sin x + t'], 70, 715, m('ans'), { size: 46 });
+    const u = τ => x => τ + Math.exp(-τ) * Math.sin(x);
+    const rod = mpRod(p, { x0: 880, y: 150, w: 620, scale: 3, t0: .3 });
+    mpClamps(p, 880, 620, 150, 46, .6);
+    const gr = mpGraph(p, { x0: 880, y0: 760, w: 620, L: PI, k: 150, lo: 0, hi: 3.3, t0: .3 });
+    const c = mpCurve(gr, u(0), COL.chalk, 5);
+    show(c, .8);
+    prog(q => rod.set(x => q * u(0)(x)), .8, 1);
+    const line = path(gr.g, gr.d(() => 0, 2), { stroke: C_BC, 'stroke-width': 4 }, { o: 0 });
+    show(line, m('w'));
+    const d0 = dotAt(p, gr.X(0), gr.Y(0), C_BC, 10), d1 = dotAt(p, gr.X(PI), gr.Y(0), C_BC, 10);
+    pop(d0, 1.4); pop(d1, 1.5);
+    const clock = mpClock(p, 1500, 300, m('play'));
+    mpRun(τ => {
+      mpSet(gr, c, u(τ)); rod.set(u(τ)); clock.set(τ);
+      line.setAttribute('d', gr.d(() => τ, 2));
+      put(d0, { y: gr.Y(τ) }); put(d1, { y: gr.Y(τ) });
+    }, m('play', .2), 5.5, 0, 2.5, lin);
+  }],
+
+  ['q5', 'Быстрая проверка', () => {
+    const p = panel(0), q = S.q5 = {};
+    q.gr = mpGraph(p, { x0: 880, y0: 760, w: 620, L: PI, k: 52, lo: -.5, hi: 10.2, t0: .2 });
+    draw(mpCurve(q.gr, x => 3 * x - 2 * Math.sin(2 * x), C_PHI, 5, 1), .4, 1);
+    mline(p, ['φ(x) = 3x − 2 sin 2x'], 920, 280, .6, C_PHI, 32);
+    pop(dotAt(p, q.gr.X(0), q.gr.Y(0), C_BC, 10), .8); pop(dotAt(p, q.gr.X(PI), q.gr.Y(3 * PI), C_BC, 10), .9);
+    mline(p, ['u(π, t) = 3π'], q.gr.X(PI) - 18, q.gr.Y(3 * PI) - 20, 1, C_BC, 30, 'end');
+    mline(p, ['u(0, t) = 0'], q.gr.X(0) + 22, q.gr.Y(0) + 46, 1, C_BC, 30);
+    q.w = path(q.gr.g, q.gr.d(x => 3 * x, 2), { stroke: C_BC, 'stroke-width': 4 }, { d: 0 });
+    q.v = mpCurve(q.gr, x => -2 * Math.sin(2 * x), COL.chalk, 5);
+  }, { ask: done => quiz(LEFTCARD, [{
+    id: 'c-reduce', prompt: ['Задача 10: ', $m('u(x, 0) = 3x − 2 sin 2x'), ', ', $m('u(0, t) = 0'), ', ', $m('u(π, t) = 3π'), '. Найдите ', $m('w'), ' и новую начальную функцию ', $m('Φ'), '.'],
+    build: blanks([
+      { parts: ['w(x) = ', { box: '3' }, 'x'], why: ['Прямая через ', $m('(0, 0)'), ' и ', $m('(π, 3π)'), ': ', $m('w = 3x'), '.'], hint: ['Прямая между значениями на концах: ', $m('0'), ' при ', $m('x = 0'), ' и ', $m('3π'), ' при ', $m('x = π'), '.'],
+        fx: () => fx(S.q5.w, { d: 1 }, 0, .8) },
+      { parts: ['Φ(x) = φ(x) − w(x) = ', { box: '-2' }, ' sin 2x'], why: [$m('3x − 2 sin 2x − 3x = −2 sin 2x'), '.'], hint: ['Вычтите ', $m('w(x)'), ' из ', $m('φ(x)'), '.'],
+        fx: () => fx(S.q5.v, { o: 1 }, 0, .6) },
+    ]),
+  }], done) }],
+
+  ['wrap', 'Итоги', (m) => {
+    const p = panel(0);
+    const items = [
+      [['Смешанная задача: уравнение, начальное и два граничных условия.'], ['согласованные в углах:  ', $m('φ(0) = α', Sub('0'), '(0),   φ(l) = α', Sub('l'), '(0)')], 'w1'],
+      [['Метод Фурье: ', $m('φ'), ', ', $m('f'), ' и ', $m('u'), ' раскладываем по синусам.'], [$m('sin ', F('kπx', 'l')), ' обращаются в ноль на концах;  ', $m('(sin ', F('kπx', 'l'), ')″ = −λ', Sub('k'), ' sin ', F('kπx', 'l'))], 'w2'],
+      [['Уравнение распадается на задачи Коши для мод.'], [$m('T′', Sub('k'), ' + a²λ', Sub('k'), 'T', Sub('k'), ' = f', Sub('k'), ',  T', Sub('k'), '(0) = φ', Sub('k')), ';   мода гаснет как ', $m('e', E(['−a²λ', Sub('k'), 't']))], 'w3'],
+      [['Неоднородные концы: замена ', $m('u = v + w'), '.'], [$m('w'), ' — прямая между ', $m('α', Sub('0'), '(t)'), ' и ', $m('α', Sub('l'), '(t)'), ';  у ', $m('v'), ' концы нулевые'], 'w4'],
+    ];
+    items.forEach(([head, detail, mark], i) => {
+      const g = G(p, { x: -16, y: 190 + i * 168, o: 0 });
+      mk('circle', { cx: 150, cy: -12, r: 26, fill: COL.task }, g);
+      T(g, String(i + 1), { x: 150, y: -1, size: 30, fill: COL.board, weight: 700, anchor: 'middle' });
+      mpRow(g, head, 210, 0, m(mark), { size: 34, weight: 600 });
+      mpRow(g, detail, 210, 62, m(mark), { size: 26, fill: COL.dim });
+      tw(g, { o: 1, x: 0 }, m(mark), .6);
+    });
+  }],
+
+  ['final1', 'Практика 1', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-two-modes', prompt: ['Задача 1. ', $m('u', Sub('t'), ' = u', Sub('xx')), ' на ', $m('(0, π)'), ', ', $m('u(x, 0) = sin x − sin 3x'), ', концы при нуле. Впишите показатели экспонент.'],
+    build: supBlanks([{ parts: ['u(x, t) = e', E('−'), { box: '1', sup: true }, E('t'), ' sin x − e', E('−'), { box: '9', sup: true }, E('t'), ' sin 3x'],
+      test: v => Math.abs(v[0]) === 1 && Math.abs(v[1]) === 9,
+      why: ['Мода ', $m('sin kx'), ' затухает как ', $m('e', E('−k²t')), ': ', $m('k = 1'), ' и ', $m('k = 3'), '.'], hint: ['При ', $m('l = π'), ' и ', $m('a² = 1'), ': ', $m('λ', Sub('k'), ' = k²'), '.'] }]),
+  }, {
+    id: 'p-cube', prompt: ['Задача 2. Те же условия, но ', $m('u(x, 0) = sin', E('3'), 'x'), '. Подсказка: ', $m('sin 3x = 3 sin x − 4 sin', E('3'), 'x'), '.'],
+    build: blanks([
+      { parts: ['sin', E('3'), 'x = ', { box: '3/4' }, ' sin x − ', { box: '1/4' }, ' sin 3x'], why: ['Из подсказки: ', $m('sin', E('3'), 'x = ', F('3 sin x − sin 3x', '4')), '.'], hint: ['Выразите ', $m('sin', E('3'), 'x'), ' из подсказки.'] },
+      { parts: ['u(', F('π', '2'), ', t) = ', { box: '3/4' }, ' e', E('−t'), ' + ', { box: '1/4' }, ' e', E('−9t')],
+        why: [$m('u = ', F('3', '4'), 'e', E('−t'), ' sin x − ', F('1', '4'), 'e', E('−9t'), ' sin 3x'), ', а ', $m('sin ', F('3π', '2'), ' = −1'), ', поэтому минус стал плюсом.'],
+        hint: ['Подставьте ', $m('x = π/2'), ': ', $m('sin ', F('π', '2'), ' = 1'), ', ', $m('sin ', F('3π', '2'), ' = −1'), '.'] },
+    ]),
+  }], done, 'Практика 1 из 3 · вопрос') }],
+
+  ['final2', 'Практика 2', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-resonance', prompt: ['Задача 5. ', $m('u', Sub('t'), ' − u', Sub('xx'), ' = e', E('−t'), ' sin x'), ' на ', $m('(0, π)'), ', ', $m('u(x, 0) = 0'), ', концы при нуле. Найдите ', $m('u(x, t)'), '.'],
+    build: choice([[$m('t e', E('−t'), ' sin x')], [$m('(1 − e', E('−t'), ') sin x')], [$m('e', E('−t'), ' sin x')], [$m('(e', E('−t'), ' − e', E('−2t'), ') sin x')]], 0,
+      [$m('T′ + T = e', E('−t')), ', ', $m('T(0) = 0'), '. Умножим на ', $m('e', E('t')), ': ', $m('(e', E('t'), 'T)′ = 1'), ', откуда ', $m('T = t e', E('−t')), '.'],
+      [null, ['Это ответ для постоянного источника ', $m('sin x'), '; здесь источник сам гаснет как ', $m('e', E('−t')), '.'],
+        ['Это решение без источника с ', $m('T(0) = 1'), ', а здесь ', $m('u(x, 0) = 0'), '.'],
+        ['Подставьте: ', $m('T′ + T = e', E('−2t')), ', а нужно ', $m('e', E('−t')), '.']]),
+  }, {
+    id: 'p-shift', prompt: ['Задача 9. ', $m('u', Sub('t'), ' − u', Sub('xx'), ' = t e', E('−t'), ' sin x'), ', ', $m('u(x, 0) = 2 sin x − 2x'), ', ', $m('u(0, t) = 0'), ', ', $m('u(π, t) = −2π'), '.'],
+    build: blanks([
+      { parts: ['w(x) = ', { box: '-2' }, 'x'], why: ['Прямая через ', $m('(0, 0)'), ' и ', $m('(π, −2π)'), '.'], hint: ['Значения на концах: ', $m('0'), ' и ', $m('−2π'), '.'] },
+      { parts: ['u(x, t) = (', F('t²', '2'), ' + ', { box: '2' }, ') e', E('−t'), ' sin x − 2x'],
+        why: [$m('Φ = 2 sin x'), '; ', $m('T′ + T = t e', E('−t')), ', ', $m('T(0) = 2'), ' дают ', $m('T = (', F('t²', '2'), ' + 2) e', E('−t')), '.'],
+        hint: ['Постоянная равна ', $m('T(0)'), ' — коэффициенту при ', $m('sin x'), ' в ', $m('Φ = φ − w'), '.'] },
+    ]),
+  }], done, 'Практика 2 из 3 · вопрос') }],
+
+  ['final3', 'Практика 3', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-rate', prompt: ['Задача 10. ', $m('u', Sub('t'), ' − 4u', Sub('xx'), ' = t e', E('−16t'), ' sin 2x'), ', ', $m('u(x, 0) = 3x − 2 sin 2x'), ', ', $m('u(0, t) = 0'), ', ', $m('u(π, t) = 3π'), '. После замены ', $m('u = v + 3x'), ' для моды ', $m('sin 2x'), ':'],
+    build: blanks([{ parts: ['T′ + ', { box: '16' }, ' T = t e', E('−16t'), ',      T(0) = ', { box: '-2' }],
+      why: [$m('a²λ', Sub('2'), ' = 4 · 2² = 16'), ', а ', $m('T(0)'), ' — коэффициент при ', $m('sin 2x'), ' в ', $m('Φ = −2 sin 2x'), '.'],
+      hint: [$m('λ', Sub('2'), ' = (2π/π)² = 4'), ' и ', $m('a² = 4'), '.'] }]),
+  }, {
+    id: 'p-answer', prompt: ['Каков ответ задачи 10?'],
+    build: choice([[$m('(', F('t²', '2'), ' − 2) e', E('−16t'), ' sin 2x + 3x')], [$m('(', F('t²', '2'), ' − 2) e', E('−4t'), ' sin 2x + 3x')], [$m('−2e', E('−16t'), ' sin 2x + 3x')], [$m('(t − 2) e', E('−16t'), ' sin 2x + 3x')]], 0,
+      ['Умножим на ', $m('e', E('16t')), ': ', $m('(e', E('16t'), 'T)′ = t'), ', значит ', $m('e', E('16t'), 'T = ', F('t²', '2'), ' − 2'), '.'],
+      [null, ['Показатель — ', $m('a²λ', Sub('2'), ' = 16'), ': вы забыли множитель ', $m('a² = 4'), '.'],
+        ['Здесь нет вклада источника ', $m('t e', E('−16t'), ' sin 2x'), '.'],
+        ['Интеграл от ', $m('t'), ' равен ', $m(F('t²', '2')), ', а не ', $m('t'), '.']]),
+  }], done, 'Практика 3 из 3 · вопрос') }],
+
+  ['finish', 'Конец главы', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>
