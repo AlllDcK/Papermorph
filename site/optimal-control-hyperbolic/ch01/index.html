@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>§ 1.1. Обобщённое решение начально-краевой задачи</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render"><!-- hold the first frame until the player exists, so the page transition can run -->
+<style>
+.screen .prompt { font-size: 32px; line-height: 1.45; }
+</style>
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="../lib/oc.js"></script>
+<script src="audio/ru/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = { number: 1, label: '§ 1.1', title: 'Обобщённое решение начально-краевой задачи', minutes: 14, language: 'ru', next: '../ch02/' };
+
+/* ---------- chapter data ---------- */
+// Characteristic speeds of the three sample families (signs fixed in Π, as the book assumes).
+const A_PLUS = (s, t) => .45 + .35 * s, A_ZERO = () => 0, A_MINUS = (s, t) => -(.75 - .35 * t);
+const BUMP = s => Math.exp(-(((s - .2) / .08) ** 2));          // transport beat: p(s), speed a = 0.6
+const KINK = (s, t) => Math.min(s, t);                         // x_t + x_s = 1, zero data: x = min(s, t)
+const JUMP = (s, t) => t - s >= .4 ? 1 : 0;                     // x_t + x_s = 0, x(0, t) = [t ≥ 0.4]
+const SEEDS_PLUS = [[.08, 0], [.32, 0], [.56, 0], [.8, 0], [0, .22], [0, .46], [0, .7]];
+const SEEDS_MINUS = [[.95, 0], [.72, 0], [.48, 0], [.24, 0], [1, .3], [1, .55], [1, .8]];
+const SEEDS_ZERO = [[.14, 0], [.38, 0], [.62, 0], [.86, 0]];
+const RIGHTCARD = { x: 980, y: 130, w: 590, cls: 'side', maxH: 640 };
+const CARD_R = { x: 860, y: 150, w: 700, cls: 'side', maxH: 620 };
+
+// Three families in Π (entry and reflect beats share this picture); returns the line arrays.
+function threeFamilies(p, D, t0, o = 1) {
+  const g = G(p, { o });
+  return { g, plus: ocFamily(g, D, A_PLUS, SEEDS_PLUS, C_PLUS, t0), zero: ocFamily(g, D, A_ZERO, SEEDS_ZERO, C_ZERO, t0 + .3, { heads: true }),
+    minus: ocFamily(g, D, A_MINUS, SEEDS_MINUS, C_MINUS, t0 + .6) };
+}
+// A dot that rides along a polyline of Π from t0 for dur seconds.
+function ocRide(p, D, pts, color, t0, dur, r = 10) {
+  const d = dotAt(p, D.X(pts[0][0]), D.Y(pts[0][1]), color, r);
+  pop(d, t0);
+  prog(q => { const [s, t] = ocAlong(pts, q); put(d, { x: D.X(s), y: D.Y(t) }); }, t0 + .3, dur, io);
+  return d;
+}
+
+/* ---------- beats: [id, title, run(m, D), { ask }?] ---------- */
+const BEATS = [
+  ['intro', '§ 1.1', (m, D) => {
+    const g = G(scene, { o: 0, y: 24 });
+    T(g, 'Глава 1 · Гиперболические системы с управляемыми связями на границе · § 1.1', { x: 800, y: 270, size: 26, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Обобщённое решение', { x: 800, y: 380, size: 84, weight: 600, anchor: 'middle' });
+    T(g, 'начально-краевой задачи', { x: 800, y: 455, size: 46, fill: COL.task, anchor: 'middle' });
+    tw(g, { o: 1, y: 0 }, .2, 1.1, out);
+    const Dm = ocDomain(scene, { x0: 660, y0: 800, w: 280, h: 180, labels: false, name: '', axes: false, t0: .9 });
+    const fam = ocFamily(scene, Dm, A_PLUS, SEEDS_PLUS, C_PLUS, 1.1, { heads: false, width: 2.5 });
+    const rd = ocRide(scene, Dm, fam[5]._pts, COL.task, 2.2, Math.max(2, D - 4), 8);
+    const r = text(scene, 'Значения бегут вдоль характеристик — даже там, где производных нет', 800, 570, m('sub'), { size: 32, fill: COL.dim, anchor: 'middle' });
+    for (const e of [g, r, Dm.g, rd, ...fam]) tw(e, { o: 0 }, D - .9, .8);
+  }],
+
+  ['system', 'Система (1.1)', (m) => {
+    const p = panel(0);
+    mline(p, [F('∂x', '∂t'), ' + A(s, t) ', F('∂x', '∂s'), ' = f(x, s, t)'], 70, 190, .2, COL.chalk, 56);
+    text(p, '(1.1)', 780, 180, .4, { size: 26, fill: COL.dim });
+    const D = ocDomain(p, { x0: 1000, y0: 720, w: 460, h: 460, t0: m('rect') });
+    mline(p, ['S'], D.X(.5), D.y0 + 70, m('rect', .6), COL.dim, 30, 'middle');
+    mline(p, ['T'], D.x0 - 70, D.Y(.5) + 10, m('rect', .6), COL.dim, 30, 'middle');
+    ocRow(p, [$m('(s, t) ∈ Π = (s', Sub('0'), ', s', Sub('1'), ') × (t', Sub('0'), ', t', Sub('1'), ')')], 70, 280, m('rect'), { size: 26, msize: 36 });
+    ocRow(p, [$m('S = [s', Sub('0'), ', s', Sub('1'), '],  T = [t', Sub('0'), ', t', Sub('1'), '],  ', Ov('Π'), ' = S × T')], 70, 335, m('rect', .8), { size: 26, msize: 30, fill: COL.dim });
+    ocRow(p, [$m('x = x(s, t) = (x', Sub('1'), ', …, x', Sub('n'), ')'), ' — вектор-функция, состояние'], 70, 430, m('x'), { size: 28, msize: 36 });
+    ocRow(p, [$m('A = diag(a', Sub('1'), ', …, a', Sub('n'), ')'), ' — инвариантный вид'], 70, 510, m('diag'), { size: 28, msize: 36 });
+    mline(p, [F(['∂x', Sub('i')], '∂t'), ' + a', Sub('i'), '(s, t) ', F(['∂x', Sub('i')], '∂s'), ' = f', Sub('i'), '(x, s, t),   i = 1, …, n'], 70, 610, m('comp'), COL.chalk, 38);
+    ocRow(p, ['полулинейная: производные входят линейно,'], 70, 700, m('semi'), { size: 28, fill: COL.task });
+    ocRow(p, ['нелинейность — только в ', $m('f')], 70, 742, m('semi', .3), { size: 28, fill: COL.task });
+  }],
+
+  ['transport', 'Перенос', (m) => {
+    const p = panel(0), a = .6;
+    mline(p, [F('∂x', '∂t'), ' + a ', F('∂x', '∂s'), ' = 0,   a > 0'], 80, 170, .2, COL.chalk, 48);
+    const gr = ocGraph(p, { x0: 90, y0: 640, w: 640, k: 260, lo: 0, hi: 1.1, vl: 'x', ends: ['s₀', 's₁'], t0: .3 });
+    const prof = path(gr.g, gr.d(BUMP), { stroke: C_INIT, 'stroke-width': 5 }, { o: 0 });
+    show(prof, .5);
+    const clk = T(p, '', { x: 740, y: 345, size: 32, font: MATH, fill: COL.dim, anchor: 'end', o: 0 });
+    show(clk, m('move'));
+    const D = ocDomain(p, { x0: 960, y0: 760, w: 520, h: 560, t0: m('simple', .3), name: '' });
+    draw(D.bottom, m('simple', .6), .7);
+    const fld = ocField(p, D, () => null);
+    const slice = path(p, `M${D.x0} ${D.y0}H${D.x0 + D.w}`, { stroke: COL.task, 'stroke-width': 3, 'stroke-dasharray': '10 8' }, { o: 0 });
+    const peak = path(p, '', { stroke: COL.task, 'stroke-width': 4 });
+    const tip = dotAt(p, D.X(.2), D.y0, COL.task, 8);
+    show(fld, m('move')); show(slice, m('move')); pop(tip, m('move'));
+    ocRun(τ => {
+      clk.textContent = 't = ' + fmt(τ);
+      prof.setAttribute('d', gr.d(s => BUMP(s - a * τ)));
+      fld.set((s, t) => t <= τ ? BUMP(s - a * t) : null);
+      slice.setAttribute('d', `M${D.x0} ${D.Y(τ)}H${D.x0 + D.w}`);
+      peak.setAttribute('d', `M${D.X(.2)} ${D.y0}L${D.X(.2 + a * τ)} ${D.Y(τ)}`);
+      put(tip, { x: D.X(.2 + a * τ), y: D.Y(τ) });
+    }, m('move', .4), 5.5, 0, 1, io);
+    const lines = G(p, { o: 0 });
+    for (const s0 of [-.4, -.2, 0, .4]) {
+      const s1 = s0 + a, ta = s0 < 0 ? -s0 / a : 0;
+      path(lines, `M${D.X(Math.max(0, s0))} ${D.Y(ta)}L${D.X(Math.min(1, s1))} ${D.Y(Math.min(1, (1 - s0) / a))}`, { stroke: C_PLUS, 'stroke-width': 2.5, 'stroke-dasharray': '6 8' });
+    }
+    show(lines, m('line', .5));
+    ocRow(p, ['вершина движется по прямой'], D.x0 + 20, D.y0 - D.h - 18, m('line'), { size: 26, fill: COL.task });
+    ocBox(p, ['x(s, t) = p(s − at)'], 90, 790, m('slope', 3), { size: 42 });
+    ocRow(p, ['вдоль ', $m(F('ds', 'dt'), ' = a'), '  решение постоянно'], 90, 255, m('slope'), { size: 28, msize: 36, fill: C_PLUS });
+  }],
+
+  ['families', 'Семейства характеристик', (m) => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 900, y0: 780, w: 560, h: 600, t0: .2, name: '' });
+    ocRow(p, [$m(F('ds', 'dt'), ' = a', Sub('i'), '(s, t),   i = 1, 2, …, n')], 70, 180, .4, { size: 28, msize: 42 });
+    text(p, '(1.4)', 640, 170, .6, { size: 26, fill: COL.dim });
+    const fp = ocFamily(p, D, A_PLUS, SEEDS_PLUS, C_PLUS, m('plus', .2));
+    ocRow(p, [cm(C_PLUS, 'a', Sub('i'), ' > 0'), '  — наклон вправо'], 70, 300, m('plus'), { size: 28, msize: 36 });
+    const fz = ocFamily(p, D, A_ZERO, SEEDS_ZERO, C_ZERO, m('zero', .2));
+    ocRow(p, [cm(C_ZERO, 'a', Sub('i'), ' = 0'), '  — вертикально'], 70, 360, m('zero'), { size: 28, msize: 36 });
+    const fm = ocFamily(p, D, A_MINUS, SEEDS_MINUS, C_MINUS, m('minus', .2));
+    ocRow(p, [cm(C_MINUS, 'a', Sub('i'), ' < 0'), '  — наклон влево'], 70, 420, m('minus'), { size: 28, msize: 36 });
+    ocRow(p, ['знак каждого ', $m('a', Sub('i')), ' постоянен в ', $m(Ov('Π'))], 70, 500, m('sign'), { size: 26, fill: COL.dim });
+    for (const e of [...fp, ...fz, ...fm]) { tw(e, { o: .28 }, m('point'), .6); if (e._head) tw(e._head, { o: .28 }, m('point'), .6); }
+    const η = .5, α = .5;
+    [[A_PLUS, C_PLUS], [A_ZERO, C_ZERO], [A_MINUS, C_MINUS]].forEach(([a, c], i) => draw(ocChar(p, D, ocWhole(a, η, α), c, 5), m('point', .5 + i * .3), .8));
+    pop(dotAt(p, D.X(η), D.Y(α), COL.task, 11), m('point', .3));
+    mline(p, ['(η, α)'], D.X(η) + 22, D.Y(α) + 40, m('point', .5), COL.task, 32);
+    ocRow(p, ['через точку ', $m('(η, α) ∈ ', Ov('Π')), ' проходит одна характеристика'], 70, 600, m('point'), { size: 26, msize: 32 });
+    mline(p, ['s = s', E('(i)'), '(η, α; t),     s', E('(i)'), '(η, α; α) = η'], 70, 680, m('name'), COL.task, 38);
+  }],
+
+  ['entry', 'Где ставить условия', (m) => {
+    const p = panel(0);
+    const D = S.D = ocDomain(p, { x0: 900, y0: 780, w: 560, h: 600, t0: .2, name: '' });
+    const F3 = S.fam = threeFamilies(p, D, .3, .5);
+    // Entry dots on the boundary.
+    const entryDots = (fam, c, t0) => fam.forEach((e, i) => pop(dotAt(p, D.X(e._pts[0][0]), D.Y(e._pts[0][1]), c, 8), t0 + i * .08));
+    entryDots(F3.plus, C_PLUS, m('enter', .6)); entryDots(F3.zero, C_ZERO, m('enter', 1)); entryDots(F3.minus, C_MINUS, m('enter', 1.4));
+    text(p, 'точки входа', D.X(.5), D.y0 + 70, m('enter', 1), { size: 26, fill: COL.task, anchor: 'middle' });
+    const L = S.entryText = G(p);
+    text(L, 'Условия — там, где характеристики входят:', 70, 170, m('enter', .3), { size: 30, weight: 600 });
+    draw(D.bottom, m('bottom'), .8);
+    ocRow(L, [cm(C_INIT, 'x(s, t', Sub('0'), ') = p(s),   s ∈ S'), '   (1.2)'], 70, 270, m('bottom'), { size: 26, msize: 36, fill: COL.dim });
+    text(L, 'снизу — все компоненты', 70, 315, m('bottom', .4), { size: 26, fill: C_INIT });
+    draw(D.left, m('left'), .8);
+    ocRow(L, ['слева — ', cm(C_PLUS, 'x', E('+'), ' = (x', Sub('1'), ', …, x', Sub(['m', Sub('1')]), ')')], 70, 405, m('left'), { size: 28, msize: 36 });
+    text(L, 'компоненты с aᵢ > 0', 70, 448, m('left', .4), { size: 24, fill: COL.dim });
+    draw(D.right, m('right'), .8);
+    ocRow(L, ['справа — ', cm(C_MINUS, 'x', E('−'), ' = (x', Sub(['m', Sub('2'), '+1']), ', …, x', Sub('n'), ')')], 70, 530, m('right'), { size: 28, msize: 36 });
+    text(L, 'компоненты с aᵢ < 0', 70, 573, m('right', .4), { size: 24, fill: COL.dim });
+    const topD = path(p, `M${D.x0} ${D.y0 - D.h}H${D.x0 + D.w}`, { stroke: COL.dim, 'stroke-width': 5, 'stroke-dasharray': '3 12' }, { d: 0 });
+    draw(topD, m('top'), .8);
+    text(L, 'сверху — условий нет: здесь всё выходит', 70, 660, m('top'), { size: 28, fill: COL.dim });
+    text(L, 'aᵢ = 0: данные только снизу', 70, 705, m('top', 4), { size: 24, fill: COL.dim });
+  }],
+
+  ['reflect', 'Отражение на границе', (m) => {
+    const p = S.panel, D = S.D;
+    hide(S.entryText, .1, .5);
+    const L = G(p);
+    text(L, 'Общий вид краевых условий (1.3):', 70, 170, .5, { size: 30, weight: 600 });
+    // A pink characteristic arrives at the left side at t = 0.55; a blue one leaves from the same point.
+    const inPink = ocTrace(A_MINUS, 0, .55, -1), outBlue = ocTrace(A_PLUS, 0, .55, 1);
+    const c1 = ocChar(p, D, inPink, C_MINUS, 6), c2 = ocChar(p, D, outBlue, C_PLUS, 6);
+    draw(c1, m('exit', .3), 1.2);
+    ocRide(p, D, inPink, C_MINUS, m('exit', .3), 2.2);
+    mline(L, ['x', E('−'), '(s', Sub('0'), ', t)'], 70, 270, m('exit', 1), C_MINUS, 36);
+    text(L, 'выходит слева — значение известно изнутри', 300, 262, m('exit', 1.3), { size: 24, fill: COL.dim });
+    draw(c2, m('refl', .2), 1.2);
+    ocRide(p, D, outBlue, C_PLUS, m('refl', .2), 2.2);
+    mline(L, ['x', E('+'), '(s', Sub('0'), ', t) = M(t) x', E('−'), '(s', Sub('0'), ', t) + g', E('(1)'), '(t)'], 70, 360, m('refl'), C_PLUS, 40);
+    text(L, '«отражение» от левой стенки', 70, 410, m('refl', 3), { size: 26, fill: COL.task });
+    // The right side: a blue one leaves at t = 0.45, a pink one enters.
+    const inBlue = ocTrace(A_PLUS, 1, .62, -1), outPink = ocTrace(A_MINUS, 1, .62, 1);
+    const c3 = ocChar(p, D, inBlue, C_PLUS, 6), c4 = ocChar(p, D, outPink, C_MINUS, 6);
+    draw(c3, m('right', .1), 1); draw(c4, m('right', 1.1), 1);
+    ocRide(p, D, inBlue, C_PLUS, m('right', .1), 1.8); ocRide(p, D, outPink, C_MINUS, m('right', 1.1), 1.8);
+    mline(L, ['x', E('−'), '(s', Sub('1'), ', t) = N(t) x', E('+'), '(s', Sub('1'), ', t) + g', E('(2)'), '(t)'], 70, 520, m('right'), C_MINUS, 40);
+    ocRow(L, [$m('M'), ' — матрица ', $m('m', Sub('1'), ' × (n − m', Sub('2'), ')'), ',  ', $m('N'), ' — ', $m('(n − m', Sub('2'), ') × m', Sub('1'))], 70, 590, m('right', 3), { size: 24, msize: 30, fill: COL.dim });
+    ocBox(L, ['t ∈ T'], 70, 700, m('gen'), { size: 34, color: COL.dim });
+    text(L, 'к этому виду сводятся все условия книги', 220, 690, m('gen', .3), { size: 26, fill: COL.task });
+  }],
+
+  ['q1', 'Проверка: стороны Π', () => {
+    const p = panel(0);
+    const D = S.Dq = ocDomain(p, { x0: 200, y0: 780, w: 560, h: 600, t0: .2, name: '' });
+    ocFamily(p, D, A_MINUS, SEEDS_MINUS, C_MINUS, .3);
+    ocRow(p, [cm(C_MINUS, 'a', Sub('i'), '(s, t) < 0')], D.x0 + D.w / 2, D.y0 - D.h - 20, .5, { size: 28, msize: 36, anchor: 'middle' });
+  }, { ask: done => quiz(RIGHTCARD, [{
+    id: 'c-side', prompt: ['Через какую ', h('b', '', 'боковую'), ' сторону характеристики семейства с ', $m('a', Sub('i'), ' < 0'), ' входят в ', $m('Π'), '? Щёлкните по ней.'],
+    build: pickEls(ocEdgePicks(S.Dq), 2, ['Верно: при росте ', $m('t'), ' линии идут влево и входят справа, поэтому ', $m('x', E('−'), '(s', Sub('1'), ', t)'), ' задаётся на правой стороне.'],
+      i => [['Снизу входят все семейства, но это начальное условие (1.2). Вопрос о боковой стороне.'],
+        ['На левой стороне эти линии ', h('b', '', 'выходят'), ': проследите стрелки вверх по времени.'], null,
+        ['Через верхнюю сторону все характеристики выходят: там условий нет.']][i]),
+  }], done) }],
+
+  ['kink', 'Пример: излом', (m) => {
+    const p = panel(0);
+    const D = S.Dk = ocDomain(p, { x0: 140, y0: 790, w: 500, h: 500, t0: .2, name: '', labels: true, sl: ['0', '', '1', ''], tl: ['0', '', '1', ''] });
+    mline(p, [F('∂x', '∂t'), ' + ', F('∂x', '∂s'), ' = 1,    x(s, 0) = 0,   x(0, t) = 0'], 740, 170, .3, COL.chalk, 40);
+    draw(D.bottom, m('ex', 1), .7); draw(D.left, m('ex', 1.4), .7);
+    const fld = ocField(p, D, () => null, { scale: 1 });
+    show(fld, m('ex', 2));
+    prog(q => fld.set((s, t) => t <= q ? KINK(s, t) : null), m('ex', 2), 3, io);
+    // Below the diagonal: entered from the bottom; above: from the left.
+    const below = ocTrace(() => 1, .75, .35, -1), above = ocTrace(() => 1, .25, .8, -1);
+    draw(ocChar(p, D, below, COL.task, 4), m('below', .3), .9);
+    pop(dotAt(p, D.X(.75), D.Y(.35), COL.task, 10), m('below'));
+    pop(dotAt(p, D.X(.4), D.y0, C_INIT, 8), m('below', 1.2));
+    mline(p, ['x = t'], D.X(.75) + 20, D.Y(.35) + 44, m('below', 4), COL.task, 34);
+    ocRow(p, ['ниже диагонали: вошла снизу, растёт с ', $m('0'), ' → ', $m('x = t')], 740, 270, m('below', 1), { size: 26, msize: 32 });
+    draw(ocChar(p, D, above, COL.task, 4), m('above', .3), .9);
+    pop(dotAt(p, D.X(.25), D.Y(.8), COL.task, 10), m('above'));
+    pop(dotAt(p, D.x0, D.Y(.55), C_PLUS, 8), m('above', 1.2));
+    mline(p, ['x = s'], D.X(.25) - 18, D.Y(.8) - 22, m('above', 4), COL.task, 34, 'end');
+    ocRow(p, ['выше: вошла слева в момент ', $m('t − s'), ' → ', $m('x = s')], 740, 325, m('above', 1), { size: 26, msize: 32 });
+    const diag = path(p, `M${D.X(0)} ${D.Y(0)}L${D.X(1)} ${D.Y(1)}`, { stroke: COL.chalk, 'stroke-width': 3, 'stroke-dasharray': '10 8' }, { d: 0 });
+    draw(diag, m('min'), .8);
+    ocBox(p, ['x(s, t) = min(s, t)'], 740, 420, m('min', .3), { size: 42 });
+    pop(dotAt(p, D.X(.6), D.Y(.6), COL.bad, 8), m('kink', .3));
+    // Slice t = 0.6 and its profile.
+    const ts = .6;
+    const sl = path(p, `M${D.x0} ${D.Y(ts)}H${D.x0 + D.w}`, { stroke: COL.chalk, 'stroke-width': 3 }, { d: 0 });
+    draw(sl, m('slice'), .6);
+    text(p, 't = 0,6', D.x0 + D.w + 14, D.Y(ts) + 9, m('slice', .3), { size: 24, fill: COL.dim });
+    const gr = ocGraph(p, { x0: 800, y0: 790, w: 600, k: 330, lo: 0, hi: .72, vl: ['x(s; 0,6)'], ends: ['0', '1'], t0: m('slice', .3), tickAt: [[.6, '0,6']] });
+    draw(ocCurve(gr, s => Math.min(s, ts), COL.chalk, 5), m('slice', .8), 1.2);
+    const kc = mk('circle', { cx: gr.X(ts), cy: gr.Y(ts), r: 22, fill: 'none', stroke: COL.bad, 'stroke-width': 4 }, p);
+    put(kc, { o: 0 }); show(kc, m('kink'));
+    pulse(kc, m('kink', .5), 1.3);
+    ocRow(p, ['излом: ', $m('∂x/∂s'), ' не существует'], gr.X(ts) + 30, gr.Y(ts) - 34, m('kink', .4), { size: 26, msize: 30, fill: COL.bad });
+    text(p, 'классического решения нет', 740, 492, m('kink', 2), { size: 30, fill: COL.bad, weight: 600 });
+  }],
+
+  ['jump', 'Разрывные данные', (m) => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 230, y0: 790, w: 470, h: 520, t0: .2, name: '', sl: ['0', '', '1', ''], tl: ['0', '', '1', ''] });
+    mline(p, [F('∂x', '∂t'), ' + ', F('∂x', '∂s'), ' = 0,   x(s, 0) = 0'], 780, 150, .3, COL.chalk, 36);
+    ocRow(p, [$m('x(0, t) = 0'), ' при ', $m('t < 0,4'), ',   ', $m('x(0, t) = 1'), ' при ', $m('t ≥ 0,4')], 780, 225, .5, { size: 26, msize: 32, fill: C_PLUS });
+    const vg = ocVGraph(p, D, { xz: 70, k: 90, lo: 0, hi: 1, t0: m('switch'), ticks: [[0, '0'], [1, '1']] });
+    draw(ocCurve(vg, t => t >= .4 ? 1 : 0, C_PLUS, 5), m('switch', .3), 1.2);
+    text(p, 'x(0, t)', 70, D.y0 - D.h - 30, m('switch'), { size: 24, fill: C_PLUS, anchor: 'start' });
+    draw(D.left, m('switch', .6), .8);
+    pop(dotAt(p, D.x0, D.Y(.4), COL.task, 9), m('switch', 1.4));
+    const fld = ocField(p, D, () => null);
+    show(fld, m('travel'));
+    const gr = ocGraph(p, { x0: 820, y0: 640, w: 600, k: 240, lo: 0, hi: 1.15, vl: ['x(s, t)'], ends: ['0', '1'], t0: m('travel') });
+    const prof = ocCurve(gr, () => 0, COL.chalk, 5);
+    show(prof, m('travel')); put(prof, { d: 1 });
+    const clk = T(p, '', { x: 1420, y: 340, size: 30, font: MATH, fill: COL.dim, anchor: 'end', o: 0 });
+    show(clk, m('travel'));
+    ocRun(τ => {
+      fld.set((s, t) => t <= τ ? JUMP(s, t) : null);
+      prof.setAttribute('d', gr.d(s => JUMP(s, τ), 0, 1, 400));
+      clk.textContent = 't = ' + fmt(τ);
+    }, m('travel', .2), 4, 0, 1, io);
+    const ln = path(p, `M${D.x0} ${D.Y(.4)}L${D.X(.6)} ${D.Y(1)}`, { stroke: COL.task, 'stroke-width': 4 }, { d: 0 });
+    draw(ln, m('across', -.6), .8);
+    const ac = ocArrow(p, D.X(.32) - 34, D.Y(.72) - 34, D.X(.32) + 34, D.Y(.72) + 34, COL.bad, 4);
+    const ac2 = ocArrow(p, D.X(.32) + 34, D.Y(.72) + 34, D.X(.32) - 34, D.Y(.72) - 34, COL.bad, 4);
+    show(ac, m('across')); show(ac2, m('across'));
+    ocRow(p, ['поперёк характеристик: скачок'], 820, 730, m('across', .3), { size: 28, fill: COL.bad });
+    const al = ocArrow(p, D.X(.06), D.Y(.48), D.X(.36), D.Y(.78), COL.good, 5);
+    show(al, m('along'));
+    ocRow(p, ['вдоль характеристики: постоянно, гладко'], 820, 780, m('along', .3), { size: 28, fill: COL.good });
+  }],
+
+  ['along', 'Производная вдоль характеристики', (m) => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 140, y0: 790, w: 500, h: 500, t0: .2, name: '', sl: ['0', '', '1', ''], tl: ['0', '', '1', ''] });
+    const fld = ocField(p, D, KINK);
+    show(fld, .3);
+    path(p, `M${D.X(0)} ${D.Y(0)}L${D.X(1)} ${D.Y(1)}`, { stroke: COL.chalk, 'stroke-width': 2, 'stroke-dasharray': '8 8', o: .6 });
+    mline(p, [F('d', 'dt'), ' x', Sub('i'), '(s', E('(i)'), '(t), t) = ', F(['∂x', Sub('i')], '∂t'), ' + a', Sub('i'), ' ', F(['∂x', Sub('i')], '∂s')], 720, 200, m('chain'), COL.chalk, 42);
+    mline(p, ['= (D', Sub('A'), 'x)', Sub('i')], 1010, 300, m('da'), COL.task, 44);
+    ocRow(p, [$m('D', Sub('A'), 'x = x', Sub('t'), ' + A x', Sub('s')), ' — производная вдоль поля направлений'], 720, 370, m('da', 1), { size: 26, msize: 32, fill: COL.dim });
+    const lo = ocTrace(() => 1, .4, 0, 1), hi = ocTrace(() => 1, 0, .5, 1);
+    draw(ocChar(p, D, lo, C_PLUS, 4), m('dots'), .6); draw(ocChar(p, D, hi, C_PLUS, 4), m('dots', .2), .6);
+    const gr = ocGraph(p, { x0: 800, y0: 790, w: 560, k: 420, lo: 0, hi: .66, zl: 't', vl: ['x'], ends: ['0', '1'], t0: m('dots', .3) });
+    const d1 = dotAt(p, D.X(.4), D.Y(0), COL.task, 10), d2 = dotAt(p, D.X(0), D.Y(.5), COL.nat, 10);
+    pop(d1, m('dots', .5)); pop(d2, m('dots', .7));
+    const v1 = path(gr.g, '', { stroke: COL.task, 'stroke-width': 5 }), v2 = path(gr.g, '', { stroke: COL.nat, 'stroke-width': 5 });
+    prog(q => {
+      const t1 = .6 * q, t2 = .5 + .5 * q;
+      put(d1, { x: D.X(.4 + t1), y: D.Y(t1) }); put(d2, { x: D.X(t2 - .5), y: D.Y(t2) });
+      v1.setAttribute('d', `M${gr.X(0)} ${gr.Y(0)}L${gr.X(t1)} ${gr.Y(t1)}`);
+      v2.setAttribute('d', `M${gr.X(.5)} ${gr.Y(0)}L${gr.X(t2)} ${gr.Y(t2 - .5)}`);
+    }, m('rate', -2.5), 5, lin);
+    ocBox(p, ['D', Sub('A'), 'x = 1  почти всюду'], 1190, 300, m('rate', 2.5), { size: 38 });
+    text(p, 'обе точки растут со скоростью 1', 800, 440, m('rate', 3), { size: 26, fill: COL.dim });
+  }],
+
+  ['q2', 'Проверка: пример с изломом', () => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 160, y0: 780, w: 520, h: 520, t0: .2, name: '', sl: ['0', '', '1', ''], tl: ['0', '', '1', ''] });
+    show(ocField(p, D, KINK), .3);
+    mline(p, ['x', Sub('t'), ' + x', Sub('s'), ' = 1'], D.x0 + 40, D.y0 - D.h - 40, .3, COL.chalk, 32);
+  }, { ask: done => quiz(CARD_R, [{
+    id: 'c-kink', prompt: ['Пример ', $m('x', Sub('t'), ' + x', Sub('s'), ' = 1'), ' с нулевыми данными. Найдите значения (запятая — десятичный знак, координаты разделены точкой с запятой).'],
+    build: blanks([
+      { parts: ['x(0,3; 0,8) = ', { box: '0.3' }], why: 'Точка выше диагонали: характеристика вошла слева в момент 0,5, x = s = 0,3.', hint: 'Выше диагонали x = s.' },
+      { parts: ['x(0,8; 0,3) = ', { box: '0.3' }], why: 'Ниже диагонали: вошла снизу, x = t = 0,3.', hint: 'Ниже диагонали x = t.' },
+      { parts: ['D', Sub('A'), 'x = ', { box: '1' }, '  почти всюду'], why: 'Вдоль каждой характеристики x растёт со скоростью f = 1.', hint: 'Вспомните уравнение: чему равна сумма x_t + x_s?' },
+    ]),
+  }], done) }],
+
+  ['weak', 'Обобщённая производная', (m) => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 980, y0: 760, w: 500, h: 520, t0: .2, name: '' });
+    const lg = mk('radialGradient', { id: 'ocBlob' }, document.querySelector('#stage defs'));
+    mk('stop', { offset: 0, 'stop-color': COL.task, 'stop-opacity': .8 }, lg);
+    mk('stop', { offset: .7, 'stop-color': COL.task, 'stop-opacity': .2 }, lg);
+    mk('stop', { offset: 1, 'stop-color': COL.task, 'stop-opacity': 0 }, lg);
+    const blob = G(p, { x: D.X(.55), y: D.Y(.5), s: 0, o: 0 });
+    mk('ellipse', { rx: 150, ry: 120, fill: 'url(#ocBlob)' }, blob);
+    M(blob, ['r(s, t)'], { y: 12, size: 36, fill: COL.board });
+    pop(blob, m('test', .2));
+    const rim = path(p, `M${D.x0} ${D.y0}H${D.x0 + D.w}V${D.y0 - D.h}H${D.x0}Z`, { stroke: COL.good, 'stroke-width': 5, 'stroke-dasharray': '4 10' }, { d: 0 });
+    draw(rim, m('test', 1.2), 1);
+    ocRow(p, [$m('r = 0'), '  возле границы (финитная)'], D.x0 + 20, D.y0 + 60, m('test', 1.4), { size: 26, msize: 32, fill: COL.good });
+    mline(p, ['∬', Sub('Π'), ' ⟨x, r', Sub('t'), ' + (Ar)', Sub('s'), '⟩ ds dt = − ∬', Sub('Π'), ' ⟨D', Sub('A'), 'x, r⟩ ds dt'], 60, 260, m('test', 2), COL.chalk, 38);
+    const arc = path(p, 'M270 300Q430 380 690 300', { stroke: COL.task, 'stroke-width': 4 }, { d: 0 });
+    draw(arc, m('parts', .5), .8);
+    ocRow(p, ['для гладкой ', $m('x'), ': интегрирование по частям,'], 60, 420, m('parts'), { size: 28, msize: 34 });
+    ocRow(p, ['краевых членов нет — на границе ', $m('r = 0')], 60, 465, m('parts', 3), { size: 28, msize: 34, fill: COL.good });
+    ocBox(p, ['Определение 1.1'], 60, 570, m('def'), { size: 32 });
+    ocRow(p, [$m('D', Sub('A'), 'x ∈ L', Sub('1,loc'), '(Π)'), ' — обобщённая производная по Соболеву,'], 60, 640, m('def', .5), { size: 26, msize: 30 });
+    ocRow(p, ['если равенство верно для любой ', $m('r ∈ C', E('1')), ', финитной в ', $m(Ov('Π'))], 60, 682, m('def', 1.5), { size: 26, msize: 30 });
+    ocRow(p, [$m('x ∈ C', E('1'), '(', Ov('Π'), ')'), '   ⇒   ', $m('D', Sub('A'), 'x = x', Sub('t'), ' + A x', Sub('s'))], 60, 770, m('smooth'), { size: 28, msize: 36, fill: COL.task });
+  }],
+
+  ['space', 'Обобщённое решение', (m) => {
+    const p = panel(0);
+    mline(p, ['H', Sub('A'), '(Π) = { x ∈ L', Sub('2'), '(Π) :  D', Sub('A'), 'x ∈ L', Sub('2'), '(Π) }'], 60, 180, m('space', .2), COL.chalk, 40);
+    mline(p, ['⟨x, y⟩', Sub(['H', Sub('A')]), ' = ∬', Sub('Π'), ' (⟨x, y⟩ + ⟨D', Sub('A'), 'x, D', Sub('A'), 'y⟩) ds dt'], 60, 260, m('space', 3), COL.dim, 34);
+    ocRow(p, ['гильбертово пространство; ', $m('C', E('1'), '(', Ov('Π'), ')'), ' в нём всюду плотно'], 60, 330, m('space', 6), { size: 26, msize: 30, fill: COL.dim });
+    ocBox(p, ['Определение 1.2'], 60, 440, m('sol'), { size: 32 });
+    ocRow(p, [$m('x ∈ H', Sub('A'), '(Π)'), ',   ', $m('D', Sub('A'), 'x = f(x, s, t)'), '  почти всюду в ', $m('Π'), '   (1.5)'], 60, 515, m('sol', .8), { size: 28, msize: 36 });
+    ocRow(p, ['следы ', $m('x|', Sub(['t=t', Sub('0')]), ', x|', Sub(['s=s', Sub('0')]), ', x|', Sub(['s=s', Sub('1')])), ' удовлетворяют (1.2), (1.3)'], 60, 590, m('trace'), { size: 28, msize: 36 });
+    const D = ocDomain(p, { x0: 1060, y0: 740, w: 420, h: 440, t0: .2, name: '' });
+    const fld = ocField(p, D, KINK);
+    show(fld, .3);
+    draw(D.bottom, m('trace', .4), .6); draw(D.left, m('trace', .8), .6); draw(D.right, m('trace', 1.2), .6);
+    ocRow(p, [$m('x = min(s, t)'), '  — обобщённое решение примера'], 60, 700, m('ok'), { size: 28, msize: 36, fill: COL.good });
+  }],
+
+  ['integral', 'Интегральная форма (1.7)', (m) => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 140, y0: 790, w: 560, h: 600, t0: .2, name: '' });
+    draw(D.bottom, .4, .6); draw(D.left, .6, .6);
+    ocFamily(G(p, { o: .3 }), D, A_PLUS, SEEDS_PLUS, C_PLUS, .3, { heads: false, width: 2 });
+    const P0 = [.3, .9], back = ocTrace(A_PLUS, P0[0], P0[1], -1), [ξ, τ] = back[0];
+    pop(dotAt(p, D.X(P0[0]), D.Y(P0[1]), COL.task, 11), m('point'));
+    mline(p, ['(s, t)'], D.X(P0[0]) + 20, D.Y(P0[1]) - 18, m('point', .3), COL.task, 32);
+    const rev = ocChar(p, D, back.slice().reverse(), COL.task, 5);
+    draw(rev, m('back'), 2);
+    const en = dotAt(p, D.X(ξ), D.Y(τ), τ > 1e-6 ? C_PLUS : C_INIT, 11);
+    pop(en, m('back', 2));
+    mline(p, ['(ξ', E('(i)'), ', τ', E('(i)'), ')'], D.X(ξ) + 24, D.Y(τ) + (τ > .05 ? 10 : -20), m('back', 2.2), COL.task, 30);
+    text(p, 'точка входа', D.X(ξ) + 24, D.Y(τ) + (τ > .05 ? 46 : -60), m('entry'), { size: 24, fill: COL.task });
+    // The value: entry value, then the accumulated integral of f along the way (a growing bar).
+    const pieces = [['x', Sub('i'), '(s, t) = '], ['x', Sub('i'), '(ξ', E('(i)'), ', τ', E('(i)'), ')'], [' + '], ['∫', Lim('τ⁽ⁱ⁾', 't'), ' f', Sub('i'), '(x(ξ, τ), ξ, τ) dτ']];
+    let px = 800;
+    const pw = pieces.map(parts => { const e = mline(p, parts, px, 220, m('entry', .3), COL.chalk, 38); const r = [px, e._w]; px += e._w; return r; });
+    ocFrame(p, pw[1][0] - 8, 178, pw[1][1] + 16, 60, C_PLUS, m('entry', 1));
+    ocFrame(p, pw[3][0] - 8, 166, pw[3][1] + 16, 82, COL.task, m('sum', .5));
+    ocRow(p, [$m('ξ = s', E('(i)'), '(s, t; τ)'), ' — вдоль характеристики'], 800, 300, m('sum', 1.5), { size: 26, msize: 30, fill: COL.dim });
+    text(p, '(1.7)', 1520, 300, m('sum', 1.5), { size: 26, fill: COL.dim });
+    const rider = dotAt(p, D.X(ξ), D.Y(τ), COL.task, 9);
+    const bar = mk('rect', { x: 820, y: 560, width: 0, height: 34, rx: 6, fill: COL.task }, p);
+    put(bar, { o: 0 });
+    const bg = mk('rect', { x: 820, y: 560, width: 560, height: 34, rx: 6, fill: 'none', stroke: COL.dim, 'stroke-width': 2 }, p);
+    put(bg, { o: 0 });
+    show(bg, m('sum')); show(bar, m('sum'));
+    text(p, 'накопленный ∫ fᵢ dτ', 820, 540, m('sum'), { size: 24, fill: COL.task });
+    pop(rider, m('sum', .2));
+    prog(q => { const [s, t] = ocAlong(back, q); put(rider, { x: D.X(s), y: D.Y(t) }); bar.setAttribute('width', 560 * q * (.4 + .6 * q)); }, m('sum', .4), 4, io);
+    ocRow(p, ['гладкое решение  ⇔  (1.1) и (1.7) равносильны'], 800, 680, m('equiv'), { size: 28, fill: COL.chalk });
+    ocRow(p, ['в (1.7) нет производных → годится для разрывных данных'], 800, 730, m('equiv', 9), { size: 26, fill: COL.good });
+  }],
+
+  ['theorem', 'Теорема 1.1', (m) => {
+    const p = panel(0);
+    ocBox(p, ['Теорема 1.1'], 70, 160, .2, { size: 36 });
+    ocRow(p, ['при ограниченных данных (в классах ', $m('L', Sub('∞')), ')'], 320, 152, .5, { size: 28, msize: 32, fill: COL.dim });
+    text(p, 'Если', 70, 260, m('cond'), { size: 30, weight: 600, fill: COL.task });
+    ocSteps(p, [
+      [$m('a', Sub('i'), ' ∈ C', E('1'), '(', Ov('Π'), ')')],
+      [$m('M(t), N(t)'), ' непрерывны на ', $m('T')],
+      [$m('p ∈ L', Sub('∞'), '(S),  g', E('(1)'), ', g', E('(2)'), ' ∈ L', Sub('∞'), '(T)')],
+      [$m('f(x, ·, ·) ∈ L', Sub('∞'), '(Π)'), ' при каждом ', $m('x')],
+      [$m('‖f‖ ≤ K', Sub('1'), '(β),  ‖f', Sub('x'), '‖ ≤ K', Sub('2'), '(β)'), ' на шарах ', $m('‖x‖ < β'), '   (1.6)'],
+    ], 70, 330, 70, [m('cond', .5), m('cond', 2.5), m('cond', 4.5), m('cond', 7), m('cond', 9)], { size: 26 });
+    ocRow(p, ['то существует единственная ', $m('x ∈ A', Sub('∞'), '(Π)'), ':'], 800, 260, m('cls'), { size: 30, msize: 34, weight: 600, fill: COL.task });
+    ocSteps(p, [
+      ['абсолютно непрерывна вдоль характеристик'],
+      [$m('D', Sub('A'), 'x = f'), ' почти всюду   (1.5)'],
+      ['следы удовлетворяют (1.2), (1.3)'],
+      ['выполнены интегральные уравнения (1.7)'],
+    ], 800, 330, 70, [m('cls', .5), m('cls', 6), m('cls', 8), m('cls', 10)], { size: 26, color: COL.good });
+    ocRow(p, ['Зачем (1.7) в книге: оценки изменения состояния при изменении управления'], 70, 760, m('use'), { size: 28, fill: COL.task });
+  }],
+
+  ['parts', 'Интегрирование по частям (1.8)', (m) => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 1060, y0: 720, w: 420, h: 440, t0: .2, name: '' });
+    const L1 = mline(p, ['∬', Sub('Π'), ' ⟨y, D', Sub('A'), 'x⟩ ds dt ='], 60, 200, m('lhs', -2), COL.chalk, 40);
+    mline(p, ['= ∫', Sub('S'), ' (⟨y(s, t', Sub('1'), '), x(s, t', Sub('1'), ')⟩ − ⟨y(s, t', Sub('0'), '), x(s, t', Sub('0'), ')⟩) ds'], 60, 300, m('tb'), COL.chalk, 34);
+    const hl = (e, t0) => { const c = path(p, e.getAttribute('d'), { stroke: COL.task, 'stroke-width': 9 }, { d: 0 }); draw(c, t0, .6); return c; };
+    hl(D.top, m('tb', .3)); hl(D.bottom, m('tb', .6));
+    mline(p, ['− ∫', Sub('T'), ' (⟨y(s', Sub('0'), ', t), A x(s', Sub('0'), ', t)⟩ − ⟨y(s', Sub('1'), ', t), A x(s', Sub('1'), ', t)⟩) dt'], 60, 400, m('lr'), COL.chalk, 34);
+    hl(D.left, m('lr', .3)); hl(D.right, m('lr', .6));
+    mline(p, ['− ∬', Sub('Π'), ' ⟨D', Sub('A'), 'y + A', Sub('s'), 'y, x⟩ ds dt'], 60, 500, m('rest'), COL.chalk, 38);
+    text(p, '(1.8)', 700, 490, m('rest', .5), { size: 26, fill: COL.dim });
+    const inside = mk('rect', { x: D.x0 + 6, y: D.y0 - D.h + 6, width: D.w - 12, height: D.h - 12, fill: COL.task, 'fill-opacity': .18 }, p);
+    put(inside, { o: 0 }); show(inside, m('rest', .4)); tw(inside, { o: .3 }, m('rest', 2.5), .6);
+    text(p, 'производная перешла с x на y; на сторонах — следы', 60, 600, m('rest', 4), { size: 28, fill: COL.dim });
+    ocRow(p, ['→ § 1.3: отсюда возникнет ', cm(C_ADJ, 'сопряжённая задача')], 60, 700, m('later'), { size: 30, msize: 30, fill: COL.task });
+    ocRow(p, [$m('x, y ∈ A', Sub('∞'), '(Π)')], D.x0 + D.w / 2, D.y0 + 80, m('lhs'), { size: 26, msize: 30, fill: COL.dim, anchor: 'middle' });
+  }],
+
+  ['q3', 'Проверка: формула (1.7)', () => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 160, y0: 780, w: 520, h: 560, t0: .2, name: '' });
+    const back = ocTrace(A_PLUS, .5, .8, -1);
+    draw(ocChar(p, D, back, COL.task, 5), .4, .8);
+    pop(dotAt(p, D.X(.5), D.Y(.8), COL.task, 10), .3);
+    mline(p, ['(s, t)'], D.X(.5) + 18, D.Y(.8) - 16, .5, COL.task, 30);
+  }, { ask: done => quiz(CARD_R, [{
+    id: 'c-entry', prompt: ['Что нужно знать, чтобы по формуле (1.7) найти ', $m('x', Sub('i'), '(s, t)'), '?'],
+    build: choice([
+      ['значение ', $m('x', Sub('i')), ' в точке входа характеристики и ', $m('f', Sub('i')), ' вдоль неё'],
+      ['значения ', $m('x'), ' на верхней стороне ', $m('t = t', Sub('1'))],
+      ['производные ', $m('x'), ' по ', $m('s'), ' и ', $m('t'), ' в точке ', $m('(s, t)')],
+      ['значения всех компонент на всей нижней стороне'],
+    ], 0, 'Значение переносится из точки входа и меняется только за счёт f вдоль характеристики.',
+      [null, 'Через верхнюю сторону характеристики выходят: данных там нет, туда значения только приходят.',
+        'В (1.7) нет производных, поэтому формула годится и для разрывных решений.',
+        'Нужна только одна точка — точка входа своей характеристики (и f на пути).']),
+  }], done) }],
+
+  ['wrap', 'Итоги', (m) => {
+    const p = panel(0);
+    [[['Характеристики: ', $m(F('ds', 'dt'), ' = a', Sub('i')), '; вдоль них ', $m('x', Sub('i')), ' меняется за счёт ', $m('f', Sub('i'))], 'w1'],
+      [['Условия — в точках входа: снизу все, слева ', cm(C_PLUS, 'x', E('+')), ', справа ', cm(C_MINUS, 'x', E('−'))], 'w2'],
+      [['Изломы и разрывы → обобщённое решение: гладкость только вдоль характеристик'], 'w3'],
+      [['Инструменты дальше: интегральная форма (1.7) и формула (1.8)'], 'w4']].forEach(([items, mark], i) => {
+      const g = G(p, { x: -16, y: 250 + i * 140, o: 0 });
+      mk('circle', { cx: 120, cy: -12, r: 26, fill: COL.task }, g);
+      T(g, String(i + 1), { x: 120, y: -1, size: 30, fill: COL.board, weight: 700, anchor: 'middle' });
+      const r = ocRow(g, items, 180, 0, undefined, { size: 32, msize: 38, weight: 600 });
+      put(r, { o: 1 });
+      tw(g, { o: 1, x: 0 }, m(mark), .6);
+    });
+  }],
+
+  ['final1', 'Практика 1', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-transport', prompt: ['В ', $m('Π = (0, 1) × (0, 1)'), ': ', $m(F('∂x', '∂t'), ' + 2', F('∂x', '∂s'), ' = 0'), ',  ', $m('x(s, 0) = s'), ',  ', $m('x(0, t) = −t'), '. Найдите значения (координаты через точку с запятой).'],
+    build: blanks([
+      { parts: ['x(0,5; 0,1) = ', { box: '0.3' }], why: 'Характеристика s − 2t = 0,3 вошла снизу в точке s = 0,3, поэтому x = 0,3.', hint: 'Пройдите назад по прямой s − 2t = const до стороны Π.' },
+      { parts: ['x(0,2; 0,5) = ', { box: '-0.4' }], why: 's − 2t = −0,8 < 0: характеристика вошла слева, 0,2 = 2(0,5 − τ), τ = 0,4, x = −τ = −0,4.', hint: 'Эта характеристика входит слева: найдите момент входа τ из 0,2 = 2(0,5 − τ).' },
+    ]),
+  }], done, 'Практика по параграфу   1 из 3') }],
+
+  ['final2', 'Практика 2', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-source', prompt: ['В ', $m('Π = (0, 1) × (0, 1)'), ': ', $m(F('∂x', '∂t'), ' − ', F('∂x', '∂s'), ' = 2'), ',  ', $m('x(s, 0) = 1'), ',  ', $m('x(1, t) = 0'), '. Скорость −1: характеристики ', $m('s + t = const'), ' входят снизу или справа.'],
+    build: blanks([
+      { parts: ['x(0,5; 0,3) = ', { box: '1.6' }], why: 's + t = 0,8: вход снизу в s = 0,8 со значением 1; за время 0,3 добавилось 2 · 0,3. Итого 1,6.', hint: 'Найдите точку входа (s + t = 0,8) и прибавьте 2 · (время в пути).' },
+      { parts: ['x(0,5; 0,8) = ', { box: '1' }], why: 's + t = 1,3: вход справа при τ = 0,3 со значением 0; за время 0,5 добавилось 2 · 0,5 = 1.', hint: 'Здесь s + t = 1,3 > 1: характеристика вошла справа в момент τ = 0,3.' },
+    ]),
+  }], done, 'Практика по параграфу   2 из 3') }],
+
+  ['final3', 'Практика 3', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-sides', prompt: ['Система (1.1) с ', $m('A = diag(a', Sub('1'), ', a', Sub('2'), ', a', Sub('3'), ', a', Sub('4'), ')'), '. Где, кроме нижней стороны, нужно граничное условие для каждой компоненты?'],
+    build: grid([
+      { parts: ['a', Sub('1'), ' = 2'], ans: ['L'], why: 'a₁ > 0: характеристики входят слева.' },
+      { parts: ['a', Sub('2'), ' = −1'], ans: ['R'], why: 'a₂ < 0: входят справа.' },
+      { parts: ['a', Sub('3'), ' = 0'], ans: ['N'], why: 'a₃ = 0: вертикальные линии, данные только снизу.' },
+      { parts: ['a', Sub('4'), ' = 1 + s²'], ans: ['L'], why: 'a₄ > 0 при всех s: входят слева.' },
+    ], [['L', 'слева, s = s₀', C_PLUS, '1'], ['R', 'справа, s = s₁', C_MINUS, '2'], ['N', 'не нужно', COL.dim, '3']], { multi: false }),
+  }, {
+    id: 'p-weak', prompt: ['Функция ', $m('x = min(s, t)'), ' в примере ', $m('x', Sub('t'), ' + x', Sub('s'), ' = 1'), ' с нулевыми данными. Что верно?'],
+    build: choice([
+      ['это обобщённое решение: ', $m('D', Sub('A'), 'x = 1'), ' почти всюду'],
+      ['это классическое решение'],
+      ['это не решение: на диагонали нет производных'],
+      ['это не решение: значения на диагонали не определены'],
+    ], 0, 'Излом лежит на характеристике s = t; вдоль характеристик x растёт со скоростью 1, а диагональ — множество меры нуль.',
+      [null, 'На диагонали нет частных производных, так что классического решения нет.',
+        'Обобщённому решению нужна только производная вдоль характеристик, и она есть: D_A x = 1.',
+        'Значения определены: min(s, t) = s = t на диагонали; к тому же диагональ имеет меру нуль.']),
+  }], done, 'Практика по параграфу   3 из 3') }],
+
+  ['finish', 'Готово', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>

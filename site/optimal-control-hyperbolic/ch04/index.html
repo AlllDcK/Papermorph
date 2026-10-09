@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>§ 1.4. Принцип максимума</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render"><!-- hold the first frame until the player exists, so the page transition can run -->
+<style>
+.screen .prompt { font-size: 32px; line-height: 1.45; }
+</style>
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="../lib/oc.js"></script>
+<script src="audio/ru/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = { number: 4, label: '§ 1.4', title: 'Принцип максимума', minutes: 13, language: 'ru' };
+
+/* ---------- chapter data ---------- */
+const TAU = .6, EPS0 = .1;            // needle beat: τ, starting ε; u ≡ 1, ū = −1
+// Needle in the toy with u ≡ 1, ū = −1 on (τ − ε, τ]: Δy(t) = −2 · clamp(t − τ + ε, 0, ε), Δx(s, t) = Δy(t − s).
+const needleDx = (τ, ε) => (s, t) => t < s ? 0 : -2 * Math.min(Math.max(t - s - τ + ε, 0), ε);
+const zU = u => (u + 1) / 2;
+const RIGHTCARD = { x: 980, y: 130, w: 590, cls: 'side', maxH: 640 };
+// Path of a control graph u(t) = 1 with a needle ū on (τ − ε, τ].
+const needleD = (gr, τ, ε, ub = -1) => `M${gr.X(0)} ${gr.Y(1)}H${gr.X(τ - ε)}V${gr.Y(ub)}H${gr.X(τ)}V${gr.Y(1)}H${gr.X(1)}`;
+// A graph of h over U = [−1, 1].
+function hGraph(p, { x0, y0, w, k, lo, hi, t0 }) {
+  const gr = ocGraph(p, { x0, y0, w, k, lo, hi, zl: 'u', vl: ['h'], ends: ['−1', '1'], t0, az: .5 });
+  const band = mk('rect', { x: gr.X(0), y: y0 - 6, width: w, height: 12, rx: 6, fill: C_U, 'fill-opacity': .5 }, gr.g);
+  M(gr.g, ['U'], { x: gr.X(.78), y: y0 + 40, size: 28, fill: C_U });
+  gr.U = u => gr.X(zU(u));
+  return gr;
+}
+
+/* ---------- beats ---------- */
+const BEATS = [
+  ['intro', '§ 1.4', (m, D) => {
+    const g = G(scene, { o: 0, y: 24 });
+    T(g, 'Глава 1 · Гиперболические системы с управляемыми связями на границе · § 1.4', { x: 800, y: 270, size: 26, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Принцип максимума', { x: 800, y: 400, size: 88, weight: 600, anchor: 'middle' });
+    tw(g, { o: 1, y: 0 }, .2, 1.1, out);
+    const gr = ocGraph(scene, { x0: 600, y0: 760, w: 400, k: 110, lo: -1.2, hi: 1.2, zl: 't', vl: ['u'], ends: ['', ''], t0: .9 });
+    const nd = path(gr.g, needleD(gr, .6, .12), { stroke: C_U, 'stroke-width': 4 }, { d: 0 });
+    draw(nd, 1.2, 1.2);
+    prog(q => nd.setAttribute('d', needleD(gr, .6, .12 - .09 * q)), 2.6, Math.max(2, D - 4), io);
+    const r = text(scene, 'Игла в управлении и необходимое условие оптимальности', 800, 520, m('sub'), { size: 32, fill: COL.dim, anchor: 'middle' });
+    for (const e of [g, r, gr.g]) tw(e, { o: 0 }, D - .9, .8);
+  }],
+
+  ['needle', 'Игольчатая вариация', (m) => {
+    const p = panel(0);
+    const gr = ocGraph(p, { x0: 110, y0: 360, w: 900, k: 140, lo: -1.3, hi: 1.3, zl: 't', vl: ['u'], ends: ['t₀', 't₁'], t0: .2, tickAt: [[1, '1'], [-1, '−1']] });
+    const base = path(gr.g, `M${gr.X(0)} ${gr.Y(1)}H${gr.X(1)}`, { stroke: C_U, 'stroke-width': 5 }, { d: 0 });
+    draw(base, .4, .8);
+    text(p, 'u(t)', gr.X(.08), gr.Y(1) - 16, .6, { size: 26, fill: C_U });
+    const vlines = G(p, { o: 0 }), v1 = path(vlines, '', { stroke: COL.dim, 'stroke-width': 2, 'stroke-dasharray': '6 8' }), v2 = path(vlines, '', { stroke: COL.dim, 'stroke-width': 2, 'stroke-dasharray': '6 8' });
+    const l1 = M(vlines, ['τ − ε'], { y: gr.y0 + 36, size: 26, fill: COL.dim, anchor: 'end' }), l2 = M(vlines, ['τ'], { y: gr.y0 + 36, size: 26, fill: COL.task, anchor: 'start' });
+    const nd = path(gr.g, '', { stroke: COL.task, 'stroke-width': 5 });
+    put(nd, { o: 0 });
+    const setε = ε => {
+      nd.setAttribute('d', needleD(gr, TAU, ε));
+      v1.setAttribute('d', `M${gr.X(TAU - ε)} ${gr.Y(1.25)}V${gr.y0 + 10}`); v2.setAttribute('d', `M${gr.X(TAU)} ${gr.Y(1.25)}V${gr.y0 + 10}`);
+      put(l1, { x: gr.X(TAU - ε) - 6 }); put(l2, { x: gr.X(TAU) + 6 });
+    };
+    setε(EPS0);
+    show(vlines, m('pick')); show(nd, m('cut'));
+    ocRow(p, ['параметры: ', $m('τ ∈ (t', Sub('0'), ', t', Sub('1'), '],   ε ∈ (0, τ − t', Sub('0'), '],   ū ∈ U')], 60, 600, m('pick'), { size: 26, msize: 32 });
+    mline(p, ['Δu(t) = ū − u(t),   t ∈ (τ − ε, τ]'], 60, 680, m('cut'), COL.task, 36);
+    mline(p, ['Δu(t) = 0,   t ∈ T \\ (τ − ε, τ]'], 60, 740, m('cut', 1), COL.dim, 36);
+    text(p, '(4.1)', 720, 670, m('cut', 1), { size: 26, fill: COL.dim });
+    mline(p, ['ū'], gr.X(TAU) + 30, gr.Y(-1) + 10, m('cut', 1), COL.task, 32);
+    ocRow(p, ['узкая: длина ', $m('ε')], 1080, 300, m('thin'), { size: 28, msize: 32, fill: COL.task });
+    const ar = ocArrow(p, gr.X(TAU) + 60, gr.Y(1) + 6, gr.X(TAU) + 60, gr.Y(-1) - 6, COL.bad, 3);
+    show(ar, m('tall'));
+    ocRow(p, ['но не обязательно низкая:'], 1080, 350, m('tall'), { size: 28, fill: COL.bad });
+    ocRow(p, [$m('|ū − u|'), ' может быть большим'], 1080, 392, m('tall', .3), { size: 28, msize: 32, fill: COL.bad });
+    ocRow(p, [$m('ε → 0')], 1080, 470, m('shrink'), { size: 28, msize: 40, fill: COL.task });
+    ocRun(setε, m('shrink', .3), 2.5, EPS0, .025, io);
+  }],
+
+  ['small', 'Остаток мал', (m) => {
+    const p = panel(0);
+    const D = ocDomain(p, { x0: 940, y0: 790, w: 500, h: 500, t0: .2, name: '', sl: ['0', '', '1', ''], tl: ['0', '', '1', ''] });
+    const fld = ocField(p, D, needleDx(.5, .15), { scale: .3 });
+    show(fld, .4);
+    const ep = T(p, '', { x: D.x0 + D.w, y: D.y0 - D.h - 20, size: 30, font: MATH, fill: COL.task, anchor: 'end', o: 0 });
+    show(ep, .4);
+    const setε = ε => { fld.set(needleDx(.5, ε), .3); ep.textContent = 'ε = ' + fmt(ε, 3); };
+    setε(.15);
+    mline(p, ['‖Δx‖ ≤ K ∫', Sub('T'), ' ‖Δ', Sub('ū'), 'g‖ dt ≤ KCε'], 60, 200, m('est'), COL.chalk, 38);
+    text(p, 'по (3.9): интеграл по отрезку длины ε', 60, 255, m('est', 2), { size: 26, fill: COL.dim });
+    ocRun(setε, m('pic', .2), 3, .15, .03, io);
+    ocRow(p, ['поле ', $m('Δx'), ' бледнеет вместе с ', $m('ε')], D.x0, D.y0 + 80, m('pic'), { size: 24, msize: 28, fill: COL.dim });
+    mline(p, ['∫', Sub('S'), ' o', Sub('φ'), '(‖Δx‖) ds,   ∫', Sub('T'), ' o', Sub('h'), '(…) dt,   ∬', Sub('Π'), ' o', Sub('H'), '(…)  =  o(ε)'], 60, 360, m('eta'), COL.chalk, 32);
+    mline(p, ['∫', Lim('τ−ε', 'τ'), ' ‖Δ', Sub('ū'), 'h', Sub(['x', E('+')]), '‖ · ‖Δx', E('+'), '‖ dt ≤ C ε · ε'], 60, 460, m('cross'), COL.chalk, 32);
+    text(p, 'смешанное слагаемое живёт только на игле', 60, 515, m('cross', 1), { size: 26, fill: COL.dim });
+    ocBox(p, ['η = o(ε)'], 60, 640, m('res'), { size: 44 });
+  }],
+
+  ['formula', 'Формула (4.2)', (m) => {
+    const p = panel(0);
+    mline(p, ['ΔJ(u) = −∫', Lim('τ−ε', 'τ'), ' Δ', Sub('ū'), 'h(p(t), x', E('+'), '(s', Sub('0'), ', t), u(t), t) dt + o(ε)'], 60, 180, m('res'), C_ADJ, 40);
+    text(p, '(4.2)', 1500, 170, m('res', .4), { size: 26, fill: COL.dim });
+    const gr = ocGraph(p, { x0: 160, y0: 640, w: 880, k: 280, lo: 0, hi: 1.1, zl: 't', vl: ['Δ', Sub('ū'), 'h'], ends: ['t₀', 't₁'], t0: m('area', -1) });
+    const f = t => .45 + .25 * Math.sin(6 * t) + .1 * t;
+    draw(ocCurve(gr, f, C_ADJ, 4), m('area', -.5), 1);
+    const τ = .6, ε = .06;
+    const slab = mk('rect', { x: gr.X(τ - ε), y: gr.Y(f(τ)), width: gr.X(τ) - gr.X(τ - ε), height: gr.y0 - gr.Y(f(τ)), fill: COL.task, 'fill-opacity': .5, stroke: COL.task, 'stroke-width': 2 }, p);
+    put(slab, { o: 0 }); show(slab, m('area', .5));
+    ocBrace(p, gr.X(τ - ε), gr.X(τ), gr.y0 + 14, COL.task, m('area', 1));
+    mline(p, ['ε'], gr.X(τ - ε / 2), gr.y0 + 70, m('area', 1.2), COL.task, 30, 'middle');
+    mline(p, ['τ'], gr.X(τ) + 8, gr.y0 + 36, m('area', 1.2), COL.task, 26);
+    ocRow(p, ['площадь ≈ ширина × высота'], 1080, 420, m('area', 2), { size: 28, fill: COL.task });
+    mline(p, ['ΔJ ≈ −ε [h(p(τ), x', E('+'), '(s', Sub('0'), ', τ), ū, τ) − h(p(τ), x', E('+'), '(s', Sub('0'), ', τ), u(τ), τ)]'], 60, 780, m('approx'), COL.task, 34);
+    text(p, '(почти при всех τ)', 1080, 470, m('approx', 3), { size: 24, fill: COL.dim });
+  }],
+
+  ['argument', 'Почему максимум', (m) => {
+    const p = panel(0);
+    const hf = u => .55 - .45 * (u - .35) ** 2;
+    const gr = hGraph(p, { x0: 140, y0: 640, w: 760, k: 380, lo: -.2, hi: .75, t0: m('curve') });
+    draw(ocCurve(gr, z => hf(2 * z - 1), C_ADJ, 5), m('curve', .3), 1.2);
+    text(p, 'h(p(τ), x⁺(s₀, τ), u, τ) при фиксированном τ', 140, 150, m('curve'), { size: 26, fill: C_ADJ });
+    const us = -.55, d0 = dotAt(p, gr.U(us), gr.Y(hf(us)), C_U, 12);
+    pop(d0, m('bad'));
+    mline(p, ['u*(τ)'], gr.U(us) - 16, gr.Y(hf(us)) - 14, m('bad', .2), C_U, 28, 'end');
+    const ub = .35, d1 = dotAt(p, gr.U(ub), gr.Y(hf(ub)), COL.task, 12);
+    pop(d1, m('better'));
+    mline(p, ['ū'], gr.U(ub), gr.Y(hf(ub)) - 26, m('better', .2), COL.task, 32, 'middle');
+    const gap = path(p, `M${gr.U(ub) + 40} ${gr.Y(hf(us))}V${gr.Y(hf(ub))}`, { stroke: COL.task, 'stroke-width': 4 }, { d: 0 });
+    const gl = path(p, `M${gr.U(us)} ${gr.Y(hf(us))}H${gr.U(ub) + 50}`, { stroke: COL.dim, 'stroke-width': 2, 'stroke-dasharray': '6 8' }, { d: 0 });
+    draw(gl, m('sign', -.5), .5); draw(gap, m('sign'), .5);
+    mline(p, ['Δ', Sub('ū'), 'h > 0'], gr.U(ub) + 56, (gr.Y(hf(us)) + gr.Y(hf(ub))) / 2 + 12, m('sign', .3), COL.task, 32);
+    mline(p, ['ΔJ ≈ −ε · Δ', Sub('ū'), 'h < 0'], 1000, 330, m('sign', 2), COL.task, 38);
+    ocRow(p, ['игла уменьшила J — противоречие ✗'], 1000, 420, m('contra'), { size: 28, fill: COL.bad, weight: 600 });
+    tw(d0, { x: gr.U(ub) }, m('fix', .5), 1.2);
+    prog(q => { const u = us + (ub - us) * q; put(d0, { y: gr.Y(hf(u)) }); }, m('fix', .5), 1.2);
+    ocRow(p, ['значит, ', $m('u*(τ)'), ' — точка максимума  ✓'], 1000, 520, m('fix', 1.5), { size: 28, msize: 32, fill: COL.good, weight: 600 });
+  }],
+
+  ['theorem', 'Теорема 4.1', (m) => {
+    const p = panel(0);
+    text(p, 'Теорема 4.1', 60, 140, .2, { size: 34, weight: 600, fill: COL.task });
+    ocRow(p, ['Если ', $m('{u*, x*}'), ' — оптимальный процесс в задаче (1.1), (2.1)–(2.5), то почти всюду на ', $m('T')], 60, 220, m('stmt'), { size: 28, msize: 34 });
+    ocBox(p, ['h(p*(t), x', E('+*'), '(s', Sub('0'), ', t), u*(t), t) = max', Sub('u ∈ U'), ' h(p*(t), x', E('+*'), '(s', Sub('0'), ', t), u, t)'], 60, 340, m('stmt', 1.5), { size: 40, color: C_ADJ });
+    text(p, '(4.3)', 1480, 330, m('stmt', 2), { size: 26, fill: COL.dim });
+    ocRow(p, [cm(C_ADJ, 'p*(t)'), ' — решение сопряжённой задачи (3.5)–(3.6) при ', $m('x = x*,  u = u*')], 60, 450, m('adj'), { size: 28, msize: 32 });
+    ocRow(p, ['аналог классического принципа максимума Л. С. Понтрягина'], 60, 530, m('name'), { size: 28, fill: COL.task });
+    text(p, 'Замечание 4.1: то же, если и правая граница управляется своей ОДУ.', 60, 640, m('rem'), { size: 24, fill: COL.dim });
+    text(p, 'Замечание 4.2: с распределёнными управлениями добавляется условие максимума для H.', 60, 685, m('rem', 3), { size: 24, fill: COL.dim });
+  }],
+
+  ['q1', 'Проверка: где максимум', () => {
+    const p = panel(0);
+    hGraph(p, { x0: 120, y0: 560, w: 700, k: 600, lo: -.4, hi: .4, t0: .3 });
+    mline(p, ['h(u) = p(τ) · u,    p(τ) = −0,3'], 120, 170, .4, C_ADJ, 36);
+  }, { ask: done => quiz(RIGHTCARD, [{
+    id: 'c-argmax', prompt: ['В примере ', $m('h = p(τ) u'), ', ', $m('U = [−1, 1]'), ', и в момент τ ', $m('p(τ) = −0,3'), '. Где максимум ', $m('h'), ' по ', $m('u ∈ U'), '?'],
+    build: choice([[$m('u = −1')], [$m('u = 1')], [$m('u = 0')], ['в любой точке ', $m('U')]], 0,
+      'h = −0,3u убывает по u, поэтому максимум на левом конце: h(−1) = 0,3.',
+      [null, 'При p < 0 функция −0,3u убывает: в u = 1 она минимальна.', 'h(0) = 0, а h(−1) = 0,3 больше.', 'Так было бы только при p(τ) = 0.'],
+      () => {}),
+  }], done) }],
+
+  ['toy', 'Пример: u* = sign p', (m) => {
+    const p = panel(0);
+    mline(p, ['h = p(t) · u,    u ∈ [−1, 1]'], 1080, 170, m('h'), C_ADJ, 36);
+    mline(p, ['u*(t) = sign p(t)'], 1080, 260, m('max'), COL.task, 40);
+    ocRow(p, ['максимум линейной функции — на конце'], 1080, 310, m('max', .5), { size: 24, fill: COL.dim });
+    const pg = ocGraph(p, { x0: 120, y0: 300, w: 860, k: 300, lo: -.55, hi: .25, zl: 't', vl: ['p(t)'], ends: ['0', '1'], t0: m('p', -1) });
+    const pc = ocCurve(pg, TOY.p, C_ADJ, 5);
+    draw(pc, m('p'), 1.2);
+    mline(p, ['p(t) = (3t − 1)(1 − t)/2'], pg.X(.55), pg.Y(-.35), m('p', .5), C_ADJ, 30);
+    const neg = mk('rect', { x: pg.X(0), y: pg.y0, width: pg.X(1 / 3) - pg.X(0), height: pg.k * .5, fill: A_NEG, 'fill-opacity': .18 }, p);
+    const pos = mk('rect', { x: pg.X(1 / 3), y: pg.y0 - pg.k * .2, width: pg.X(1) - pg.X(1 / 3), height: pg.k * .2, fill: A_POS, 'fill-opacity': .2 }, p);
+    put(neg, { o: 0 }); put(pos, { o: 0 }); show(neg, m('sign')); show(pos, m('sign', .8));
+    text(p, 'p < 0', pg.X(.12), pg.y0 + 40, m('sign'), { size: 24, fill: A_NEG, anchor: 'middle' });
+    text(p, 'p > 0', pg.X(.7), pg.y0 - 30, m('sign', .8), { size: 24, fill: A_POS, anchor: 'middle' });
+    const ug = ocGraph(p, { x0: 120, y0: 650, w: 860, k: 110, lo: -1.3, hi: 1.3, zl: 't', vl: ['u*'], ends: ['0', '1'], t0: m('ustar', -.5), tickAt: [[1, '1'], [-1, '−1']] });
+    const uc = ocCurve(ug, t => TOY.uStar(t), COL.task, 5);
+    uc.setAttribute('d', ug.d(t => TOY.uStar(t), 0, 1, 600));
+    draw(uc, m('ustar'), 1.5);
+    const sw = path(p, `M${pg.X(1 / 3)} ${pg.Y(.25)}V${ug.Y(-1.3)}`, { stroke: COL.task, 'stroke-width': 3, 'stroke-dasharray': '8 8' }, { d: 0 });
+    draw(sw, m('ustar', .8), .8);
+    mline(p, ['t = 1/3'], pg.X(1 / 3) + 10, ug.Y(1.3) - 6, m('ustar', 1.2), COL.task, 28);
+    ocBox(p, ['J* = −4/27'], 1080, 450, m('answer'), { size: 40 });
+    text(p, 'ответ на вопрос из § 1.2', 1080, 520, m('answer', .8), { size: 26, fill: COL.good });
+  }],
+
+  ['check', 'Нарушение принципа', (m) => {
+    const p = panel(0);
+    mline(p, ['u ≡ 1 — не оптимально?'], 60, 150, .2, COL.chalk, 38);
+    const gr = hGraph(p, { x0: 140, y0: 520, w: 760, k: 700, lo: -.22, hi: .22, t0: m('tau', -1) });
+    ocRow(p, [$m('τ = 0,2'), ':   ', cm(C_ADJ, 'p(τ) = −0,16')], 1040, 250, m('tau'), { size: 28, msize: 34 });
+    const hf = u => -.16 * u;
+    draw(ocCurve(gr, z => hf(2 * z - 1), C_ADJ, 5), m('hline'), 1);
+    mline(p, ['h(u) = −0,16 u'], 1040, 320, m('hline', .3), C_ADJ, 34);
+    const dU = dotAt(p, gr.U(1), gr.Y(hf(1)), C_U, 12), dB = dotAt(p, gr.U(-1), gr.Y(hf(-1)), COL.task, 12);
+    pop(dU, m('hline', .8));
+    mline(p, ['u = 1'], gr.U(1), gr.Y(hf(1)) + 50, m('hline', .8), C_U, 28, 'middle');
+    pop(dB, m('gap'));
+    mline(p, ['ū = −1'], gr.U(-1) + 20, gr.Y(hf(-1)) - 24, m('gap'), COL.task, 28);
+    const gl = path(p, `M${gr.U(1)} ${gr.Y(hf(1))}H${gr.U(-1) + 40}`, { stroke: COL.dim, 'stroke-width': 2, 'stroke-dasharray': '6 8' }, { d: 0 });
+    const ga = path(p, `M${gr.U(-1) + 40} ${gr.Y(hf(1))}V${gr.Y(hf(-1)) + 14}`, { stroke: COL.task, 'stroke-width': 4 }, { d: 0 });
+    draw(gl, m('gap', .5), .5); draw(ga, m('gap', 1), .5);
+    mline(p, ['0,32'], gr.U(-1) + 54, (gr.Y(hf(1)) + gr.Y(hf(-1))) / 2 + 40, m('gap', 1.2), COL.task, 30);
+    mline(p, ['Δ', Sub('ū'), 'h = 0,16 − (−0,16) = 0,32'], 1040, 390, m('gap', .5), COL.task, 32);
+    ocBox(p, ['ΔJ ≈ −0,32 ε < 0'], 1040, 500, m('dj'), { size: 38 });
+    ocRow(p, ['принцип максимума нарушен ⇒'], 1040, 610, m('viol'), { size: 28, fill: COL.bad });
+    ocRow(p, ['игла в этот момент улучшает J'], 1040, 650, m('viol', .3), { size: 28, fill: COL.good });
+  }],
+
+  ['q2', 'Проверка: оптимальное управление', () => {
+    const p = panel(0);
+    const pg = ocGraph(p, { x0: 100, y0: 380, w: 780, k: 300, lo: -.55, hi: .25, zl: 't', vl: ['p(t)'], ends: ['0', '1'], t0: .3 });
+    draw(ocCurve(pg, TOY.p, C_ADJ, 5), .4, 1);
+    mline(p, ['p(t) = (3t − 1)(1 − t)/2'], 100, 640, .5, C_ADJ, 32);
+  }, { ask: done => quiz(RIGHTCARD, [{
+    id: 'c-ustar', prompt: ['В примере ', $m('h = p(t) u'), ', ', $m('U = [−1, 1]'), '. Найдите значения оптимального управления.'],
+    build: blanks([
+      { parts: ['u*(0,25) = ', { box: '-1' }], why: 'p(0,25) = (−0,25)(0,75)/2 < 0, поэтому u* = −1.', hint: 'Определите знак p в этой точке.' },
+      { parts: ['u*(0,5) = ', { box: '1' }], why: 'p(0,5) = (0,5)(0,5)/2 = 0,125 > 0, поэтому u* = 1.', hint: 'Определите знак p в этой точке.' },
+    ]),
+  }], done) }],
+
+  ['linear', 'Линейно-выпуклый случай', (m) => {
+    const p = panel(0);
+    mline(p, ['f = B(s, t)x + d(s, t)'], 60, 170, m('lin'), COL.chalk, 36);
+    mline(p, ['g = G(t)x', E('+'), '(s', Sub('0'), ', t) + ', Ov('g', .62), '(u(t), t)'], 60, 235, m('lin', 3), COL.chalk, 36);
+    ocRow(p, [cm(C_COST, 'F, φ'), ' выпуклы по ', $m('x')], 60, 310, m('conv'), { size: 28, msize: 36 });
+    const gr = ocGraph(p, { x0: 920, y0: 640, w: 560, k: 300, lo: -.3, hi: 1.05, zl: 'x', vl: ['φ'], ends: ['', ''], t0: m('gap', -1) });
+    const X = z => 2 * z - 1, ph = x => x * x, x0 = .4, tg = x => x0 * x0 + 2 * x0 * (x - x0);
+    draw(ocCurve(gr, z => ph(X(z)), C_COST, 5), m('gap', -.5), 1);
+    draw(ocCurve(gr, z => tg(X(z)), COL.dim, 3, .35, 1), m('gap', .5), .8);
+    pop(dotAt(p, gr.X(zU(x0)), gr.Y(ph(x0)), COL.chalk, 9), m('gap', .3));
+    const xg = -.4, gp = path(p, `M${gr.X(zU(xg))} ${gr.Y(tg(xg))}V${gr.Y(ph(xg))}`, { stroke: COL.good, 'stroke-width': 5 }, { d: 0 });
+    draw(gp, m('gap', 1.5), .6);
+    mline(p, ['o', Sub('φ'), ' ≥ 0'], gr.X(zU(xg)) - 14, (gr.Y(tg(xg)) + gr.Y(ph(xg))) / 2, m('gap', 1.8), COL.good, 30, 'end');
+    ocRow(p, [$m('o', Sub('φ'), ' ≥ 0,   −o', Sub('H'), ' ≥ 0,   o', Sub('h'), ' = 0,   Δ', Sub('ũ'), 'h', Sub(['x', E('+')]), ' = 0')], 60, 400, m('eta'), { size: 26, msize: 32 });
+    ocBox(p, ['η ≥ 0'], 60, 480, m('eta', 3), { size: 38, color: COL.good });
+    mline(p, ['Δ', Sub('ũ'), 'h ≤ 0  ⇒  ΔJ = −∫ Δ', Sub('ũ'), 'h dt + η ≥ 0'], 60, 590, m('suff'), COL.task, 34);
+    ocRow(p, ['Теорема 4.2: условие (4.3) необходимо и достаточно'], 60, 650, m('suff', 6), { size: 28, fill: COL.task, weight: 600 });
+    ocRow(p, ['пример линеен:  ', cm(COL.task, 'u*'), ' действительно оптимально,  ', $m('J* = −4/27')], 60, 730, m('toy'), { size: 28, msize: 32, fill: COL.good });
+  }],
+
+  ['sufficient', 'Теорема 4.3', (m) => {
+    const p = panel(0);
+    mline(p, ['L(x, u, ψ*, p*) = J(u) + ∬', Sub('Π'), ' ⟨ψ*, D', Sub('A'), 'x − f⟩ ds dt + ∫', Sub('T'), ' ⟨p*, ẋ', E('+'), '(s', Sub('0'), ', t) − g⟩ dt'], 60, 160, m('lag'), COL.chalk, 34);
+    ocRow(p, ['на допустимых процессах ', $m('L = J')], 60, 215, m('lag', 5), { size: 26, msize: 30, fill: COL.dim });
+    mline(p, ['L = [три слагаемых, зависящих от процесса] + [три одинаковых для всех]'], 60, 290, m('parts'), COL.chalk, 30);
+    const card = (x, title, lines, t0) => {
+      const g = G(p, { o: 0, y: 12 });
+      mk('rect', { x, y: 350, width: 470, height: 200, rx: 16, fill: COL.board, stroke: C_ADJ, 'stroke-width': 3 }, g);
+      T(g, title, { x: x + 22, y: 395, size: 28, weight: 600, fill: C_ADJ });
+      lines.forEach((l, i) => M(g, l, { x: x + 22, y: 450 + i * 50, size: 26, anchor: 'start' }));
+      tw(g, { o: 1, y: 0 }, t0, .5);
+      return g;
+    };
+    card(50, 'MH  (почти все (s, t))', [['x*(s, t) максимизирует по x ∈ E', E('n'), ':'], ['H(ψ*, x, s, t) − ⟨H', Sub('x'), '*, x⟩']], m('three'));
+    card(560, 'Mh  (почти все t)', [['(u*, x', E('+*'), ') максимизирует по u, x', E('+'), ':'], ['h(p*, x', E('+'), ', u, t) − ⟨h', Sub('x'), '*, x', E('+'), '⟩']], m('three', 2));
+    card(1070, 'MB  (почти все s)', [['x*(s, t', Sub('1'), ') минимизирует по x:'], ['φ(x, s) + ⟨ψ*(s, t', Sub('1'), '), x⟩']], m('three', 4));
+    ocBox(p, ['L(x, u) ≥ L(x*, u*)  ⇒  J(u) ≥ J(u*)'], 60, 660, m('conc'), { size: 36, color: COL.good });
+    text(p, 'без предположений вогнутости H и h', 760, 652, m('conc', 3), { size: 24, fill: COL.dim });
+    ocRow(p, ['Mh при ', $m('x', E('+'), ' = x', E('+*')), '  ⇒  принцип максимума (4.3)'], 60, 760, m('mh'), { size: 28, msize: 32, fill: COL.task });
+  }],
+
+  ['q3', 'Проверка: верно или неверно', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'c-tf', prompt: ['Верно или неверно?'],
+    build: grid([
+      { parts: ['Условие максимума (4.3) — необходимое условие оптимальности'], ans: ['t'], why: 'Теорема 4.1.' },
+      { parts: ['Условие (4.3) всегда и достаточно для оптимальности'], ans: ['f'], why: 'Только при дополнительных предположениях: линейно-выпуклый случай (теорема 4.2) или усиленные условия (теорема 4.3).' },
+      { parts: ['В линейно-выпуклом случае остаток ', $m('η ≥ 0')], ans: ['t'], why: 'Выпуклость φ, F и линейность f, g дают η ≥ 0.' },
+      { parts: ['На игле величина ', $m('|Δu|'), ' обязана быть порядка ', $m('ε')], ans: ['f'], why: 'Нет: мала только длина отрезка; |ū − u| может быть большим.' },
+    ], [['t', 'верно', COL.good, '1'], ['f', 'неверно', COL.bad, '2']], { multi: false, text: true }),
+  }], done) }],
+
+  ['wrap', 'Итоги', (m) => {
+    const p = panel(0);
+    [[['Игла длины ', $m('ε'), ':  ', $m('‖Δx‖ = O(ε)'), ',  ', $m('η = o(ε)')], 'w1'],
+      [[$m('ΔJ ≈ −ε Δ', Sub('ū'), 'h'), ' в момент ', $m('τ'), '   (4.2)'], 'w2'],
+      [['Оптимальное ', $m('u*(t)'), ' максимизирует ', cm(C_ADJ, 'h'), ' почти всюду   (4.3)'], 'w3'],
+      [['Линейно-выпуклый случай: условие и достаточно; в примере ', $m('u* = sign p')], 'w4']].forEach(([items, mark], i) => {
+      const g = G(p, { x: -16, y: 250 + i * 140, o: 0 });
+      mk('circle', { cx: 100, cy: -12, r: 26, fill: COL.task }, g);
+      T(g, String(i + 1), { x: 100, y: -1, size: 30, fill: COL.board, weight: 700, anchor: 'middle' });
+      put(ocRow(g, items, 160, 0, undefined, { size: 30, msize: 36, weight: 600 }), { o: 1 });
+      tw(g, { o: 1, x: 0 }, m(mark), .6);
+    });
+  }],
+
+  ['final1', 'Практика 1', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-flip', prompt: ['Тот же пример, но ', $m('J(u) = ∫', Lim('0', '1'), ' (1 − 3s) x(s, 1) ds'), '. Тогда ', $m('ψ(s, 1) = 3s − 1'), ' и ', $m('p(t)'), ' меняет знак на противоположный. Найдите ', $m('u*'), '.'],
+    build: blanks([
+      { parts: ['u*(0,2) = ', { box: '1' }], why: 'Теперь p(t) = −(3t − 1)(1 − t)/2 > 0 при t < 1/3, поэтому u* = +1.', hint: 'Знак p поменялся: где он теперь положителен?' },
+      { parts: ['u*(0,6) = ', { box: '-1' }], why: 'При t > 1/3 новое p < 0, поэтому u* = −1.', hint: 'Знак p поменялся: где он теперь отрицателен?' },
+    ]),
+  }], done, 'Практика по параграфу   1 из 3') }],
+
+  ['final2', 'Практика 2', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-U02', prompt: ['Исходный пример, но ', $m('U = [0, 2]'), '. По-прежнему ', $m('h = p(t) u'), ' с ', $m('p(t) = (3t − 1)(1 − t)/2'), ' и ', $m('J(u) = −∫', Lim('0', '1'), ' u(t) p(t) dt'), '.'],
+    build: blanks([
+      { parts: ['u*(0,1) = ', { box: '0' }], why: 'p(0,1) < 0: максимум p·u на [0, 2] в точке u = 0.', hint: 'Линейная функция на отрезке [0, 2]: какой конец выбрать при p < 0?' },
+      { parts: ['u*(0,5) = ', { box: '2' }], why: 'p(0,5) > 0: максимум на правом конце, u = 2.', hint: 'При p > 0 берём правый конец U.' },
+      { parts: ['J* = ', { box: '-4/27' }], why: 'J* = −2∫ от 1/3 до 1 p dt = −2 · 2/27 = −4/27 (интеграл p по [0, 1] равен 0).', hint: '∫ от 1/3 до 1 p dt = 2/27.' },
+    ]),
+  }], done, 'Практика по параграфу   2 из 3') }],
+
+  ['final3', 'Практика 3', () => { panel(0); }, { ask: done => quiz(SCREEN, [{
+    id: 'p-needle', prompt: ['В момент τ: ', $m('p(τ) = 0,1'), ', ', $m('u(τ) = −1'), ', ', $m('h = p u'), '. Иглу ставим с ', $m('ū = 1'), '. Чему примерно равно ', $m('ΔJ'), '?'],
+    build: choice([[$m('−0,2 ε')], [$m('0,2 ε')], [$m('−0,1 ε')], [$m('0')]], 0,
+      'Δ_ū h = 0,1 · 1 − 0,1 · (−1) = 0,2, и ΔJ ≈ −ε · 0,2.',
+      [null, 'Знак: в (4.2) перед интегралом стоит минус.', 'Нужна разность h(ū) − h(u), а не одно h(ū).', 'Ноль был бы, если бы h(ū) = h(u(τ)).']),
+  }], done, 'Практика по параграфу   3 из 3') }],
+
+  ['finish', 'Готово', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>
